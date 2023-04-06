@@ -65,5 +65,8 @@
       "yarn lint .",
       "yarn format"
     ]
+  },
+  "volta": {
+    "node": "18.15.0"
   }
 }
