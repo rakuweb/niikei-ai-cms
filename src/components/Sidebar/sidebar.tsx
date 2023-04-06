@@ -202,6 +202,7 @@ const SidebarContent = styled.div<{ isOpen: boolean }>`
   }
   .box2 {
     width: 250px;
+    visibility: hidden;
     animation: ${(props) => (props.isOpen ? 'fadeIn 0.3s' : 'fadeOut 0.3s')};
     animation-fill-mode: forwards;
     background-color: #444857;
