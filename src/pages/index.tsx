@@ -2,7 +2,16 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-
+import Autorenew from 'public/svg/autorenew_FILL0_wght400_GRAD0_opsz48.svg';
+import Description from 'public/svg/description_FILL0_wght400_GRAD0_opsz48.svg';
+import Edit from 'public/svg/edit_note_FILL0_wght400_GRAD0_opsz48.svg';
+import Expand1 from 'public/svg/expand_circle_down_FILL-1.svg';
+import Expand0 from 'public/svg/expand_circle_down_FILL0_wght400_GRAD0_opsz48.svg';
+import Pass from 'public/svg/pass48.svg';
+import S from 'public/svg/S.svg';
+import Settings from 'public/svg/settings_input_antenna_FILL0_wght400_GRAD0_opsz48.svg';
+import Smart from 'public/svg/smart_toy_FILL0_wght400_GRAD0_opsz48.svg';
+import { Box } from '@chakra-ui/react';
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -17,10 +26,19 @@ const Home: NextPage = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>
+        <Box className={styles.description} bgColor={'#333'}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
-        </p>
+          <Autorenew />
+          <Description />
+          <Edit />
+          <Expand1 />
+          <Expand0 />
+          <Pass />
+          <S />
+          <Settings />
+          <Smart />
+        </Box>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
