@@ -157,10 +157,11 @@ const fadeIn = `
   @keyframes fadeIn {
     from {
       opacity: 0;
+     
     }
     to {
       opacity: 1;
-      visibility: visible;
+     
     }
   }
 `;
@@ -169,10 +170,11 @@ const fadeOut = `
   @keyframes fadeOut {
     from {
       opacity: 1;
+  
     }
     to {
       opacity:0;
-      visibility: hidden;
+  
     }
   }
 `;
@@ -195,31 +197,32 @@ const SidebarContent = styled.div<{ isOpen: boolean }>`
     top: 0;
     padding-left: 22px;
 
-    svg{
-        width: 20px;
-        height:20px;
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
   .box2 {
-  width: 250px;
-  opacity: ${(props) => (props.isOpen ? 1 : 0)};
-  transition: opacity 0.3s;
-  background-color: #444857;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  padding-left: 22px;
-  font-family: 'Noto Sans JP', sans-serif;
-  .se {
-    width: auto;
-    height: 20px;
+    width: 250px;
+    visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
+    transition: 0.3s;
+    animation: ${(props) => (props.isOpen ? 'fadeIn 0.3s' : 'fadeOut 0.3s')};
+    animation-fill-mode: forwards;
+    background-color: #444857;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    padding-left: 22px;
+    font-family: 'Noto Sans JP', sans-serif;
+    .se {
+      width: auto;
+      height: 20px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
 
   a {
     display: flex;
@@ -229,18 +232,15 @@ const SidebarContent = styled.div<{ isOpen: boolean }>`
     cursor: pointer;
     text-decoration: none;
     &:hover {
-      color: #49BAC0;
+      color: #49bac0;
       text-decoration: none;
       transition: 0.5s;
-      svg{
-      path{
-        fill: #49BAC0;
-        transition: 0.5s;
+      svg {
+        path {
+          fill: #49bac0;
+          transition: 0.5s;
+        }
       }
-    }
-    }
-
-
     }
   }
 `;
