@@ -13,7 +13,7 @@ export type PresenterProps = StyleProps & DataProps;
 export const Presenter: FC<PresenterProps> = ({ image, ...props }) => {
   return (
     <Box position={`relative`} {...props}>
-      <NextImage width={`100%`} height={`100%`} loading={`lazy`} {...image} />
+      <NextImage loading={`lazy`} {...image} />
     </Box>
   );
 };
