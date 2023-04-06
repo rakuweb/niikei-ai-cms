@@ -201,25 +201,26 @@ const SidebarContent = styled.div<{ isOpen: boolean }>`
     }
   }
   .box2 {
-    width: 250px;
-    visibility: hidden;
-    animation: ${(props) => (props.isOpen ? 'fadeIn 0.3s' : 'fadeOut 0.3s')};
-    animation-fill-mode: forwards;
-    background-color: #444857;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    padding-left: 22px;
-    font-family: 'Noto Sans JP', sans-serif;
-    .se{
-        width: auto;
-        height: 20px;
-    }
-    svg{
-        width: 20px;
-        height: 20px;
-    }
+  width: 250px;
+  opacity: ${(props) => (props.isOpen ? 1 : 0)};
+  transition: opacity 0.3s;
+  background-color: #444857;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  padding-left: 22px;
+  font-family: 'Noto Sans JP', sans-serif;
+  .se {
+    width: auto;
+    height: 20px;
   }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+
   a {
     display: flex;
     align-items: center;
