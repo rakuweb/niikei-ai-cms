@@ -58,36 +58,72 @@ const Sidebar: React.FC = () => {
           <Box p={'50px 10px'}>
             <Pass className="se" />
           </Box>
-          <Link className="link" href={'/'} color={'#BABABA'}>
+          <Link
+            className="link"
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Home />
             ホーム
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Smart />
             サイト管理
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Description />
             記事管理
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Edit />
             テンプレート管理
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Autorenew />
             自動投稿管理
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Settings />
             オリジナル配信管理
           </Link>
-          <Link href={'/'} color={'#BABABA'}>
+          <Link
+            href={'/'}
+            color={'#BABABA'}
+            display={'flex'}
+            alignItems={'center'}
+          >
             <Gear />
             設定
           </Link>
           <SidebarToggle onClick={toggleSidebar}>
-            <Link color={'#BABABA'}>
+            <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>
               <Expand0 />
               メニューを閉じる
             </Link>
@@ -173,7 +209,7 @@ const SidebarContent = styled.div<{ isOpen: boolean }>`
     position: absolute;
     top: 0;
     padding-left: 22px;
-
+    font-family: 'Noto Sans JP', sans-serif;
     .se{
         width: auto;
         height: 20px;
