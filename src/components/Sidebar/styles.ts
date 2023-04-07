@@ -44,6 +44,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
   gap: 10px;
   padding: 10px 0;
   position: relative;
+
   .box1 {
     width: 90px;
     animation: ${(props) => (props.isOpen ? 'fadeOut 0.3s' : 'fadeIn 0.3s')};
@@ -52,7 +53,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     height: 100vh;
     position: absolute;
     top: 0;
-    padding-left: 22px;
+    padding: 0 22px;
 
     svg {
       width: 20px;
