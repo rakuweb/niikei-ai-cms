@@ -26,7 +26,7 @@ const Popup = ({ title, logo, links }) => {
         border={'0.5vw solid #353845'}
         borderRadius={'0'}
         boxShadow={'none'}
-        w={'25vw'}
+        w={'15vw'}
         top={'-1.7vw'}
       >
         <PopoverArrow
