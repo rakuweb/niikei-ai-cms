@@ -1,19 +1,5 @@
 import React, { FC, useState } from 'react';
-import {
-  Box,
-  Link,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  VStack,
-  Button,
-  ButtonGroup,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverFooter,
-  PopoverHeader,
-} from '@chakra-ui/react';
+import { Box, Link } from '@chakra-ui/react';
 import HomeSvg from 'public/svg/home.svg';
 import AutorenewSvg from 'public/svg/autorenew.svg';
 import DescriptionSvg from 'public/svg/description.svg';
@@ -27,8 +13,7 @@ import RobotSvg from 'public/svg/robot.svg';
 import GearSvg from 'public/svg/gear.svg';
 import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
 import Popup from './Popup';
-// import Itemlink from './Itemlink';
-// type layer
+
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
