@@ -48,7 +48,7 @@ export const Presenter: FC = () => {
     <SidebarContainer isOpen={isOpen}>
       <SidebarContent isOpen={isOpen}>
         <Box className="box1">
-          <Box p={'50px 10px'}>
+          <Box p={'3.125vw 1.042vw'}>
             <SSvg />
           </Box>
 
@@ -68,7 +68,7 @@ export const Presenter: FC = () => {
           </SidebarToggle>
         </Box>
         <Box className="box2">
-          <Box p={'50px 10px'}>
+          <Box p={'3.125vw 1.042vw'}>
             <SpecialeditorSvg className="se" />
           </Box>
           <Popup title="ホーム" logo={<HomeSvg />} links={links} />
@@ -85,6 +85,7 @@ export const Presenter: FC = () => {
             logo={<AntennaSvg />}
             links={links}
           />
+
           <Popup title="設定" logo={<GearSvg />} links={links} />
           <SidebarToggle onClick={toggleSidebar}>
             <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>

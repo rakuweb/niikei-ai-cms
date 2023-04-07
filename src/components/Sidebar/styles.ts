@@ -41,27 +41,27 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
   ${fadeOut}
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px 0;
+  gap: 1.4vw;
+  padding: 1vw 0;
   position: relative;
 
   .box1 {
-    width: 90px;
+    width: 6vw;
     animation: ${(props) => (props.isOpen ? 'fadeOut 0.3s' : 'fadeIn 0.3s')};
     animation-fill-mode: forwards;
     background-color: #444857;
     height: 100vh;
     position: absolute;
     top: 0;
-    padding: 0 22px;
+    padding: 0 1vw;
 
     svg {
-      width: 20px;
-      height: 20px;
+      width: 1.6vw;
+      height: 1.6vw;
     }
   }
   .box2 {
-    width: 250px;
+    width: 18vw;
     visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
     transition: 0.3s;
     animation: ${(props) => (props.isOpen ? 'fadeIn 0.3s' : 'fadeOut 0.3s')};
@@ -70,23 +70,24 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     height: 100vh;
     position: absolute;
     top: 0;
-    padding-left: 22px;
+    padding: 0 1vw;
     font-family: 'Noto Sans JP', sans-serif;
     .se {
       width: auto;
-      height: 20px;
+      height: 1.6vw;
     }
     svg {
-      width: 20px;
-      height: 20px;
+      width: 1.6vw;
+      height: 1.6vw;
     }
   }
 
   a {
     display: flex;
+    font-size: 1vw;
     align-items: center;
-    gap: 10px;
-    padding: 13px 10px;
+    gap: 1.3vw;
+    padding: 1vw 1vw;
     cursor: pointer;
     line-height: 1;
     text-decoration: none;
