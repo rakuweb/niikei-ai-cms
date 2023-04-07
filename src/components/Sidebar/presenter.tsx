@@ -52,9 +52,7 @@ export const Presenter: FC = () => {
             <SSvg />
           </Box>
 
-          <Link href={'/'}>
-            <HomeSvg />
-          </Link>
+          <Popup title="" logo={<HomeSvg />} links={links} />
           <Popup title="" logo={<RobotSvg />} links={links} />
           <Popup title="" logo={<DescriptionSvg />} links={links} />
           <Popup title="" logo={<EditnoteSvg />} links={links} />
