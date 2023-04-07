@@ -71,7 +71,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     position: absolute;
     top: 0;
     padding: 0 1vw;
-    font-family: 'Noto Sans JP', sans-serif;
+
     .se {
       width: auto;
       height: 1.6vw;
@@ -83,6 +83,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
   }
 
   a {
+    font-family: 'Noto Sans JP', sans-serif;
     display: flex;
     font-size: 1vw;
     align-items: center;
