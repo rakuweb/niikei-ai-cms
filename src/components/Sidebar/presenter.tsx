@@ -13,6 +13,7 @@ import RobotSvg from 'public/svg/robot.svg';
 import GearSvg from 'public/svg/gear.svg';
 import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
 import Popup from './Popup';
+import { Header } from 'components/Header';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -30,54 +31,57 @@ export const Presenter: FC = () => {
   ];
 
   return (
-    <SidebarContainer isOpen={isOpen}>
-      <SidebarContent isOpen={isOpen}>
-        <Box className="box1">
-          <Box p={'3.125vw 1.042vw'}>
-            <SSvg />
-          </Box>
+    <>
+      <Header isOpen={isOpen} />
+      <SidebarContainer isOpen={isOpen}>
+        <SidebarContent isOpen={isOpen}>
+          <Box className="box1">
+            <Box p={'3.125vw 1.042vw'}>
+              <SSvg />
+            </Box>
 
-          <Popup title="" logo={<HomeSvg />} links={links} />
-          <Popup title="" logo={<RobotSvg />} links={links} />
-          <Popup title="" logo={<DescriptionSvg />} links={links} />
-          <Popup title="" logo={<EditnoteSvg />} links={links} />
-          <Popup title="" logo={<AutorenewSvg />} links={links} />
-          <Popup title="" logo={<AntennaSvg />} links={links} />
-          <Popup title="" logo={<GearSvg />} links={links} />
-          <SidebarToggle onClick={toggleSidebar}>
-            <Link>
-              <RightmarkSvg />
-            </Link>
-          </SidebarToggle>
-        </Box>
-        <Box className="box2">
-          <Box p={'3.125vw 1.042vw'}>
-            <SpecialeditorSvg className="se" />
+            <Popup title="" logo={<HomeSvg />} links={links} />
+            <Popup title="" logo={<RobotSvg />} links={links} />
+            <Popup title="" logo={<DescriptionSvg />} links={links} />
+            <Popup title="" logo={<EditnoteSvg />} links={links} />
+            <Popup title="" logo={<AutorenewSvg />} links={links} />
+            <Popup title="" logo={<AntennaSvg />} links={links} />
+            <Popup title="" logo={<GearSvg />} links={links} />
+            <SidebarToggle onClick={toggleSidebar}>
+              <Link>
+                <RightmarkSvg />
+              </Link>
+            </SidebarToggle>
           </Box>
-          <Popup title="ホーム" logo={<HomeSvg />} links={links} />
-          <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
-          <Popup title="記事管理" logo={<DescriptionSvg />} links={links} />
-          <Popup
-            title="テンプレート管理"
-            logo={<EditnoteSvg />}
-            links={links}
-          />
-          <Popup title="自動投稿管理" logo={<AutorenewSvg />} links={links} />
-          <Popup
-            title="オリジナル配信管理"
-            logo={<AntennaSvg />}
-            links={links}
-          />
+          <Box className="box2">
+            <Box p={'3.125vw 1.042vw'}>
+              <SpecialeditorSvg className="se" />
+            </Box>
+            <Popup title="ホーム" logo={<HomeSvg />} links={links} />
+            <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
+            <Popup title="記事管理" logo={<DescriptionSvg />} links={links} />
+            <Popup
+              title="テンプレート管理"
+              logo={<EditnoteSvg />}
+              links={links}
+            />
+            <Popup title="自動投稿管理" logo={<AutorenewSvg />} links={links} />
+            <Popup
+              title="オリジナル配信管理"
+              logo={<AntennaSvg />}
+              links={links}
+            />
 
-          <Popup title="設定" logo={<GearSvg />} links={links} />
-          <SidebarToggle onClick={toggleSidebar}>
-            <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>
-              <LeftmarkSvg />
-              メニューを閉じる
-            </Link>
-          </SidebarToggle>
-        </Box>
-      </SidebarContent>
-    </SidebarContainer>
+            <Popup title="設定" logo={<GearSvg />} links={links} />
+            <SidebarToggle onClick={toggleSidebar}>
+              <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>
+                <LeftmarkSvg />
+                メニューを閉じる
+              </Link>
+            </SidebarToggle>
+          </Box>
+        </SidebarContent>
+      </SidebarContainer>
+    </>
   );
 };

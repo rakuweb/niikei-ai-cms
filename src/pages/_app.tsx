@@ -6,6 +6,7 @@ import { SEO } from 'constants/seo';
 
 import '../styles/globals.css';
 import { Sidebar } from 'components/Sidebar';
+import { Header } from 'components/Header';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
