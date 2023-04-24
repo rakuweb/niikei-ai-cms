@@ -32,14 +32,6 @@ export default class Document extends NextDocument {
           <meta name="theme-color" content="#ffffff" />
 
           <meta charSet={`utf-8`} />
-          {/* <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;1,700&family=Oswald:wght@700&display=swap"
-            rel="stylesheet"
-          /> */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
