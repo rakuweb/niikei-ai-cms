@@ -20,6 +20,11 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
           justifyContent={`center`}
           alignItems={`center`}
           borderRadius={`${50 / 19.2}vw`}
+          transition={`all .3s`}
+          _hover={{
+            cursor: `pointer`,
+            filter: `opacity(80%)`,
+          }}
         >
           ログイン
         </Box>

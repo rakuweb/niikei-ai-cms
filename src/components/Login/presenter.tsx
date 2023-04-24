@@ -9,7 +9,7 @@ export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
 
 // presenter
-export const Presenter: FC<PresenterProps> = ({ ...props }) => {
+export const Presenter: FC<PresenterProps> = () => {
   return (
     <>
       <Text

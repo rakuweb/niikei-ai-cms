@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { Login } from 'components/Login';
 import type { NextPage } from 'next';
 
-const Home: NextPage = () => {
+const Signin: NextPage = () => {
   return (
     <>
       <Box w={`100vw`} h={`100vh`} bg={`#EAEAEA`}>
@@ -12,4 +12,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Signin;
