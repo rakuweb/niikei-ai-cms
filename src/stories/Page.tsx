@@ -1,7 +1,5 @@
 import React from 'react';
-
 import { Header } from './Header';
-import { Box } from '@chakra-ui/react';
 import './page.css';
 
 type User = {
