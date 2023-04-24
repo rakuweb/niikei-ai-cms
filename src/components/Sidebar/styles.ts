@@ -48,6 +48,8 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
   .box1 {
     width: 6vw;
     animation: ${(props) => (props.isOpen ? 'fadeOut 0.3s' : 'fadeIn 0.3s')};
+    /* display: ${(props) => (props.isOpen ? 'none' : 'block')}; */
+    transition: 0.3s;
     animation-fill-mode: forwards;
     background-color: #444857;
     height: 100vh;
