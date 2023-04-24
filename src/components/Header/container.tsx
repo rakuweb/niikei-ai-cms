@@ -1,5 +1,5 @@
 // import layer
-import { VFC } from 'react';
+import { FC } from 'react';
 
 import { Presenter, PresenterProps } from './presenter';
 
@@ -7,6 +7,6 @@ import { Presenter, PresenterProps } from './presenter';
 export type ContainerProps = PresenterProps;
 
 // container
-export const Container: VFC<ContainerProps> = ({ ...props }) => {
+export const Container: FC<ContainerProps> = ({ ...props }) => {
   return <Presenter {...props} />;
 };
