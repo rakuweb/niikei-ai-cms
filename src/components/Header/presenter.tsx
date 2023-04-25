@@ -3,11 +3,13 @@ import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-export type PresenterProps = {
-  isOpen: boolean;
-};
+import { useStore } from 'lib/store';
 
-export const Presenter: FC<PresenterProps> = ({ isOpen }) => {
+export type PresenterProps = Record<string, unknown>;
+
+export const Presenter: FC = () => {
+  const isOpen = useStore((state) => state.open);
+
   return (
     <Box css={styles}>
       <Flex

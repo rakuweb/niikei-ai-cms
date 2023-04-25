@@ -14,15 +14,16 @@ import GearSvg from 'public/svg/gear.svg';
 import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
 import Popup from './Popup';
 import { Header } from 'components/Header';
+import { useStore } from 'lib/store';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   const links = [
     { text: 'リンク1', url: '/' },
@@ -30,9 +31,13 @@ export const Presenter: FC = () => {
     { text: 'リンク3', url: '/' },
   ];
 
+  const isOpen = useStore((state) => state.open);
+
+  const toggleSidebar = useStore((state) => state.toggleOpen);
+
   return (
     <>
-      <Header isOpen={isOpen} />
+      <Header />
       <SidebarContainer isOpen={isOpen}>
         <SidebarContent isOpen={isOpen}>
           <Box className="box1">
