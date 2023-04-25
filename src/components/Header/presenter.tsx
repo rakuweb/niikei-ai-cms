@@ -15,10 +15,11 @@ export const Presenter: FC = () => {
       <Flex
         bgColor={'#DEDEDE'}
         position={'fixed'}
-        width={isOpen ? 'calc(100vw - 13vw)' : '100%'}
+        width={isOpen ? 'calc(100vw - 9vw)' : '100%'}
         transition="0.3s"
         right={'0'}
-        p={'1.05vw 1.05vw 1.05vw 8vw'}
+        h={`${102 / 19.2}vw`}
+        pl={`${140 / 19.2}vw`}
         alignItems={'center'}
         className="flex"
       >

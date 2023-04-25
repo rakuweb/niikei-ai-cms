@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Link } from '@chakra-ui/react';
 import HomeSvg from 'public/svg/home.svg';
 import AutorenewSvg from 'public/svg/autorenew.svg';
@@ -19,12 +19,6 @@ import { useStore } from 'lib/store';
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // const toggleSidebar = () => {
-  //   setIsOpen(!isOpen);
-  // };
-
   const links = [
     { text: 'リンク1', url: '/' },
     { text: 'リンク2', url: '/' },
@@ -34,6 +28,8 @@ export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
 
   const toggleSidebar = useStore((state) => state.toggleOpen);
+
+  console.log(isOpen);
 
   return (
     <>

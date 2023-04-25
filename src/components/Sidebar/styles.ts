@@ -46,7 +46,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
   position: relative;
 
   .box1 {
-    width: 6vw;
+    width: ${90 / 19.2}vw;
     animation: ${(props) => (props.isOpen ? 'fadeOut 0.3s' : 'fadeIn 0.3s')};
     /* display: ${(props) => (props.isOpen ? 'none' : 'block')}; */
     transition: 0.3s;
@@ -55,15 +55,16 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     height: 100vh;
     position: absolute;
     top: 0;
-    padding: 0 1vw;
+    // padding: 0 1vw;
 
     svg {
-      width: 1.6vw;
-      height: 1.6vw;
+      width: ${23 / 19.2}vw;
+      height: ${23 / 19.2}vw;
+      margin: 0 auto;
     }
   }
   .box2 {
-    width: 18vw;
+    width: ${246 / 19.2}vw;
     visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
     transition: 0.3s;
     animation: ${(props) => (props.isOpen ? 'fadeIn 0.3s' : 'fadeOut 0.3s')};
@@ -72,28 +73,29 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     height: 100vh;
     position: absolute;
     top: 0;
-    padding: 0 1vw;
+    font-weight: bold;
 
     .se {
       width: auto;
       height: 1.6vw;
     }
     svg {
-      width: 1.6vw;
-      height: 1.6vw;
+      width: ${23 / 19.2}vw;
+      height: ${23 / 19.2}vw;
     }
   }
 
   a {
     font-family: 'Noto Sans JP', sans-serif;
     display: flex;
-    font-size: 1vw;
+    font-size: ${16 / 19.2}vw;
     align-items: center;
     gap: 1.3vw;
     padding: 1vw 1vw;
     cursor: pointer;
     line-height: 1;
     text-decoration: none;
+    color: white;
     &:hover {
       color: #49bac0;
       text-decoration: none;
