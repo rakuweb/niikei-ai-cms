@@ -1,14 +1,13 @@
 import React from 'react';
 
 import { Header } from './Header';
-import { Box } from '@chakra-ui/react';
 import './page.css';
 
 type User = {
   name: string;
 };
 
-export const Page: React.VFC = () => {
+export const Page: React.FC = () => {
   const [user, setUser] = React.useState<User>();
 
   return (
