@@ -55,14 +55,38 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     height: 100vh;
     position: absolute;
     top: 0;
-    // padding: 0 1vw;
+    padding: 0 auto;
 
     svg {
       width: ${23 / 19.2}vw;
       height: ${23 / 19.2}vw;
       margin: 0 auto;
     }
+    a {
+      font-family: 'Noto Sans JP', sans-serif;
+      display: flex;
+      font-size: ${16 / 19.2}vw;
+      align-items: center;
+      gap: ${11 / 19.2}vw;
+      padding-bottom: ${23 / 19.2}vw;
+      cursor: pointer;
+      line-height: 0;
+      text-decoration: none;
+      color: white;
+      &:hover {
+        color: #49bac0;
+        text-decoration: none;
+        transition: 0.5s;
+        svg {
+          path {
+            fill: #49bac0;
+            transition: 0.5s;
+          }
+        }
+      }
+    }
   }
+
   .box2 {
     width: ${246 / 19.2}vw;
     visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
@@ -76,34 +100,32 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     font-weight: bold;
 
     .se {
-      width: auto;
-      height: 1.6vw;
+      width: ${142 / 19.2}vw;
     }
     svg {
       width: ${23 / 19.2}vw;
       height: ${23 / 19.2}vw;
     }
-  }
-
-  a {
-    font-family: 'Noto Sans JP', sans-serif;
-    display: flex;
-    font-size: ${16 / 19.2}vw;
-    align-items: center;
-    gap: 1.3vw;
-    padding: 1vw 1vw;
-    cursor: pointer;
-    line-height: 1;
-    text-decoration: none;
-    color: white;
-    &:hover {
-      color: #49bac0;
+    a {
+      font-family: 'Noto Sans JP', sans-serif;
+      display: flex;
+      font-size: ${16 / 19.2}vw;
+      align-items: center;
+      gap: ${11 / 19.2}vw;
+      padding: 0 0 ${23 / 19.2}vw ${32 / 19.2}vw;
+      cursor: pointer;
+      line-height: 0;
       text-decoration: none;
-      transition: 0.5s;
-      svg {
-        path {
-          fill: #49bac0;
-          transition: 0.5s;
+      color: white;
+      &:hover {
+        color: #49bac0;
+        text-decoration: none;
+        transition: 0.5s;
+        svg {
+          path {
+            fill: #49bac0;
+            transition: 0.5s;
+          }
         }
       }
     }

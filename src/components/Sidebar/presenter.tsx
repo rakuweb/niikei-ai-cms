@@ -29,18 +29,15 @@ export const Presenter: FC = () => {
 
   const toggleSidebar = useStore((state) => state.toggleOpen);
 
-  console.log(isOpen);
-
   return (
     <>
       <Header />
       <SidebarContainer isOpen={isOpen}>
         <SidebarContent isOpen={isOpen}>
           <Box className="box1">
-            <Box p={'3.125vw 1.042vw'}>
+            <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
               <SSvg />
             </Box>
-
             <Popup title="" logo={<HomeSvg />} links={links} />
             <Popup title="" logo={<RobotSvg />} links={links} />
             <Popup title="" logo={<DescriptionSvg />} links={links} />
@@ -55,7 +52,7 @@ export const Presenter: FC = () => {
             </SidebarToggle>
           </Box>
           <Box className="box2">
-            <Box p={'3.125vw 1.042vw'}>
+            <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
               <SpecialeditorSvg className="se" />
             </Box>
             <Popup title="ホーム" logo={<HomeSvg />} links={links} />

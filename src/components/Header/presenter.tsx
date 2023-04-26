@@ -20,16 +20,16 @@ export const Presenter: FC = () => {
         right={'0'}
         h={`${102 / 19.2}vw`}
         pl={`${140 / 19.2}vw`}
+        pr={`${54 / 19.2}vw`}
         alignItems={'center'}
         className="flex"
       >
-        <Text fontSize={'1.1vw'}>山田太郎</Text>
+        <Text fontSize={`${24 / 19.2}vw`}>山田太郎</Text>
 
         <Link
           ml={'auto'}
           mr={'1.4vw'}
-          textDecoration={'underline'}
-          fontSize={'1vw'}
+          borderBottom={`1px solid`}
           display={'flex'}
           alignItems={'center'}
         >
@@ -40,7 +40,6 @@ export const Presenter: FC = () => {
         <Link
           bgColor={'#444857'}
           color={'white'}
-          fontSize={'1vw'}
           borderRadius={'1.4vw'}
           p={'0.35vw 1vw'}
           display={'flex'}
@@ -59,10 +58,12 @@ export const Presenter: FC = () => {
 const styles = css`
   .flex {
     font-family: 'Noto Sans JP', sans-serif;
+    font-size: ${16 / 19.2}vw;
     a {
       &:hover {
         color: #49bac0;
         transition: 0.3s;
+        text-decoration: none;
         svg {
           path {
             fill: #49bac0;
