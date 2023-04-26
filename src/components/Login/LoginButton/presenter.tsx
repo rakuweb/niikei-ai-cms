@@ -1,5 +1,5 @@
 // import layer
-import { Box, Input } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { FC } from 'react';
 
@@ -8,7 +8,7 @@ export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
 
 // presenter
-export const Presenter: FC<PresenterProps> = ({ ...props }) => {
+export const Presenter: FC<PresenterProps> = () => {
   return (
     <>
       <Text color={`white`} fontSize={`${16 / 19.2}vw`} letterSpacing={`0`}>
