@@ -3,30 +3,33 @@ import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-export type PresenterProps = {
-  isOpen: boolean;
-};
+import { useStore } from 'lib/store';
 
-export const Presenter: FC<PresenterProps> = ({ isOpen }) => {
+export type PresenterProps = Record<string, unknown>;
+
+export const Presenter: FC = () => {
+  const isOpen = useStore((state) => state.open);
+
   return (
     <Box css={styles}>
       <Flex
         bgColor={'#DEDEDE'}
         position={'fixed'}
-        width={isOpen ? 'calc(100vw - 13vw)' : '100%'}
+        width={isOpen ? 'calc(100vw - 9vw)' : '100%'}
         transition="0.3s"
         right={'0'}
-        p={'1.05vw 1.05vw 1.05vw 8vw'}
+        h={`${102 / 19.2}vw`}
+        pl={`${140 / 19.2}vw`}
+        pr={`${54 / 19.2}vw`}
         alignItems={'center'}
         className="flex"
       >
-        <Text fontSize={'1.1vw'}>山田太郎</Text>
+        <Text fontSize={`${24 / 19.2}vw`}>山田太郎</Text>
 
         <Link
           ml={'auto'}
           mr={'1.4vw'}
-          textDecoration={'underline'}
-          fontSize={'1vw'}
+          borderBottom={`1px solid`}
           display={'flex'}
           alignItems={'center'}
         >
@@ -37,7 +40,6 @@ export const Presenter: FC<PresenterProps> = ({ isOpen }) => {
         <Link
           bgColor={'#444857'}
           color={'white'}
-          fontSize={'1vw'}
           borderRadius={'1.4vw'}
           p={'0.35vw 1vw'}
           display={'flex'}
@@ -56,10 +58,12 @@ export const Presenter: FC<PresenterProps> = ({ isOpen }) => {
 const styles = css`
   .flex {
     font-family: 'Noto Sans JP', sans-serif;
+    font-size: ${16 / 19.2}vw;
     a {
       &:hover {
         color: #49bac0;
         transition: 0.3s;
+        text-decoration: none;
         svg {
           path {
             fill: #49bac0;

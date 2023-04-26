@@ -27,7 +27,8 @@ const Popup = ({ title, logo, links }) => {
         borderRadius={'0'}
         boxShadow={'none'}
         w={'15vw'}
-        top={'-1.7vw'}
+        // h={`5vw`}
+        top={'-2.3vw'}
       >
         <PopoverArrow
           backgroundColor={'#353845'}
@@ -35,9 +36,16 @@ const Popup = ({ title, logo, links }) => {
           boxShadow={'none'}
         />
 
-        <PopoverBody>
+        <PopoverBody mt={`0.5vw`}>
           {links.map((link, index) => (
-            <Link key={index} href={link.url} color="#fff" fontSize="1vw">
+            <Link
+              key={index}
+              w={`fit-content`}
+              href={link.url}
+              color="#fff"
+              fontSize="1vw"
+              mt={`0.5vw`}
+            >
               {link.text}
             </Link>
           ))}
