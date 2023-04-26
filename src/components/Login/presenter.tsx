@@ -46,6 +46,7 @@ export const Presenter: FC<PresenterProps> = () => {
           h={`${50 / 19.2}vw`}
           fontSize={`${16 / 19.2}vw`}
           type={'password'}
+          borderRadius={`0`}
         />
         <LoginButton />
         <Box mt={`${20 / 19.2}vw`}>
