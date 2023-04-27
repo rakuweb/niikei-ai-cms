@@ -19,6 +19,8 @@ export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
       borderRadius={`${50 / 19.2}vw`}
       _hover={{
         cursor: `pointer`,
+        transition: `0.3s`,
+        filter: `opacity(80%)`,
       }}
       {...props}
     >

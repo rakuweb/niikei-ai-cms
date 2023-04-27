@@ -4,9 +4,9 @@ import { Image } from 'components/images/Image';
 import { Text } from 'components/texts/Text';
 import { Link } from '@chakra-ui/react';
 
-export type PresenterProps = Record<string, unknown>;
+export type PresenterProps = { pagename1: string; pagename2: string };
 
-export const Presenter: FC = () => {
+export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
   return (
     <>
       <Text
@@ -24,7 +24,7 @@ export const Presenter: FC = () => {
             color: `#49bac0`,
           }}
         >
-          {`サイト管理`}
+          {pagename1}
         </Link>
 
         <Image
@@ -45,7 +45,7 @@ export const Presenter: FC = () => {
             color: `#49bac0`,
           }}
         >
-          {`サイト管理`}
+          {pagename2}
         </Link>
       </Text>
     </>

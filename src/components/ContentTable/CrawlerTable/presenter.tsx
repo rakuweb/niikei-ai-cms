@@ -10,77 +10,15 @@ import {
   TableContainer,
   Switch,
   Checkbox,
+  Flex,
 } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 
-export type PresenterProps = Record<string, unknown>;
+export type PresenterProps = Record<string, any>;
 
-export const Presenter: FC = () => {
-  const list = [
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-    {
-      category: `企業`,
-      name: `ラクウェブ`,
-      url: `https://rakuweb.jp/`,
-      frequency: `毎日12:00`,
-    },
-  ];
-
+export const Presenter: FC<PresenterProps> = ({ list }) => {
   return (
     <>
       <Box>
@@ -112,26 +50,24 @@ export const Presenter: FC = () => {
                       h={`${59 / 19.2}vw`}
                       borderLeft={`1px`}
                     >
-                      <Checkbox
-                        pt={{
-                          lg: `${4 / 10.2}vw`,
-                          xl: `${5 / 12.8}vw`,
-                          '2xl': `${3 / 19.2}vw`,
-                        }}
-                        borderColor={`#707070`}
-                        size={{ lg: `sm`, '2xl': `md` }}
-                        sx={{
-                          '.css-1ydjfm6[aria-checked=true], .css-1ydjfm6[data-checked]':
-                            {
-                              backgroundColor: '#49BAC0',
-                            },
-                        }}
-                      />
+                      <Flex justify={`center`} alignItems={`center`}>
+                        <Checkbox
+                          borderColor={`#707070`}
+                          size={{ lg: `sm`, '2xl': `md` }}
+                          sx={{
+                            '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
+                              {
+                                backgroundColor: '#49BAC0',
+                                borderColor: `#49BAC0`,
+                              },
+                          }}
+                        />
+                      </Flex>
                     </Td>
-                    <Td>企業</Td>
-                    <Td>google</Td>
-                    <Td>https://rakuweb.jp/</Td>
-                    <Td>{`毎日12:00`}</Td>
+                    <Td>{list.category}</Td>
+                    <Td>{list.name}</Td>
+                    <Td>{list.url}</Td>
+                    <Td>{list.frequency}</Td>
                     <Td>
                       <Switch
                         size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
