@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { FC } from 'react';
 import { Box, BoxProps } from '@chakra-ui/react';
-import { useStore } from 'lib/store';
 
 export type PresenterProps = BoxProps;
 
 export const Presenter: FC<PresenterProps> = ({ children, ...props }) => {
-  // const isOpen = useStore((state) => state.open);
   return (
     <Box
       bg={`white`}
