@@ -8,6 +8,7 @@ const AccountInput = ({ ...props }) => {
       w={`${424 / 19.2}vw`}
       fontSize={`${16 / 19.2}vw`}
       borderRadius={`0`}
+      borderColor={`#d6d6d6`}
       {...props}
     />
   );
