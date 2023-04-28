@@ -11,14 +11,7 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const title = `アカウント情報`;
-  const list = [
-    {
-      category: `企業`,
-      name: `pr times`,
-      url: `https://prtimes.jp/main/html/index/pagenum/1`,
-      frequency: `毎日12:00`,
-    },
-  ];
+
   return (
     <>
       <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
