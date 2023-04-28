@@ -1,8 +1,9 @@
 // import layer
-import { Box, Input, Link } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { FC } from 'react';
 import { LoginButton } from './LoginButton';
+import { InternalLink } from 'components/links/InternalLink';
 
 // type layer
 export type StyleProps = Record<string, unknown>;
@@ -49,9 +50,9 @@ export const Presenter: FC<PresenterProps> = () => {
         />
         <LoginButton />
         <Box mt={`${20 / 19.2}vw`}>
-          <Link href={`/password-reset`} fontWeight={`bold`}>
+          <InternalLink href={`/password-reset`} fontWeight={`bold`}>
             パスワードをお忘れですか?
-          </Link>
+          </InternalLink>
         </Box>
       </Text>
     </>

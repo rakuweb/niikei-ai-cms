@@ -2,7 +2,7 @@
 import React, { FC } from 'react';
 import { Image } from 'components/images/Image';
 import { Text } from 'components/texts/Text';
-import { Link } from '@chakra-ui/react';
+import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = { pagename1: string; pagename2: string };
 
@@ -18,14 +18,14 @@ export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
         alignItems={`center`}
         mb={`${15 / 19.2}vw`}
       >
-        <Link
+        <InternalLink
           href={`/`}
           _hover={{
             color: `#49bac0`,
           }}
         >
           {pagename1}
-        </Link>
+        </InternalLink>
 
         <Image
           w={`${7 / 19.2}vw`}
@@ -39,14 +39,14 @@ export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
           }}
         />
 
-        <Link
+        <InternalLink
           href={`/`}
           _hover={{
             color: `#49bac0`,
           }}
         >
           {pagename2}
-        </Link>
+        </InternalLink>
       </Text>
     </>
   );

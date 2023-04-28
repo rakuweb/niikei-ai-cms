@@ -16,7 +16,9 @@ import { Text } from 'components/texts/Text';
 import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 
-export type PresenterProps = Record<string, any>;
+export type PresenterProps = {
+  list: { category: string; name: string; url: string; frequency: string }[];
+};
 
 export const Presenter: FC<PresenterProps> = ({ list }) => {
   return (
