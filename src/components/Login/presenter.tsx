@@ -1,9 +1,9 @@
 // import layer
 import { Box, Input } from '@chakra-ui/react';
-import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';
 import { FC } from 'react';
 import { LoginButton } from './LoginButton';
+import { InternalLink } from 'components/links/InternalLink';
 
 // type layer
 export type StyleProps = Record<string, unknown>;
