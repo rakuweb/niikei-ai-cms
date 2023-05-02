@@ -7,7 +7,6 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const [pagenumber, setPagenumber] = useState(1);
-
   return (
     <Flex
       w={`fit-content`}
