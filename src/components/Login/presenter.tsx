@@ -4,6 +4,9 @@ import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';
 import { FC } from 'react';
 import { LoginButton } from './LoginButton';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, provider } from 'src/firebase';
+import { SignOutButton } from './SignOutButton';
 
 // type layer
 export type StyleProps = Record<string, unknown>;
@@ -11,6 +14,7 @@ export type PresenterProps = StyleProps;
 
 // presenter
 export const Presenter: FC<PresenterProps> = () => {
+  const [user] = useAuthState(auth);
   return (
     <>
       <Text
@@ -48,7 +52,14 @@ export const Presenter: FC<PresenterProps> = () => {
           type={'password'}
           borderRadius={`0`}
         />
-        <LoginButton />
+        {user ? (
+          <>
+            <SignOutButton />
+          </>
+        ) : (
+          <LoginButton />
+        )}
+
         <Box mt={`${20 / 19.2}vw`}>
           <InternalLink href={`/password-reset`} fontWeight={`bold`}>
             パスワードをお忘れですか?
