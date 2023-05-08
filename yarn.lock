@@ -1814,6 +1814,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chakra-ui/icons@npm:^2.0.19":
+  version: 2.0.19
+  resolution: "@chakra-ui/icons@npm:2.0.19"
+  dependencies:
+    "@chakra-ui/icon": "npm:3.0.16"
+  peerDependencies:
+    "@chakra-ui/system": ">=2.0.0"
+    react: ">=18"
+  checksum: adfbf98ce2c90973867c02476335b1ce890b968a3dbace5f47c937b05795c885acf08f47ec5d236c3fa3ff8b031e7937c9a2bfeea8705b9f68dd6baed1f84bd8
+  languageName: node
+  linkType: hard
+
 "@chakra-ui/image@npm:2.0.16":
   version: 2.0.16
   resolution: "@chakra-ui/image@npm:2.0.16"
@@ -4364,6 +4376,13 @@ __metadata:
   version: 1.1.0
   resolution: "@protobufjs/utf8@npm:1.1.0"
   checksum: a9dd3eca80967bab9175c860b87e4e2fd2cc867460df5431fc47898f5b817e6a88f670e5f58655c3753bccde25bcd77ec18f0a433b6dee8e4b50711707b2f7c1
+  languageName: node
+  linkType: hard
+
+"@remix-run/router@npm:1.6.1":
+  version: 1.6.1
+  resolution: "@remix-run/router@npm:1.6.1"
+  checksum: 37d46dd9ff73ce6ca4d1df4d1283ec7515c96ef39b3f042b4071856ae5852008765e5ebe2db212d7dba08a6c19f4b1af3664c3765f4acdd3dcd3917feb5a4821
   languageName: node
   linkType: hard
 
@@ -16089,6 +16108,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.21.4"
     "@chakra-ui/cli": "npm:^2.3.0"
+    "@chakra-ui/icons": "npm:^2.0.19"
     "@chakra-ui/react": "npm:^2.5.5"
     "@emotion/react": "npm:^11.10.6"
     "@emotion/styled": "npm:^11.10.6"
@@ -16131,6 +16151,7 @@ __metadata:
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     react-firebase-hooks: "npm:^5.1.1"
+    react-router-dom: "npm:^6.11.1"
     storybook-addon-next-router: "npm:^4.0.2"
     typescript: "npm:5.0.3"
     zustand: "npm:^4.3.7"
@@ -17907,6 +17928,30 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 68d47a732456598904ec29ebd42966b7454ed502deeaab0cffcc1fcd36211545dfd3ec6df4b15a25f0d3c84245db057231808880071578af3a70369b7033ec3e
+  languageName: node
+  linkType: hard
+
+"react-router-dom@npm:^6.11.1":
+  version: 6.11.1
+  resolution: "react-router-dom@npm:6.11.1"
+  dependencies:
+    "@remix-run/router": "npm:1.6.1"
+    react-router: "npm:6.11.1"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 1532e198268bea791919e2db1788d4dd4d90dc8e76612d0bae028b16e0ffaddc1c76e1af416a923eab09be8f71c27ae1d9ba257b9bfaef714d1f17f81c09b25d
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.11.1":
+  version: 6.11.1
+  resolution: "react-router@npm:6.11.1"
+  dependencies:
+    "@remix-run/router": "npm:1.6.1"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 5f39f6c6dbdd0d352416cc928dd61b8b8d321bc93f9135cc783fec125923c3ac8731af3fea07a8e97ce7b5eecf301e76fb6281872c85364b09d9b918118f72fc
   languageName: node
   linkType: hard
 
