@@ -72,7 +72,6 @@ export const Presenter: FC = () => {
           <OpenSvg fontSize={'1vw'} />
         </Link>
         <Link
-          as="button"
           bgColor={'#444857'}
           color={'white'}
           borderRadius={'1.4vw'}
