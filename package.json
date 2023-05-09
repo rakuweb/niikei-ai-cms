@@ -59,6 +59,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.11",
+    "firebase-admin": "^11.8.0",
     "firebase-tools": "^11.29.1",
     "husky": "^8.0.3",
     "hygen": "^6.2.11",
