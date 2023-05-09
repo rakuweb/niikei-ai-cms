@@ -1,15 +1,47 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-import { useStore } from 'lib/store';
+import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import router from 'next/router';
+
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
-  const currentUser = auth.currentUser;
+  const currentUser = useUserStore((state) => state.currentUser);
+
+  useEffect(() => {
+    const onAuthStateChanged = (user) => {
+      if (user) {
+        useUserStore.setState({ currentUser: user });
+      } else {
+        useUserStore.setState({ currentUser: null });
+      }
+    };
+
+    auth.onAuthStateChanged(onAuthStateChanged);
+
+    return () => {
+      auth.onAuthStateChanged(onAuthStateChanged);
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user && router.pathname !== '/signin') {
+        router.push('/signin');
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [router]);
+
   return (
     <Box css={styles}>
       <Flex
@@ -25,7 +57,7 @@ export const Presenter: FC = () => {
         className="flex"
       >
         <Text fontSize={`${24 / 19.2}vw`}>
-          {currentUser ? currentUser.displayName : ''}
+          {currentUser ? currentUser.email : ''}
         </Text>
 
         <Link
