@@ -7,7 +7,6 @@ import { FC, useState } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from 'src/firebase';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { InternalLink } from 'components/links/InternalLink';
 
 // type layer
 export type StyleProps = Record<string, unknown>;

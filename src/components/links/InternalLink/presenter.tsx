@@ -10,7 +10,6 @@ import {
 
 // type layer
 export type StyleProps = BoxProps & NextLinkProps;
-export type StyleProps = BoxProps & NextLinkProps;
 export type DataProps = Record<string, unknown>;
 export type PresenterProps = StyleProps & DataProps;
 
@@ -39,7 +38,6 @@ export const Presenter: FC<PresenterProps> = ({
       locale={locale}
     >
       <Box
-      <Box
         transition={`all .3s`}
         _hover={{
           cursor: 'pointer',
@@ -49,7 +47,6 @@ export const Presenter: FC<PresenterProps> = ({
         {...props}
       >
         {children}
-      </Box>
       </Box>
     </NextLink>
   );
