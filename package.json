@@ -1,0 +1,81 @@
+{
+  "name": "nextjs-template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next build && next-sitemap && next export",
+    "export:optimized": "next build && next-sitemap && next export && next-export-optimize-images",
+    "test": "jest",
+    "format": "prettier --write ./src",
+    "generate": "hygen component new",
+    "postbuild": "next-sitemap",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "gen:theme-typings": "chakra-cli tokens ./src/lib/theme/index.ts"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.5.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@vanilla-extract/css": "^1.11.0",
+    "firebase": "^9.21.0",
+    "firebase-functions": "^3.23.0",
+    "framer-motion": "^10.10.0",
+    "next": "13.2.4",
+    "next-seo": "^6.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.1.1",
+    "react-router-dom": "^6.11.1",
+    "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@chakra-ui/cli": "^2.3.0",
+    "@storybook/addon-actions": "^6.0.0",
+    "@storybook/addon-essentials": "^7.0.2",
+    "@storybook/addon-interactions": "^7.0.2",
+    "@storybook/addon-links": "^7.0.2",
+    "@storybook/builder-webpack5": "^7.0.2",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/react": "^7.0.2",
+    "@storybook/testing-library": "^0.1.0",
+    "@svgr/webpack": "^7.0.0",
+    "@types/firebase": "^3.2.1",
+    "@types/gtag.js": "^0.0.12",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.33",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vanilla-extract/next-plugin": "^2.1.1",
+    "babel-loader": "^9.1.2",
+    "eslint": "8.37.0",
+    "eslint-config-next": "13.2.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.11",
+    "firebase-tools": "^11.29.1",
+    "husky": "^8.0.3",
+    "hygen": "^6.2.11",
+    "lint-staged": "^13.2.0",
+    "next-export-optimize-images": "^2.0.1",
+    "next-sitemap": "^4.0.6",
+    "prettier": "^2.8.7",
+    "storybook-addon-next-router": "^4.0.2",
+    "typescript": "5.0.3"
+  },
+  "lint-staged": {
+    "*.@(ts|tsx})": [
+      "yarn lint .",
+      "yarn format"
+    ]
+  },
+  "volta": {
+    "node": "18.15.0"
+  }
+}
