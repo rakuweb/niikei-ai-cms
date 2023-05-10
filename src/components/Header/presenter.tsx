@@ -1,19 +1,20 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-import { useStore, useUserStore } from 'lib/store';
+import { useStore, useUserStore, usenameStore } from 'lib/store';
 import { auth } from 'src/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import router from 'next/router';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
   const currentUser = useUserStore((state) => state.currentUser);
-
+  const { userName } = usenameStore();
   useEffect(() => {
     const onAuthStateChanged = (user) => {
       if (user) {
@@ -42,6 +43,28 @@ export const Presenter: FC = () => {
     };
   }, [router]);
 
+  const [usersName, setUserName] = useState<string>('');
+
+  const getNameEmail = async () => {
+    const user = currentUser;
+    if (user) {
+      const db = getFirestore();
+      const usersRef = collection(db, 'allowedEmails');
+      const querySnapshot = await getDocs(usersRef);
+      querySnapshot.forEach((doc) => {
+        if (doc.data().email === user.email) {
+          setUserName(doc.data().name);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      getNameEmail();
+    }
+  }, [currentUser]);
+
   return (
     <Box css={styles}>
       <Flex
@@ -56,9 +79,7 @@ export const Presenter: FC = () => {
         alignItems={'center'}
         className="flex"
       >
-        <Text fontSize={`${24 / 19.2}vw`}>
-          {currentUser ? currentUser.email : ''}
-        </Text>
+        <Text fontSize={`${24 / 19.2}vw`}>{usersName ? usersName : ''}</Text>
 
         <Link
           ml={'auto'}

@@ -19,7 +19,7 @@ import { auth } from 'src/firebase';
 import Password from 'components/Templates/Inputcolumn/Password';
 
 export type PresenterProps = {
-  data?: { password: string; email: string; name: string }[];
+  data?: { role: string; string; email: string; name: string }[];
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
@@ -34,7 +34,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                   <Th w={`${52 / 19.2}vw`} h={`${20 / 19.2}vw`} />
                   <Th w={`${261 / 19.2}vw`}>ユーザー名</Th>
                   <Th w={`${617 / 19.2}vw`}>メールアドレス</Th>
-                  <Th w={`${73 / 19.2}vw`}>パスワード</Th>
+                  <Th w={`${73 / 19.2}vw`}>ステータス</Th>
                   <Th w={`${140 / 19.2}vw`}>アクション</Th>
                 </Tr>
               </Thead>
@@ -63,7 +63,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                     </Td>
                     <Td>{user.name}</Td>
                     <Td>{user.email}</Td>
-                    <Td>{user.password}</Td>
+                    <Td>{user.role}</Td>
                     <Td>
                       <Box display={'flex'} justifyContent={'space-around'}>
                         <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
