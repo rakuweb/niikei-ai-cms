@@ -27,6 +27,12 @@
     },
     "typeRoots": ["src/types", "node_modules/@types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./.eslintrc.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "./.eslintrc.js",
+    "src/firebase.js"
+  ],
   "exclude": ["node_modules"]
 }

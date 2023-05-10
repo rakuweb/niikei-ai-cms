@@ -12,6 +12,7 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     'storybook-addon-next-router',
+    '@storybook/addon-actions',
   ],
   framework: '@storybook/react',
   typescript: {
