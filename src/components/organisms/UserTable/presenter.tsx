@@ -34,7 +34,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                   <Th w={`${52 / 19.2}vw`} h={`${20 / 19.2}vw`} />
                   <Th w={`${261 / 19.2}vw`}>ユーザー名</Th>
                   <Th w={`${617 / 19.2}vw`}>メールアドレス</Th>
-                  <Th w={`${73 / 19.2}vw`}>ステータス</Th>
+                  <Th w={`${73 / 19.2}vw`}>パスワード</Th>
                   <Th w={`${140 / 19.2}vw`}>アクション</Th>
                 </Tr>
               </Thead>
