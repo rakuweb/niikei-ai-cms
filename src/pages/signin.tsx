@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { Login } from 'components/Login';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import type { NextPage } from 'next';
 import { db } from 'src/firebase';
 
