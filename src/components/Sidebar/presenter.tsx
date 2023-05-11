@@ -72,10 +72,18 @@ export const Presenter: FC = () => {
 
             <Popup title="設定" logo={<GearSvg />} links={links} />
             <SidebarToggle onClick={toggleSidebar}>
-              <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>
+              <Box
+                fontFamily={`'Noto Sans JP', sans-serif`}
+                fontSize={`${16 / 19.2}vw`}
+                color={'#BABABA'}
+                display={'flex'}
+                alignItems={'center'}
+                pl={`${32 / 19.2}vw`}
+                gap={`${11 / 19.2}vw`}
+              >
                 <LeftmarkSvg />
                 メニューを閉じる
-              </Link>
+              </Box>
             </SidebarToggle>
           </Box>
         </SidebarContent>

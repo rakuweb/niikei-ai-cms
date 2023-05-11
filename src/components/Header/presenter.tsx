@@ -1,9 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useEffect, useState } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-import { useStore, useUserStore, usenameStore } from 'lib/store';
+import { useStore, useUserStore, useUserStore, usenameStore } from 'lib/store';
+import { auth } from 'src/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import router from 'next/router';
 import { auth } from 'src/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import router from 'next/router';
@@ -100,6 +103,7 @@ export const Presenter: FC = () => {
           display={'flex'}
           alignItems={'center'}
           _hover={{ textDecoration: 'none' }}
+          onClick={() => auth.signOut()}
           onClick={() => auth.signOut()}
         >
           ログアウト

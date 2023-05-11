@@ -22,6 +22,13 @@ const Home: NextPage<HomeProps> = ({ data }) => {
           <h1 className={styles.title}>
             Welcome to <a href="https://nextjs.org">Next.js!</a>
           </h1>
+    <>
+      <Sidebar />
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <h1 className={styles.title}>
+            Welcome to <a href="https://nextjs.org">Next.js!</a>
+          </h1>
 
           <Box className={styles.description}>
             Get started by editing{' '}
