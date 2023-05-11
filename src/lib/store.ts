@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { User } from 'firebase/auth';
-import { User } from 'firebase/auth';
+
 type Open = {
   open: boolean;
   toggleOpen: () => void;
