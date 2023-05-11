@@ -10,7 +10,7 @@ type DocumentProps = {
     email: string;
     name: string;
     password: string;
-  }[];
+  };
 };
 
 const DocumentPage: NextPage<DocumentProps> = ({ data }) => {

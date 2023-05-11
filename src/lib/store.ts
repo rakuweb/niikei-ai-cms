@@ -26,10 +26,14 @@ export const useUserStore = create<UserState>((set) => ({
 
 type State = {
   userName: string;
+  userPassword: string;
   setUserName: (name: string) => void;
+  setUserPassword: (password: string) => void;
 };
 
 export const usenameStore = create<State>((set) => ({
   userName: '',
+  userPassword: '',
   setUserName: (name) => set({ userName: name }),
+  setUserPassword: (password) => set({ userPassword: password }),
 }));
