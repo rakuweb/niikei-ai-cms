@@ -18,9 +18,6 @@ const DocumentPage: NextPage<DocumentProps> = ({ data }) => {
     <>
       <Sidebar />
       <Box>
-        {/* <h1>{data.name}</h1>
-      <p>{data.email}</p>
-      <p>{data.role}</p> */}
         <Renew data={data} />
       </Box>
     </>

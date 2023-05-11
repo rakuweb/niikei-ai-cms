@@ -3,11 +3,8 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
-import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import { CrawlerTable } from 'components/ContentTable/CrawlerTable';
-import { Pagination } from 'components/Pagination';
 import { NewForm } from 'components/organisms/NewForm';
 
 export type PresenterProps = Record<string, unknown>;

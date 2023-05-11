@@ -2,24 +2,18 @@ import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Input,
-  Select,
   FormLabel,
   Flex,
-  InputGroup,
-  InputRightElement,
-  IconButton,
   FormControl,
   FormErrorMessage,
   Text,
 } from '@chakra-ui/react';
-import { css } from '@emotion/react';
+
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
 import { collection, addDoc, getDocs, getFirestore } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
-import { NameLabel } from './NameLabel';
-import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { useUserStore } from 'lib/store';
 
 type FormData = {
@@ -45,7 +39,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
-  const [showPassword, setShowPassword] = useState(false);
+
   const currentUser = useUserStore((state) => state.currentUser);
 
   const onSubmit = async (data: FormData) => {
