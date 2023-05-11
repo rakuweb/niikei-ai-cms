@@ -33,6 +33,7 @@ export type PresenterProps = {
     role: string;
     email: string;
     name: string;
+    password: string;
   }[];
 };
 

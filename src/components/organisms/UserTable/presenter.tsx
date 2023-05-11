@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Box,
   Table,
@@ -15,8 +15,6 @@ import { Text } from 'components/texts/Text';
 import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 import { GreyButton } from 'components/Button/GreyButton';
-import { auth } from 'src/firebase';
-import Password from 'components/Templates/Inputcolumn/Password';
 
 export type PresenterProps = {
   data?: { role: string; string; email: string; name: string }[];

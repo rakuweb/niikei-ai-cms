@@ -6,8 +6,9 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
 
 type HomeProps = {
-  data: {
+  data?: {
     role: string;
+    string: any;
     email: string;
     name: string;
   }[];
@@ -28,7 +29,7 @@ export const getStaticProps = async () => {
   const allowedEmailsRef = collection(db, 'allowedEmails');
   const querySnapshot = await getDocs(allowedEmailsRef);
 
-  let data = [];
+  const data = [];
   querySnapshot.forEach((doc) => {
     data.push(doc.data());
   });

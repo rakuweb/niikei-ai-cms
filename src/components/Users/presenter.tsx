@@ -12,8 +12,9 @@ import { UserTable } from 'components/organisms/UserTable';
 import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = {
-  data: {
+  data?: {
     role: string;
+    string: any;
     email: string;
     name: string;
   }[];
