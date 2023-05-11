@@ -10,9 +10,16 @@ import { CrawlerTable } from 'components/ContentTable/CrawlerTable';
 import { Pagination } from 'components/Pagination';
 import { RenewForm } from 'components/organisms/RenewForm';
 
-export type PresenterProps = Record<string, unknown>;
+export type PresenterProps = {
+  data: {
+    role: string;
+    email: string;
+    name: string;
+    password: string;
+  };
+};
 
-export const Presenter: FC = () => {
+export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `登録情報一覧`;
 
   return (
@@ -25,7 +32,7 @@ export const Presenter: FC = () => {
               <Title title={title} />
             </Flex>
             <ContentContainer h={`${702 / 19.2}vw`}>
-              <RenewForm />
+              <RenewForm data={data} />
             </ContentContainer>
           </Text>
         </OutsideContainer>

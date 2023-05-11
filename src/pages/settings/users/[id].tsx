@@ -21,7 +21,7 @@ const DocumentPage: NextPage<DocumentProps> = ({ data }) => {
         {/* <h1>{data.name}</h1>
       <p>{data.email}</p>
       <p>{data.role}</p> */}
-        <Renew />
+        <Renew data={data} />
       </Box>
     </>
   );
