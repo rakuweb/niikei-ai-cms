@@ -21,14 +21,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
+      <Box bg={`#EAEAEA`} h={'auto'} pb={'50px'}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>
-            <ContentContainer h={`${702 / 19.2}vw`}>
+            <ContentContainer h={'auto'}>
               <RenewForm data={data} />
             </ContentContainer>
           </Text>
