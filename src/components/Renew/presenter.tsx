@@ -13,7 +13,7 @@ export type PresenterProps = {
     email: string;
     name: string;
     password: string;
-  }[];
+  };
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
