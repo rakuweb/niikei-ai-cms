@@ -4,32 +4,34 @@ import { Box } from '@chakra-ui/react';
 import styles from '../styles/Home.module.css';
 import { Sidebar } from 'components/Sidebar';
 import { db } from '../../src/firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
-type HomeProps = {};
+type HomeProps = Record<string, never>;
 
-type DataType = {
-  email: string;
+type UserData = {
+  role: string;
   password: string;
+  email: string;
   name: string;
 };
 
 const Home: NextPage<HomeProps> = () => {
-  const [data, setData] = useState<DataType | null>(null);
+  const [data, setData] = useState<UserData[] | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       const allowedEmailsRef = collection(db, 'allowedEmails');
-      const cityRef = doc(allowedEmailsRef, 'kUquv8UHgNTimBsoqWG5');
-      const docSnap = await getDoc(cityRef);
+      const querySnapshot = await getDocs(allowedEmailsRef);
 
-      if (docSnap.exists()) {
-        const fetchedData = docSnap.data();
-        setData(fetchedData as DataType);
-      }
+      const fetchedData: UserData[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedData.push(doc.data() as UserData);
+      });
+
+      setData(fetchedData);
     };
 
-    fetchData();
+    fetchUserData();
   }, []);
 
   if (!data) {
@@ -45,10 +47,7 @@ const Home: NextPage<HomeProps> = () => {
             Welcome to <a href="https://nextjs.org">Next.js!</a>
           </h1>
 
-          <Box className={styles.description}>
-            Get started by editing{' '}
-            <code className={styles.code}>{data.password}</code>
-          </Box>
+          <Box className={styles.description}>Get started by editing </Box>
         </main>
       </div>
     </>

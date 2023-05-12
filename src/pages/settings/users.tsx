@@ -4,17 +4,38 @@ import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
+import { useEffect, useState } from 'react';
 
-type HomeProps = {
-  data?: {
-    role: string;
-    password: string;
-    email: string;
-    name: string;
-  }[];
+type UserData = {
+  role: string;
+  password: string;
+  email: string;
+  name: string;
 };
 
-const Home: NextPage<HomeProps> = ({ data }) => {
+const Home: NextPage = () => {
+  const [data, setData] = useState<UserData[] | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const allowedEmailsRef = collection(db, 'allowedEmails');
+      const querySnapshot = await getDocs(allowedEmailsRef);
+
+      const fetchedData: UserData[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedData.push(doc.data() as UserData);
+      });
+
+      setData(fetchedData);
+    };
+
+    fetchUserData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Sidebar />
@@ -23,22 +44,6 @@ const Home: NextPage<HomeProps> = ({ data }) => {
       </Box>
     </>
   );
-};
-
-export const getStaticProps = async () => {
-  const allowedEmailsRef = collection(db, 'allowedEmails');
-  const querySnapshot = await getDocs(allowedEmailsRef);
-
-  const data = [];
-  querySnapshot.forEach((doc) => {
-    data.push(doc.data());
-  });
-
-  return {
-    props: {
-      data,
-    },
-  };
 };
 
 export default Home;

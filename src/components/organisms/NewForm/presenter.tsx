@@ -45,7 +45,7 @@ export const Presenter: FC<PresenterProps> = () => {
       window.alert('送信しました');
     } catch (error) {
       console.error('Error adding document: ', error);
-      alert('エラーが発生しました');
+      alert('既に登録されているメールアドレスです。');
     }
   };
 

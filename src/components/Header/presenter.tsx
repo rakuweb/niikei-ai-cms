@@ -3,7 +3,7 @@ import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-import { useStore, useUserStore, usenameStore } from 'lib/store';
+import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import router from 'next/router';
@@ -15,7 +15,7 @@ export type PresenterProps = Record<string, unknown>;
 export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
   const currentUser = useUserStore((state) => state.currentUser);
-  const { userName } = usenameStore();
+
   useEffect(() => {
     const onAuthStateChanged = (user) => {
       if (user) {
@@ -42,7 +42,7 @@ export const Presenter: FC = () => {
     return () => {
       unsubscribe();
     };
-  }, [router]);
+  }, []);
 
   const [usersName, setUserName] = useState<string>('');
 

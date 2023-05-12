@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box } from '@chakra-ui/react';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
 import { NextPage } from 'next';
 
-type DocumentProps = {};
+type DocumentProps = Record<string, never>;
 
 type DataType = {
   role: string;

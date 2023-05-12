@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Box,
   Input,
@@ -15,12 +15,10 @@ import {
 
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
-import { collection, addDoc, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
-import { useUserStore } from 'lib/store';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
-import { NameLabel } from './NameLabel';
 
 type FormData = {
   name: string;
