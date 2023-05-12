@@ -98,7 +98,7 @@ export const SidebarContent = styled.div<{ isOpen: boolean }>`
     position: absolute;
     top: 0;
     font-weight: bold;
-
+    z-index: '5';
     .se {
       width: ${142 / 19.2}vw;
     }

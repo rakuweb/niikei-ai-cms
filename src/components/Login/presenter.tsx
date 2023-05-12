@@ -1,9 +1,9 @@
 import { Box, Input, IconButton } from '@chakra-ui/react';
 import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from 'src/firebase';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -37,9 +37,18 @@ export const Presenter: FC<PresenterProps> = () => {
       await signInWithEmailAndPassword(auth, userEmail, password);
       router.push('/');
     } catch (error) {
-      setError(error.message);
+      setError('ログイン情報に誤りがあります。');
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/');
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>

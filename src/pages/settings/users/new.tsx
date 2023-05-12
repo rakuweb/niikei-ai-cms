@@ -37,8 +37,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar />
       <Box>
+        <Sidebar />
         <New />
       </Box>
     </>

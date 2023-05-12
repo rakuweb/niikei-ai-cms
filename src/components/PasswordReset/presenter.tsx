@@ -50,6 +50,8 @@ export const Presenter: FC<PresenterProps> = () => {
           fontSize={`${16 / 19.2}vw`}
           borderRadius={`0`}
         />
+        {message && <Box color="green">{message}</Box>}
+        {error && <Box color="red">{error}</Box>}
         <Box
           as="button"
           type="submit"
@@ -68,8 +70,6 @@ export const Presenter: FC<PresenterProps> = () => {
         >
           パスワードリセットメールを送信
         </Box>
-        {message && <Box color="green">{message}</Box>}
-        {error && <Box color="red">{error}</Box>}
       </Box>
     </>
   );
