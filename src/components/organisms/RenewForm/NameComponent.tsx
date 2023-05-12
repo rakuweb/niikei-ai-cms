@@ -11,16 +11,22 @@ import { WideButton } from 'components/Button/WideButton';
 
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { PresenterProps } from './presenter';
 import { auth, db } from 'src/firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { PresenterProps } from './presenter';
+import { useRouter } from 'next/router';
 
 type FormData = {
   name: string;
 };
 
-export const NameComponent: FC<PresenterProps> = ({ data }) => {
+type NameComponentProps = PresenterProps & {
+  id: string;
+};
+export const NameComponent: FC<NameComponentProps> = ({ data }) => {
+  const router = useRouter();
+  const { id } = router.query;
   const {
     register,
     handleSubmit,
@@ -36,7 +42,7 @@ export const NameComponent: FC<PresenterProps> = ({ data }) => {
         await updateProfile(user, {
           displayName: data.name,
         });
-        const docRef = doc(db, 'allowedEmails', user.uid);
+        const docRef = doc(db, 'allowedEmails', id as string);
         await setDoc(docRef, { name: data.name }, { merge: true });
         window.alert('名前が更新されました');
       }

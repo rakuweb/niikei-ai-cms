@@ -29,7 +29,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               <Title title={title} />
             </Flex>
             <ContentContainer h={'auto'}>
-              <RenewForm data={data} />
+              <RenewForm data={data} id={''} />
             </ContentContainer>
           </Text>
         </OutsideContainer>

@@ -28,15 +28,11 @@ type FormData = {
   password: string;
 };
 export type PresenterProps = {
-  data: {
-    role: string;
-    email: string;
-    name: string;
-    password: string;
-  };
+  data: FormData;
+  id: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const {
     register,
     handleSubmit,
@@ -61,7 +57,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   return (
     <>
-      <NameComponent data={name} />
+      <NameComponent data={data} id={id} />
 
       <Box
         as="form"
