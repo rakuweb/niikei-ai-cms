@@ -8,7 +8,7 @@ import { db } from '../../../src/firebase';
 type HomeProps = {
   data?: {
     role: string;
-    string: any;
+    password: string;
     email: string;
     name: string;
   }[];

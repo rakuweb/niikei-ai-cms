@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
 import styles from '../styles/Home.module.css';
@@ -5,15 +6,36 @@ import { Sidebar } from 'components/Sidebar';
 import { db } from '../../src/firebase';
 import { collection, doc, getDoc } from 'firebase/firestore';
 
-type HomeProps = {
-  data: {
-    email: string;
-    password: string;
-    name: string;
-  };
+type HomeProps = {};
+
+type DataType = {
+  email: string;
+  password: string;
+  name: string;
 };
 
-const Home: NextPage<HomeProps> = ({ data }) => {
+const Home: NextPage<HomeProps> = () => {
+  const [data, setData] = useState<DataType | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const allowedEmailsRef = collection(db, 'allowedEmails');
+      const cityRef = doc(allowedEmailsRef, 'kUquv8UHgNTimBsoqWG5');
+      const docSnap = await getDoc(cityRef);
+
+      if (docSnap.exists()) {
+        const fetchedData = docSnap.data();
+        setData(fetchedData as DataType);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Sidebar />
@@ -31,26 +53,6 @@ const Home: NextPage<HomeProps> = ({ data }) => {
       </div>
     </>
   );
-};
-
-export const getStaticProps = async () => {
-  const allowedEmailsRef = collection(db, 'allowedEmails');
-  const cityRef = doc(allowedEmailsRef, 'kUquv8UHgNTimBsoqWG5');
-  const docSnap = await getDoc(cityRef);
-
-  if (!docSnap.exists()) {
-    return {
-      props: {},
-    };
-  }
-
-  const data = docSnap.data();
-
-  return {
-    props: {
-      data,
-    },
-  };
 };
 
 export default Home;

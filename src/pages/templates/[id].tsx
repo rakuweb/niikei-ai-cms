@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react';
-import { Login } from 'components/Login';
 import { Templates } from 'components/Templates';
 import type { NextPage } from 'next';
 

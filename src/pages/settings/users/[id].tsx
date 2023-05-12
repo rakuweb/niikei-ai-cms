@@ -1,19 +1,45 @@
-import { NextPage } from 'next';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Box } from '@chakra-ui/react';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
-type DocumentProps = {
-  data: {
-    role: string;
-    email: string;
-    name: string;
-    password: string;
-  };
+import { NextPage } from 'next';
+
+type DocumentProps = {};
+
+type DataType = {
+  role: string;
+  email: string;
+  name: string;
+  password: string;
 };
 
-const DocumentPage: NextPage<DocumentProps> = ({ data }) => {
+const DocumentPage: NextPage<DocumentProps> = () => {
+  const [data, setData] = useState<DataType | null>(null);
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const docRef = doc(db, 'allowedEmails', id as string);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setData(docSnap.data() as DataType);
+        }
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Sidebar />
@@ -22,28 +48,6 @@ const DocumentPage: NextPage<DocumentProps> = ({ data }) => {
       </Box>
     </>
   );
-};
-
-export const getStaticPaths = async () => {
-  const allowedEmailsRef = collection(db, 'allowedEmails');
-  const querySnapshot = await getDocs(allowedEmailsRef);
-
-  const paths = querySnapshot.docs.map((doc) => ({
-    params: { id: doc.id },
-  }));
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps = async ({ params }) => {
-  const docRef = doc(db, 'allowedEmails', params.id);
-  const docSnap = await getDoc(docRef);
-
-  return {
-    props: {
-      data: docSnap.data(),
-    },
-  };
 };
 
 export default DocumentPage;

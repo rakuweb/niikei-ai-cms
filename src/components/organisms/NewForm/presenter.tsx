@@ -10,7 +10,6 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
 import { collection, addDoc } from 'firebase/firestore';

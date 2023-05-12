@@ -13,7 +13,7 @@ import { InternalLink } from 'components/links/InternalLink';
 export type PresenterProps = {
   data?: {
     role: string;
-    string: any;
+    password: string;
     email: string;
     name: string;
   }[];

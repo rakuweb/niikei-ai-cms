@@ -1,8 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { Login } from 'components/Login';
-import { collection, getDocs } from 'firebase/firestore';
 import type { NextPage } from 'next';
-import { db } from 'src/firebase';
 
 type SigninProps = {
   data: {
@@ -19,24 +17,6 @@ const Signin: NextPage<SigninProps> = ({ data }) => {
       </Box>
     </>
   );
-};
-
-export const getStaticProps = async () => {
-  const allowedEmailsRef = collection(db, 'allowedEmails');
-  const querySnapshot = await getDocs(allowedEmailsRef);
-
-  const data = [];
-
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data());
-    data.push(doc.data());
-  });
-
-  return {
-    props: {
-      data,
-    },
-  };
 };
 
 export default Signin;
