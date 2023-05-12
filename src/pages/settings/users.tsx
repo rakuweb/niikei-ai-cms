@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 type UserData = {
   role: string;
-  string: any;
+  password: string;
   email: string;
   name: string;
 };

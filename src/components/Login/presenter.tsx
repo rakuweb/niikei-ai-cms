@@ -48,7 +48,7 @@ export const Presenter: FC<PresenterProps> = () => {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   return (
     <>

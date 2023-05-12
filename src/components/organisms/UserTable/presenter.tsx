@@ -17,7 +17,12 @@ import { WideButton } from 'components/Button/WideButton';
 import { GreyButton } from 'components/Button/GreyButton';
 
 export type PresenterProps = {
-  data?: { role: string; string; email: string; name: string }[];
+  data?: {
+    role: string;
+    email: string;
+    name: string;
+    password: string;
+  }[];
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {

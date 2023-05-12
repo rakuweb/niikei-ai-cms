@@ -10,7 +10,7 @@ type HomeProps = Record<string, never>;
 
 type UserData = {
   role: string;
-  string: any;
+  password: string;
   email: string;
   name: string;
 };

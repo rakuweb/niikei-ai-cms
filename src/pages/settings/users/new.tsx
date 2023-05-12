@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { db } from 'src/firebase';
 type UserData = {
   role: string;
-  string: any;
+  password: string;
   email: string;
   name: string;
 };
