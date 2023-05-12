@@ -14,7 +14,7 @@ import {
 import { Text } from 'components/texts/Text';
 import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
-import { GreyButton } from 'components/Button/GreyButton';
+import { GrayButton } from 'components/Button/GrayButton';
 
 export type PresenterProps = {
   data?: {
@@ -70,7 +70,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                     <Td>
                       <Box display={'flex'} justifyContent={'space-around'}>
                         <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
-                        <GreyButton text={`削除する`} w={`${140 / 19.2}vw`} />
+                        <GrayButton text={`削除する`} w={`${140 / 19.2}vw`} />
                       </Box>
                     </Td>
                   </Tr>

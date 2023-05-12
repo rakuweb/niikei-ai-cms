@@ -44,7 +44,7 @@ export const Presenter: FC = () => {
     };
   }, []);
 
-  const [usersName, setUserName] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   const getNameEmail = async () => {
     const user = currentUser;
@@ -80,7 +80,7 @@ export const Presenter: FC = () => {
         alignItems={'center'}
         className="flex"
       >
-        <Text fontSize={`${24 / 19.2}vw`}>{usersName ? usersName : ''}</Text>
+        <Text fontSize={`${24 / 19.2}vw`}>{userName ? userName : ''}</Text>
 
         <Link
           ml={'auto'}
