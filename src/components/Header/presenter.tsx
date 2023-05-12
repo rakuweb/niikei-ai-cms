@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import LogoutSvg from '../../../public/svg/logout.svg';
 import OpenSvg from '../../../public/svg/open_in_new.svg';
@@ -17,7 +17,7 @@ export const Presenter: FC = () => {
   const currentUser = useUserStore((state) => state.currentUser);
 
   useEffect(() => {
-    const onAuthStateChangedHandler = (user) => {
+    const onAuthStateChanged = (user) => {
       if (user) {
         useUserStore.setState({ currentUser: user });
       } else {
@@ -25,22 +25,28 @@ export const Presenter: FC = () => {
       }
     };
 
-    const unsubscribe = onAuthStateChanged(auth, onAuthStateChangedHandler);
+    auth.onAuthStateChanged(onAuthStateChanged);
+
+    return () => {
+      auth.onAuthStateChanged(onAuthStateChanged);
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user && router.pathname !== '/signin') {
+        router.push('/signin');
+      }
+    });
 
     return () => {
       unsubscribe();
     };
   }, []);
 
-  useEffect(() => {
-    if (!currentUser && router.pathname !== '/signin') {
-      router.push('/signin');
-    }
-  }, [currentUser]);
-
   const [usersName, setUserName] = useState<string>('');
 
-  const getNameEmail = useCallback(async () => {
+  const getNameEmail = async () => {
     const user = currentUser;
     if (user) {
       const db = getFirestore();
@@ -52,13 +58,13 @@ export const Presenter: FC = () => {
         }
       });
     }
-  }, [currentUser]);
+  };
 
   useEffect(() => {
     if (currentUser) {
       getNameEmail();
     }
-  }, [currentUser, getNameEmail]);
+  }, [currentUser]);
 
   return (
     <Box css={styles}>
