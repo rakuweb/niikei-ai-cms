@@ -7,8 +7,6 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { NewForm } from 'components/organisms/NewForm';
 
-export type PresenterProps = Record<string, unknown>;
-
 export const Presenter: FC = () => {
   const title = `登録情報一覧`;
 
