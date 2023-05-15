@@ -9,7 +9,7 @@ import { NewForm } from 'components/organisms/NewForm';
 
 export type PresenterProps = Record<string, unknown>;
 
-export const Presenter: FC = () => {
+export const Presenter: FC<PresenterProps> = () => {
   const title = `登録情報一覧`;
 
   return (
