@@ -8,12 +8,10 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { RenewForm } from 'components/organisms/RenewForm';
 
 export type PresenterProps = {
-  data: {
-    role: string;
-    email: string;
-    name: string;
-    password: string;
-  };
+  role: string;
+  email: string;
+  name: string;
+  password: string;
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {

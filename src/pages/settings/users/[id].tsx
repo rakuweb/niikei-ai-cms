@@ -7,7 +7,9 @@ import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
 import { NextPage } from 'next';
 
-type DocumentProps = Record<string, never>;
+type PresenterProps = {
+  data: DataType;
+};
 
 type DataType = {
   role: string;
@@ -16,7 +18,7 @@ type DataType = {
   password: string;
 };
 
-const DocumentPage: NextPage<DocumentProps> = () => {
+const DocumentPage: NextPage<PresenterProps> = () => {
   const [data, setData] = useState<DataType | null>(null);
   const router = useRouter();
   const { id } = router.query;
@@ -25,7 +27,13 @@ const DocumentPage: NextPage<DocumentProps> = () => {
     const fetchData = async () => {
       try {
         if (id) {
-          const docRef = doc(db, 'allowedEmails', id as string);
+          const docRef = doc(
+            db,
+            'companies',
+            'employees',
+            'employees',
+            id as string
+          );
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {

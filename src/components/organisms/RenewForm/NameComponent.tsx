@@ -42,7 +42,13 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         await updateProfile(user, {
           displayName: data.name,
         });
-        const docRef = doc(db, 'allowedEmails', id as string);
+        const docRef = doc(
+          db,
+          'companies',
+          'employees',
+          'employees',
+          id as string
+        );
         await setDoc(docRef, { name: data.name }, { merge: true });
         window.alert('名前が更新されました');
       }
@@ -71,18 +77,19 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
           </Flex>
           <Flex alignItems={'center'}>
             <Text w={'35%'}>変更後のユーザー名</Text>
-            <Input
-              w={'65%'}
-              type="text"
-              placeholder="ユーザ名を入力"
-              {...register('name', { required: true })}
-              borderRadius={'none'}
-            />
+            <Box w={'65%'}>
+              <Input
+                type="text"
+                placeholder="ユーザ名を入力"
+                {...register('name', { required: true })}
+                borderRadius={'none'}
+              />
+              <FormErrorMessage fontSize={'10px'}>
+                ユーザ名を入力してください
+              </FormErrorMessage>
+            </Box>
           </Flex>
         </FormLabel>
-        <FormErrorMessage fontSize={'10px'}>
-          ユーザ名を入力してください
-        </FormErrorMessage>
       </FormControl>
       <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
         <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />

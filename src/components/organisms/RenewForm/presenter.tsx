@@ -44,7 +44,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const onSubmit = async (data: FormData) => {
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
-      const docRef = collection(db, 'allowedEmails');
+      const docRef = collection(db, 'companies', 'employees', 'employees');
       await addDoc(docRef, { ...data });
       window.alert('送信しました');
     } catch (error) {

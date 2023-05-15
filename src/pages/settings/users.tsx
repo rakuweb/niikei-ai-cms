@@ -21,7 +21,12 @@ const Home: NextPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const allowedEmailsRef = collection(db, 'allowedEmails');
+        const allowedEmailsRef = collection(
+          db,
+          'companies',
+          'employees',
+          'employees'
+        );
         const querySnapshot = await getDocs(allowedEmailsRef);
 
         const fetchedData: UserData[] = [];

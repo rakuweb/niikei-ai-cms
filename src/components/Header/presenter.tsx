@@ -50,7 +50,7 @@ export const Presenter: FC = () => {
     const user = currentUser;
     if (user) {
       const db = getFirestore();
-      const usersRef = collection(db, 'allowedEmails');
+      const usersRef = collection(db, 'companies', 'employees', 'employees');
       const querySnapshot = await getDocs(usersRef);
       querySnapshot.forEach((doc) => {
         if (doc.data().email === user.email) {
