@@ -5,6 +5,8 @@ import { Sidebar } from 'components/Sidebar';
 import { collection, getDocs } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from 'src/firebase';
+import { useRouter } from 'next/router';
+
 type UserData = {
   role: string;
   password: string;
@@ -14,18 +16,21 @@ type UserData = {
 
 const Home: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const allowedEmailsRef = collection(db, 'allowedEmails');
-      const querySnapshot = await getDocs(allowedEmailsRef);
-
-      const fetchedData: UserData[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedData.push(doc.data() as UserData);
-      });
-
-      setData(fetchedData);
+      try {
+        const allowedEmailsRef = collection(db, 'allowedEmails');
+        const querySnapshot = await getDocs(allowedEmailsRef);
+        const fetchedData: UserData[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedData.push(doc.data() as UserData);
+        });
+        setData(fetchedData);
+      } catch (error) {
+        router.push('/signin');
+      }
     };
 
     fetchUserData();

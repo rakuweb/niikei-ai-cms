@@ -23,13 +23,17 @@ const DocumentPage: NextPage<DocumentProps> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
-        const docRef = doc(db, 'allowedEmails', id as string);
-        const docSnap = await getDoc(docRef);
+      try {
+        if (id) {
+          const docRef = doc(db, 'allowedEmails', id as string);
+          const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          setData(docSnap.data() as DataType);
+          if (docSnap.exists()) {
+            setData(docSnap.data() as DataType);
+          }
         }
+      } catch (error) {
+        router.push('/signin');
       }
     };
 

@@ -25,6 +25,10 @@ export const Presenter: FC = () => {
     { text: 'リンク3', url: '/' },
   ];
 
+  const setting = [
+    { text: 'ユーザ一覧', url: '/settings/users' },
+    { text: 'ユーザ新規作成', url: 'settings/users/new' },
+  ];
   const isOpen = useStore((state) => state.open);
 
   const toggleSidebar = useStore((state) => state.toggleOpen);
@@ -45,7 +49,7 @@ export const Presenter: FC = () => {
               <Popup title="" logo={<EditnoteSvg />} links={links} />
               <Popup title="" logo={<AutorenewSvg />} links={links} />
               <Popup title="" logo={<AntennaSvg />} links={links} />
-              <Popup title="" logo={<GearSvg />} links={links} />
+              <Popup title="" logo={<GearSvg />} links={setting} />
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
                   <RightmarkSvg />
@@ -74,7 +78,7 @@ export const Presenter: FC = () => {
                 logo={<AntennaSvg />}
                 links={links}
               />
-              <Popup title="設定" logo={<GearSvg />} links={links} />
+              <Popup title="設定" logo={<GearSvg />} links={setting} />
               <SidebarToggle onClick={toggleSidebar}>
                 <Box
                   fontFamily={`'Noto Sans JP', sans-serif`}

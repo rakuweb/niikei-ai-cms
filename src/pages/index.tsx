@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 import { Sidebar } from 'components/Sidebar';
 import { db } from '../../src/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 type HomeProps = Record<string, never>;
 
@@ -17,18 +18,21 @@ type UserData = {
 
 const Home: NextPage<HomeProps> = () => {
   const [data, setData] = useState<UserData[] | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const allowedEmailsRef = collection(db, 'allowedEmails');
-      const querySnapshot = await getDocs(allowedEmailsRef);
-
-      const fetchedData: UserData[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedData.push(doc.data() as UserData);
-      });
-
-      setData(fetchedData);
+      try {
+        const allowedEmailsRef = collection(db, 'allowedEmails');
+        const querySnapshot = await getDocs(allowedEmailsRef);
+        const fetchedData: UserData[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedData.push(doc.data() as UserData);
+        });
+        setData(fetchedData);
+      } catch (error) {
+        router.push('/signin');
+      }
     };
 
     fetchUserData();
