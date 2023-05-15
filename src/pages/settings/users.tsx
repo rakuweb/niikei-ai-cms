@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import styles from '../styles/Home.module.css';
+import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
-import { db } from '../../src/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../src/firebase';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-
-type HomeProps = Record<string, never>;
 
 type UserData = {
   role: string;
@@ -16,7 +14,7 @@ type UserData = {
   name: string;
 };
 
-const Home: NextPage<HomeProps> = () => {
+const Home: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
   const router = useRouter();
 
@@ -25,10 +23,12 @@ const Home: NextPage<HomeProps> = () => {
       try {
         const allowedEmailsRef = collection(db, 'allowedEmails');
         const querySnapshot = await getDocs(allowedEmailsRef);
+
         const fetchedData: UserData[] = [];
         querySnapshot.forEach((doc) => {
           fetchedData.push(doc.data() as UserData);
         });
+
         setData(fetchedData);
       } catch (error) {
         router.push('/signin');
@@ -45,15 +45,9 @@ const Home: NextPage<HomeProps> = () => {
   return (
     <>
       <Sidebar />
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <h1 className={styles.title}>
-            Welcome to <a href="https://nextjs.org">Next.js!</a>
-          </h1>
-
-          <Box className={styles.description}>Get started by editing </Box>
-        </main>
-      </div>
+      <Box>
+        <Users data={data} />
+      </Box>
     </>
   );
 };

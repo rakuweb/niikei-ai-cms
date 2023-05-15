@@ -1,9 +1,9 @@
 import { Box, Input, IconButton } from '@chakra-ui/react';
 import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from 'src/firebase';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -14,7 +14,8 @@ export type PresenterProps = StyleProps;
 
 // presenter
 export const Presenter: FC<PresenterProps> = () => {
-  const [error, setError] = useState('');
+  const [errorEmail, setErrorEmail] = useState('');
+  const [errorPass, setErrorPass] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -22,10 +23,12 @@ export const Presenter: FC<PresenterProps> = () => {
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(event.target.value);
+    setErrorEmail('');
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
+    setErrorPass('');
   };
 
   const handlePasswordVisibility = () => {
@@ -37,9 +40,25 @@ export const Presenter: FC<PresenterProps> = () => {
       await signInWithEmailAndPassword(auth, userEmail, password);
       router.push('/');
     } catch (error) {
-      setError(error.message);
+      if (
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/user-not-found'
+      ) {
+        setErrorEmail('メールアドレスが無効、または存在しません。');
+      } else {
+        setErrorPass('パスワードが間違っています。');
+      }
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/');
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
 
   return (
     <>
@@ -51,50 +70,54 @@ export const Presenter: FC<PresenterProps> = () => {
         fontSize={`${16 / 19.2}vw`}
         lineHeight={`${26 / 19.2}vw`}
       >
-        <Box
-          as={`h1`}
-          fontWeight={`bold`}
-          fontSize={`${36 / 19.2}vw`}
-          lineHeight={`${49 / 19.2}vw`}
-          mb={`${50 / 19.2}vw`}
-          textAlign={`center`}
-        >
-          管理者ログイン
-        </Box>
-        <Box mb={`${10 / 19.2}vw`}>メールアドレス</Box>
-        <Input
-          type="email"
-          value={userEmail}
-          onChange={handleEmailChange}
-          placeholder="メールアドレスを入力"
-          bg={`white`}
-          mb={`${10 / 19.2}vw`}
-          h={`${50 / 19.2}vw`}
-          fontSize={`${16 / 19.2}vw`}
-          borderRadius={`0`}
-        />
-        <Box mb={`${10 / 19.2}vw`}>パスワード</Box>
-        <Box position="relative">
+        <Box mb={`${10 / 19.2}vw`}>
+          <Box
+            as={`h1`}
+            fontWeight={`bold`}
+            fontSize={`${36 / 19.2}vw`}
+            lineHeight={`${49 / 19.2}vw`}
+            textAlign={`center`}
+          >
+            管理者ログイン
+          </Box>
+          <Box mb={`${10 / 19.2}vw`}>メールアドレス</Box>
           <Input
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="パスワードを入力"
+            type="email"
+            value={userEmail}
+            onChange={handleEmailChange}
+            placeholder="メールアドレスを入力"
             bg={`white`}
-            mb={`${30 / 19.2}vw`}
             h={`${50 / 19.2}vw`}
             fontSize={`${16 / 19.2}vw`}
             borderRadius={`0`}
           />
-          <IconButton
-            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-            position="absolute"
-            onClick={handlePasswordVisibility}
-            variant="ghost"
-            aria-label={''}
-          />
+          {errorEmail && <Box color={'red'}>{errorEmail}</Box>}
         </Box>
-        {error && <Box color="red">{error}</Box>}
+
+        <Box mb={`${10 / 19.2}vw`}>パスワード</Box>
+        <Box mb={`${30 / 19.2}vw`}>
+          <Box position="relative">
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder="パスワードを入力"
+              bg={`white`}
+              h={`${50 / 19.2}vw`}
+              fontSize={`${16 / 19.2}vw`}
+              borderRadius={`0`}
+            />
+            <IconButton
+              icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+              position="absolute"
+              onClick={handlePasswordVisibility}
+              variant="ghost"
+              aria-label={''}
+            />
+          </Box>
+          {errorPass && <Box color={'red'}>{errorPass}</Box>}
+        </Box>
+
         <Box
           as="button"
           onClick={signInWithEmailAndPasswordHandler}

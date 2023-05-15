@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import styles from '../styles/Home.module.css';
+import { New } from 'components/New';
 import { Sidebar } from 'components/Sidebar';
-import { db } from '../../src/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { db } from 'src/firebase';
 import { useRouter } from 'next/router';
-
-type HomeProps = Record<string, never>;
 
 type UserData = {
   role: string;
@@ -16,7 +14,7 @@ type UserData = {
   name: string;
 };
 
-const Home: NextPage<HomeProps> = () => {
+const Home: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
   const router = useRouter();
 
@@ -44,16 +42,10 @@ const Home: NextPage<HomeProps> = () => {
 
   return (
     <>
-      <Sidebar />
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <h1 className={styles.title}>
-            Welcome to <a href="https://nextjs.org">Next.js!</a>
-          </h1>
-
-          <Box className={styles.description}>Get started by editing </Box>
-        </main>
-      </div>
+      <Box>
+        <Sidebar />
+        <New />
+      </Box>
     </>
   );
 };

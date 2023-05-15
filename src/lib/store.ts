@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { User } from 'firebase/auth';
+
 type Open = {
   open: boolean;
   toggleOpen: () => void;
@@ -21,4 +22,14 @@ type UserState = {
 export const useUserStore = create<UserState>((set) => ({
   currentUser: null,
   setCurrentUser: (user) => set({ currentUser: user }),
+}));
+
+type State = {
+  userName: string;
+  setUserName: (name: string) => void;
+};
+
+export const usenameStore = create<State>((set) => ({
+  userName: '',
+  setUserName: (name) => set({ userName: name }),
 }));

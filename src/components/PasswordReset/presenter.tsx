@@ -39,17 +39,20 @@ export const Presenter: FC<PresenterProps> = () => {
         fontSize={`${16 / 19.2}vw`}
         lineHeight={`${26 / 19.2}vw`}
       >
-        <Input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="登録メールアドレスを入力"
-          bg={`white`}
-          mb={`${30 / 19.2}vw`}
-          h={`${50 / 19.2}vw`}
-          fontSize={`${16 / 19.2}vw`}
-          borderRadius={`0`}
-        />
+        <Box mb={`${30 / 19.2}vw`}>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="登録メールアドレスを入力"
+            bg={`white`}
+            h={`${50 / 19.2}vw`}
+            fontSize={`${16 / 19.2}vw`}
+            borderRadius={`0`}
+          />
+          {message && <Box color="green">{message}</Box>}
+          {error && <Box color="red">{error}</Box>}
+        </Box>
         <Box
           as="button"
           type="submit"
@@ -68,8 +71,6 @@ export const Presenter: FC<PresenterProps> = () => {
         >
           パスワードリセットメールを送信
         </Box>
-        {message && <Box color="green">{message}</Box>}
-        {error && <Box color="red">{error}</Box>}
       </Box>
     </>
   );
