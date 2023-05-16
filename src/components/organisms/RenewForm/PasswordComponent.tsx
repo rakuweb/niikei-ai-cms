@@ -76,7 +76,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'33vw'}
+      w={'45vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="password"
