@@ -2,7 +2,6 @@ import {
   FormControl,
   FormLabel,
   Flex,
-  Input,
   FormErrorMessage,
   Text,
   Box,
@@ -13,7 +12,6 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
-import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';

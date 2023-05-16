@@ -5,7 +5,6 @@ import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
 import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import router from 'next/router';
 
 import { getFirestore, collection, getDocs } from 'firebase/firestore';

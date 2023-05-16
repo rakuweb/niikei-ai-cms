@@ -1,7 +1,5 @@
 import {
-  Box,
   Input,
-  IconButton,
   Button,
   useDisclosure,
   Modal,
@@ -10,17 +8,14 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from 'src/firebase';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const [errorEmail, setErrorEmail] = useState('');
@@ -29,7 +24,6 @@ export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: isOpen });
-  const router = useRouter();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(event.target.value);
@@ -39,10 +33,6 @@ export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
     setErrorPass('');
-  };
-
-  const handlePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   useEffect(() => {
@@ -103,9 +93,6 @@ export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
           >
             ログイン
           </Button>
-          {/* <Button variant="ghost" onClick={onClose}>
-            キャンセル
-          </Button> */}
         </ModalFooter>
       </ModalContent>
     </Modal>
