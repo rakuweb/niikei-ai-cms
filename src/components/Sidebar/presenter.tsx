@@ -27,7 +27,7 @@ export const Presenter: FC = () => {
 
   const setting = [
     { text: 'ユーザ一覧', url: '/settings/users' },
-    { text: 'ユーザ新規作成', url: 'settings/users/new' },
+    { text: 'ユーザ新規作成', url: '/settings/users/new' },
   ];
   const isOpen = useStore((state) => state.open);
 

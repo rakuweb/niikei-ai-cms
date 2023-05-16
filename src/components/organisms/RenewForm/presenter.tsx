@@ -20,6 +20,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { NameComponent } from './NameComponent';
+import { EmailComponent } from './emailComponent';
 
 type FormData = {
   name: string;
@@ -97,44 +98,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         </Box>
       </Box>
 
-      <Box
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        w={'650px'}
-        color={'#222526'}
-        mb={'30px'}
-        className="email"
-      >
-        <FormControl isInvalid={!!errors.name} mb={'20px'}>
-          <FormLabel>
-            <Flex alignItems={'center'}>
-              <Text w={'35%'}>現在のメールアドレス</Text>
-              <Text textAlign={'left'} w={'65%'}>
-                {data.email}
-              </Text>
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Text w={'35%'}>変更後のメールアドレス</Text>
-              <Input
-                w={'65%'}
-                type="email"
-                placeholder="Emailを入力"
-                {...register('email', {
-                  required: true,
-                  pattern: /^[^@]+@[^@]+\.[^@]+$/,
-                })}
-                borderRadius={'none'}
-              />
-            </Flex>
-          </FormLabel>
-          <FormErrorMessage fontSize={'10px'}>
-            正しい形式でメールアドレスを入力してください
-          </FormErrorMessage>
-        </FormControl>
-        <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
-          <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
-        </Box>
-      </Box>
+      <EmailComponent data={data} id={id} />
 
       <Box
         as="form"
@@ -146,12 +110,6 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       >
         <FormControl isInvalid={!!errors.password} mb={'20px'}>
           <FormLabel>
-            {/* <Flex alignItems={'center'}>
-              <Text w={'35%'}>現在のパスワード</Text>
-              <Text textAlign={'left'} w={'65%'}>
-                {data.password}
-              </Text>
-            </Flex> */}
             <Flex alignItems={'center'}>
               <Text w={'35%'}>変更後のパスワード</Text>
               <InputGroup w={'65%'}>

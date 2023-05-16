@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
@@ -36,16 +36,24 @@ export const Presenter: FC<PresenterProps> = () => {
     mode: 'onChange',
   });
   const [showPassword, setShowPassword] = useState(false);
-
   const onSubmit = async (data: FormData) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
-      const docRef = collection(db, 'companies', 'employees', 'employees');
-      await addDoc(docRef, { ...data });
-      window.alert('送信しました');
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const { user } = userCredential;
+      const { password, ...dataWithoutPassword } = data;
+      if (user) {
+        const docRef = doc(db, 'companies', 'employees', 'employees', user.uid);
+        await setDoc(docRef, dataWithoutPassword);
+        window.alert('送信しました。サインアウトします。');
+        auth.signOut();
+      }
     } catch (error) {
       console.error('Error adding document: ', error);
-      alert('既に登録されているメールアドレスです。');
+      alert(error);
     }
   };
 

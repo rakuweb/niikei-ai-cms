@@ -7,10 +7,6 @@ import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
 import { NextPage } from 'next';
 
-type PresenterProps = {
-  data: DataType;
-};
-
 type DataType = {
   role: string;
   email: string;
@@ -18,7 +14,7 @@ type DataType = {
   password: string;
 };
 
-const DocumentPage: NextPage<PresenterProps> = () => {
+const DocumentPage: NextPage = () => {
   const [data, setData] = useState<DataType | null>(null);
   const router = useRouter();
   const { id } = router.query;

@@ -53,7 +53,7 @@ export const Presenter: FC = () => {
       const usersRef = collection(db, 'companies', 'employees', 'employees');
       const querySnapshot = await getDocs(usersRef);
       querySnapshot.forEach((doc) => {
-        if (doc.data().email === user.email) {
+        if (doc.id === user.uid) {
           setUserName(doc.data().name);
         }
       });
