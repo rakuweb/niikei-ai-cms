@@ -32,18 +32,6 @@ export const Presenter: FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user && router.pathname !== '/signin') {
-        router.push('/signin');
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   const [userName, setUserName] = useState<string>('');
 
   const getNameEmail = async () => {
@@ -101,7 +89,10 @@ export const Presenter: FC = () => {
           display={'flex'}
           alignItems={'center'}
           _hover={{ textDecoration: 'none' }}
-          onClick={() => auth.signOut()}
+          onClick={async () => {
+            await auth.signOut();
+            router.push('/signin');
+          }}
         >
           ログアウト
           <Box as="span" pr={'0.35vw'} />

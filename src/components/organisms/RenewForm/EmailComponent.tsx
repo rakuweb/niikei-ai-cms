@@ -16,7 +16,7 @@ import { updateEmail } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
-
+import { PasswordPopupComponent } from './PasswordPopupComponent';
 type FormData = {
   email: string;
 };
@@ -57,9 +57,11 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       }
     } catch (error) {
       console.error('Error updating email: ', error);
-      alert('制限時間を過ぎました。ログインし直して再度変更して下さい。');
+      window.alert('再ログイン後もう一度ご入力下さい');
+      setShowPopup(true);
     }
   };
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleEmailSubmit = (e) => {
     e.stopPropagation();
@@ -106,6 +108,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       >
         <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
       </Box>
+      {showPopup && <PasswordPopupComponent isOpen={true} />}
     </Box>
   );
 };
