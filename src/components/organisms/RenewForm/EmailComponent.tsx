@@ -71,9 +71,9 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'650px'}
+      w={'33vw'}
       color={'#222526'}
-      mb={'30px'}
+      mb={'1.5vw'}
       className="email"
     >
       <FormControl isInvalid={!!errors.email}>
@@ -93,7 +93,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
                 {...register('email', { required: true })}
                 borderRadius={'none'}
               />
-              <FormErrorMessage fontSize={'10px'}>
+              <FormErrorMessage fontSize={'0.5vw'}>
                 メールアドレスを入力してください
               </FormErrorMessage>
             </Box>

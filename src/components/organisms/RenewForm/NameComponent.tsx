@@ -67,9 +67,9 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'650px'}
+      w={'33vw'}
       color={'#222526'}
-      mb={'30px'}
+      mb={'1.5vw'}
       className="name"
     >
       <FormControl isInvalid={!!errors.name}>
@@ -89,7 +89,7 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
                 {...register('name', { required: true })}
                 borderRadius={'none'}
               />
-              <FormErrorMessage fontSize={'10px'}>
+              <FormErrorMessage fontSize={'0.5vw'}>
                 ユーザ名を入力してください
               </FormErrorMessage>
             </Box>

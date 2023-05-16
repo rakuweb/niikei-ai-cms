@@ -76,12 +76,12 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'650px'}
+      w={'33vw'}
       color={'#222526'}
-      mb={'30px'}
+      mb={'1.5vw'}
       className="password"
     >
-      <FormControl isInvalid={!!errors.password} mb={'20px'}>
+      <FormControl isInvalid={!!errors.password} mb={'1vw'}>
         <FormLabel>
           <Flex alignItems={'center'}>
             <Text w={'35%'}>変更後のパスワード</Text>
@@ -98,12 +98,12 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
                 })}
                 borderRadius={'none'}
               />
-              <InputRightElement width="3rem">
+              <InputRightElement width="2.4vw">
                 <IconButton
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                   onClick={() => setShowPassword(!showPassword)}
-                  h="1.75rem"
+                  h="1.4vw"
                   variant="ghost"
                   size="sm"
                 />
@@ -112,7 +112,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
           </Flex>
 
           {errors.password && (
-            <FormErrorMessage fontSize={'10px'}>
+            <FormErrorMessage fontSize={'0.5vw'}>
               {errors.password.message}
             </FormErrorMessage>
           )}

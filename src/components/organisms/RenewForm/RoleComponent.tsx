@@ -63,12 +63,12 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'650px'}
+      w={'33vw'}
       color={'#222526'}
-      mb={'30px'}
+      mb={'1.5vw'}
       className="role"
     >
-      <FormControl isInvalid={!!errors.role} mb={'20px'}>
+      <FormControl isInvalid={!!errors.role} mb={'1vw'}>
         <FormLabel>
           <Flex alignItems={'center'}>
             <Text w={'35%'}>現在のRole</Text>
@@ -89,7 +89,7 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
             </Select>
           </Flex>
         </FormLabel>
-        <FormErrorMessage fontSize={'10px'}>
+        <FormErrorMessage fontSize={'0.5vw'}>
           Roleを選択してください
         </FormErrorMessage>
       </FormControl>

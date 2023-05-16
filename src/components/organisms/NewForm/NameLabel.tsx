@@ -8,16 +8,16 @@ type NameLabelProps = {
 export const NameLabel: FC<NameLabelProps> = ({ name }) => {
   return (
     <Flex alignItems={'center'} lineHeight={'1'}>
-      <Box fontSize={'20px'} fontWeight={'400'}>
+      <Box fontSize={'1vw'} fontWeight={'400'}>
         {name}
       </Box>
       <Box
-        fontSize={'12px'}
+        fontSize={'0.6vw'}
         bgColor={'#49BAC0'}
         color={'white'}
-        p={'5px 12px'}
-        borderRadius={'20px'}
-        ml={'5px'}
+        p={'0.25vw 0.6vw'}
+        borderRadius={'1vw'}
+        ml={'0.25vw'}
       >
         必須
       </Box>
