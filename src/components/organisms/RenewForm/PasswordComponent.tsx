@@ -85,37 +85,40 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         <FormLabel>
           <Flex alignItems={'center'}>
             <Text w={'35%'}>変更後のパスワード</Text>
-            <InputGroup w={'65%'}>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="パスワードを入力"
-                {...register('password', {
-                  required: 'パスワードを入力してください',
-                  minLength: {
-                    value: 6,
-                    message: 'パスワードは6文字以上で入力してください',
-                  },
-                })}
-                borderRadius={'none'}
-              />
-              <InputRightElement width="2.4vw">
-                <IconButton
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                  onClick={() => setShowPassword(!showPassword)}
-                  h="1.4vw"
-                  variant="ghost"
-                  size="sm"
+            <Box w={'65%'}>
+              <InputGroup>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="パスワードを入力"
+                  {...register('password', {
+                    required: 'パスワードを入力してください',
+                    minLength: {
+                      value: 6,
+                      message: 'パスワードは6文字以上で入力してください',
+                    },
+                  })}
+                  borderRadius={'none'}
                 />
-              </InputRightElement>
-            </InputGroup>
+                <InputRightElement width="2.4vw">
+                  <IconButton
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    onClick={() => setShowPassword(!showPassword)}
+                    h="1.4vw"
+                    variant="ghost"
+                    size="sm"
+                  />
+                </InputRightElement>
+              </InputGroup>
+              {errors.password && (
+                <FormErrorMessage fontSize={'0.5vw'}>
+                  {errors.password.message}
+                </FormErrorMessage>
+              )}
+            </Box>
           </Flex>
-
-          {errors.password && (
-            <FormErrorMessage fontSize={'0.5vw'}>
-              {errors.password.message}
-            </FormErrorMessage>
-          )}
         </FormLabel>
       </FormControl>
       <Box

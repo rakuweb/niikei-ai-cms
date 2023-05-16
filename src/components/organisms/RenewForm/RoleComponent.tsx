@@ -76,22 +76,25 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
               {role}
             </Text>
           </Flex>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>変更後のRole</Text>
-            <Select
-              w={'65%'}
-              placeholder="Roleを選択"
-              {...register('role', { required: true })}
-              borderRadius={'none'}
-            >
-              <option value="確認者">確認者</option>
-              <option value="編集者">編集者</option>
-            </Select>
-          </Flex>
+          <Box>
+            <Flex alignItems={'center'}>
+              <Text w={'35%'}>変更後のRole</Text>
+              <Box w={'65%'}>
+                <Select
+                  placeholder="Roleを選択"
+                  {...register('role', { required: true })}
+                  borderRadius={'none'}
+                >
+                  <option value="確認者">確認者</option>
+                  <option value="編集者">編集者</option>
+                </Select>
+                <FormErrorMessage fontSize={'0.5vw'}>
+                  Roleを選択してください
+                </FormErrorMessage>
+              </Box>
+            </Flex>
+          </Box>
         </FormLabel>
-        <FormErrorMessage fontSize={'0.5vw'}>
-          Roleを選択してください
-        </FormErrorMessage>
       </FormControl>
       <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
         <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
