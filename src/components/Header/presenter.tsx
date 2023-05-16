@@ -68,6 +68,7 @@ export const Presenter: FC = () => {
         className="flex"
       >
         <Text fontSize={`${24 / 19.2}vw`}>{userName ? userName : ''}</Text>
+        <Text fontSize={`${24 / 19.2}vw`}>{userName ? userName : ''}</Text>
 
         <Link
           ml={'auto'}
