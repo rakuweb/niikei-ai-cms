@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 
 type UserData = {
   role: string;
-  password: string;
   email: string;
   name: string;
+  id: string;
 };
 
 const Home: NextPage = () => {
@@ -31,7 +31,10 @@ const Home: NextPage = () => {
 
         const fetchedData: UserData[] = [];
         querySnapshot.forEach((doc) => {
-          fetchedData.push(doc.data() as UserData);
+          fetchedData.push({
+            id: doc.id,
+            ...(doc.data() as { role: string; email: string; name: string }),
+          });
         });
 
         setData(fetchedData);
