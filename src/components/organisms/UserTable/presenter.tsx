@@ -39,6 +39,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
       if (user) {
         await deleteUser(user);
+        // ↑ここにAuthを消す処理を入れる
+
         await deleteDoc(docRef);
         window.alert('データと認証情報の削除が成功しました');
       } else {
