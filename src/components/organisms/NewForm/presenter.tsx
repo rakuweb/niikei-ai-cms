@@ -17,6 +17,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
+import { PasswordPopupComponent } from '../RenewForm/PasswordPopupComponent';
 
 type FormData = {
   name: string;
@@ -36,6 +37,8 @@ export const Presenter: FC<PresenterProps> = () => {
     mode: 'onChange',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
   const onSubmit = async (data: FormData) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -46,10 +49,14 @@ export const Presenter: FC<PresenterProps> = () => {
       const { user } = userCredential;
       const { password, ...dataWithoutPassword } = data;
       if (user) {
-        const docRef = doc(db, 'companies', 'employees', 'employees', user.uid);
-        await setDoc(docRef, dataWithoutPassword);
+        const companyDocRef = doc(db, 'companies', user.uid);
+        const employeeDocRef = doc(db, 'employees', user.uid);
+        await setDoc(companyDocRef, dataWithoutPassword);
+        await setDoc(employeeDocRef, dataWithoutPassword);
+
         window.alert('送信しました。サインアウトします。');
         auth.signOut();
+        setShowPopup(true);
       }
     } catch (error) {
       console.error('Error adding document: ', error);
@@ -133,12 +140,12 @@ export const Presenter: FC<PresenterProps> = () => {
                 })}
                 borderRadius={'none'}
               />
-              <InputRightElement width="48px">
+              <InputRightElement width="2.4vw">
                 <IconButton
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                   onClick={() => setShowPassword(!showPassword)}
-                  minH="28px"
+                  minH="1.2vw"
                   variant="ghost"
                   size="sm"
                 />
@@ -156,6 +163,7 @@ export const Presenter: FC<PresenterProps> = () => {
           <WideButton text={`送信する`} w={`${140 / 19.2}vw`} />
         </Box>
       </Box>
+      {showPopup && <PasswordPopupComponent isOpen={true} />}
     </>
   );
 };

@@ -14,11 +14,14 @@ import GearSvg from 'public/svg/gear.svg';
 import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
 import Popup from './Popup';
 import { Header } from 'components/Header';
-import { useStore } from 'lib/store';
+import { useStore, useUserStore } from 'lib/store';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
+  const currentUser = useUserStore((state) => state.currentUser);
+  const user = currentUser;
+  const url = '/settings/account/';
   const links = [
     { text: 'リンク1', url: '/' },
     { text: 'リンク2', url: '/' },
@@ -28,6 +31,7 @@ export const Presenter: FC = () => {
   const setting = [
     { text: 'ユーザ一覧', url: '/settings/users' },
     { text: 'ユーザ新規作成', url: '/settings/users/new' },
+    { text: 'アカウント詳細', url: user ? `${url}/${user.uid}` : '' },
   ];
   const isOpen = useStore((state) => state.open);
 

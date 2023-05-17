@@ -30,11 +30,11 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const url = '/settings/users/';
+  const url = '/settings/users';
 
   const handleDelete = async (id: string) => {
     try {
-      const docRef = doc(db, 'companies', 'employees', 'employees', id);
+      const docRef = doc(db, 'companies', id);
       const user = auth.currentUser;
 
       if (user) {
