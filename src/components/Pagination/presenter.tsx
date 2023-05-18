@@ -28,10 +28,19 @@ export const Presenter: FC<PresenterProps> = ({
       fontSize={`${16 / 19.2}vw`}
     >
       <Box
-        display={currentPage == 1 ? `none` : `block`}
-        onClick={() => handlePageChange(currentPage - 1)}
+        onClick={() => {
+          if (currentPage !== 1) {
+            handlePageChange(currentPage - 1);
+          }
+        }}
         // style
-      >{`戻る`}</Box>
+        color={currentPage === 1 ? 'gray' : 'inherit'}
+        cursor={currentPage === 1 ? 'default' : 'pointer'}
+        pointerEvents={currentPage === 1 ? 'none' : 'auto'}
+        mr={`1vw`}
+      >
+        戻る
+      </Box>
 
       {currentPage > 2 && <Box>{`…`}</Box>}
 
@@ -53,10 +62,15 @@ export const Presenter: FC<PresenterProps> = ({
       {currentPage < totalPages - 1 && <Box>{`…`}</Box>}
 
       <Box
-        display={currentPage == totalPages ? `none` : `block`}
         onClick={() => handlePageChange(currentPage + 1)}
         // style
-      >{`次へ`}</Box>
+        color={currentPage == totalPages ? 'gray' : 'inherit'}
+        cursor={currentPage == totalPages ? 'default' : 'pointer'}
+        pointerEvents={currentPage === totalPages ? 'none' : 'auto'}
+        ml={`1vw`}
+      >
+        次へ
+      </Box>
     </Flex>
   );
 };
