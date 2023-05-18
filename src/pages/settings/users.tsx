@@ -30,6 +30,10 @@ const Home: NextPage = () => {
             id: doc.id,
             ...(doc.data() as { role: string; email: string; name: string }),
           });
+          fetchedData.push({
+            id: doc.id,
+            ...(doc.data() as { role: string; email: string; name: string }),
+          });
         });
 
         setData(fetchedData);
