@@ -12,7 +12,6 @@ type UserData = {
   email: string;
   name: string;
   id: string;
-  id: string;
 };
 
 const Home: NextPage = () => {

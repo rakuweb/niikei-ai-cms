@@ -30,13 +30,6 @@ const UserPage: NextPage = () => {
             'employees',
             id as string
           );
-          const docRef = doc(
-            db,
-            'companies',
-            'employees',
-            'employees',
-            id as string
-          );
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {

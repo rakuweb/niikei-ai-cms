@@ -13,7 +13,6 @@ import {
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
 import { doc, setDoc } from 'firebase/firestore';
-import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
@@ -62,7 +61,6 @@ export const Presenter: FC<PresenterProps> = () => {
     } catch (error) {
       console.error('Error adding document: ', error);
       alert(error);
-      alert(error);
     }
   };
 
@@ -72,15 +70,12 @@ export const Presenter: FC<PresenterProps> = () => {
         as="form"
         onSubmit={handleSubmit(onSubmit)}
         w={'30vw'}
-        w={'30vw'}
         color={'#222526'}
       >
-        <FormControl isInvalid={!!errors.name} mb={'1vw'}>
         <FormControl isInvalid={!!errors.name} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="ユーザ名" />
             <Input
-              mt={'0.5vw'}
               mt={'0.5vw'}
               type="text"
               placeholder="ユーザ名を入力"
@@ -89,17 +84,14 @@ export const Presenter: FC<PresenterProps> = () => {
             />
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
-          <FormErrorMessage fontSize={'0.5vw'}>
             ユーザ名を入力してください
           </FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={!!errors.email} mb={'1vw'}>
-        <FormControl isInvalid={!!errors.email} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="Email" />
             <Input
-              mt={'0.5vw'}
               mt={'0.5vw'}
               type="email"
               placeholder="Emailを入力"
@@ -111,17 +103,14 @@ export const Presenter: FC<PresenterProps> = () => {
             />
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
-          <FormErrorMessage fontSize={'0.5vw'}>
             正しい形式でメールアドレスを入力してください
           </FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={!!errors.role} mb={'1vw'}>
-        <FormControl isInvalid={!!errors.role} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="Role" />
             <Select
-              mt={'0.5vw'}
               mt={'0.5vw'}
               placeholder="Roleを選択"
               {...register('role', { required: true })}
@@ -132,15 +121,12 @@ export const Presenter: FC<PresenterProps> = () => {
             </Select>
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
-          <FormErrorMessage fontSize={'0.5vw'}>
             Roleを選択してください
           </FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.password} mb={'1vw'}>
-        <FormControl isInvalid={!!errors.password} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="パスワード" />
-            <InputGroup mt={'0.5vw'}>
             <InputGroup mt={'0.5vw'}>
               <Input
                 type={showPassword ? 'text' : 'password'}
@@ -166,7 +152,6 @@ export const Presenter: FC<PresenterProps> = () => {
               </InputRightElement>
             </InputGroup>
             {errors.password && (
-              <FormErrorMessage fontSize={'0.5vw'}>
               <FormErrorMessage fontSize={'0.5vw'}>
                 {errors.password.message}
               </FormErrorMessage>

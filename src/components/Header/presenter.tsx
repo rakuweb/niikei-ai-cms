@@ -41,7 +41,6 @@ export const Presenter: FC = () => {
       const querySnapshot = await getDocs(usersRef);
       querySnapshot.forEach((doc) => {
         if (doc.id === user.uid) {
-        if (doc.id === user.uid) {
           setUserName(doc.data().name);
         }
       });
@@ -89,10 +88,6 @@ export const Presenter: FC = () => {
           display={'flex'}
           alignItems={'center'}
           _hover={{ textDecoration: 'none' }}
-          onClick={async () => {
-            await auth.signOut();
-            router.push('/signin');
-          }}
           onClick={async () => {
             await auth.signOut();
             router.push('/signin');

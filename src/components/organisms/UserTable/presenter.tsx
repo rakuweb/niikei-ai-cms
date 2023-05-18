@@ -19,10 +19,6 @@ import { InternalLink } from 'components/links/InternalLink';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from 'src/firebase';
 import { deleteUser } from 'firebase/auth';
-import { InternalLink } from 'components/links/InternalLink';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { auth, db } from 'src/firebase';
-import { deleteUser } from 'firebase/auth';
 
 export type PresenterProps = {
   data?: {
