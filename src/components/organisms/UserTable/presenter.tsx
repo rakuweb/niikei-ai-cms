@@ -19,6 +19,10 @@ import { InternalLink } from 'components/links/InternalLink';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from 'src/firebase';
 import { deleteUser } from 'firebase/auth';
+import { InternalLink } from 'components/links/InternalLink';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { auth, db } from 'src/firebase';
+import { deleteUser } from 'firebase/auth';
 
 export type PresenterProps = {
   data?: {
@@ -30,17 +34,15 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const url = '/settings/users/';
+  const url = '/settings/users';
 
   const handleDelete = async (id: string) => {
     try {
-      const docRef = doc(db, 'companies', 'employees', 'employees', id);
+      const docRef = doc(db, 'companies', id);
       const user = auth.currentUser;
 
       if (user) {
         await deleteUser(user);
-        // ↑ここにAuthを消す処理を入れる
-
         await deleteDoc(docRef);
         window.alert('データと認証情報の削除が成功しました');
       } else {
@@ -95,6 +97,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
                     <Td>
                       <Box display={'flex'} justifyContent={'space-around'}>
+                        <InternalLink href={`${url}/${user.id}`}>
+                          <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
+                        </InternalLink>
+                        <GrayButton
+                          text={`削除する`}
+                          w={`${140 / 19.2}vw`}
+                          onClick={() => handleDelete(user.id)}
+                        />
                         <InternalLink href={`${url}/${user.id}`}>
                           <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
                         </InternalLink>

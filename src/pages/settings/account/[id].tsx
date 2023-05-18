@@ -6,6 +6,7 @@ import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
 import { NextPage } from 'next';
+import { auth } from 'src/firebase';
 
 type DataType = {
   role: string;
@@ -19,24 +20,13 @@ const UserPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const user = auth.currentUser; // 現在のログインユーザーを取得
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
-          const docRef = doc(
-            db,
-            'companies',
-            'employees',
-            'employees',
-            id as string
-          );
-          const docRef = doc(
-            db,
-            'companies',
-            'employees',
-            'employees',
-            id as string
-          );
+          const docRef = doc(db, 'employees', id as string);
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
@@ -53,6 +43,9 @@ const UserPage: NextPage = () => {
 
   if (!data) {
     return <div>Loading...</div>;
+  }
+  if (user && user.uid !== id) {
+    return <div>このページにはアクセスできません。</div>;
   }
 
   return (
