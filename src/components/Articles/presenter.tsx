@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Box, Flex, TableContainer } from '@chakra-ui/react';
+import { Box, Flex, TableContainer, useDisclosure } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
@@ -7,11 +7,9 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
-import { UserTable } from 'components/organisms/UserTable';
-import { InternalLink } from 'components/links/InternalLink';
 import { ArticlesTable } from 'components/organisms/ArticlesTable';
+import { Popup } from './PopupComponent';
 
-// Articlesコンポーネント
 export type PresenterProps = {
   data?: {
     role: string;
@@ -29,6 +27,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
@@ -37,13 +37,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             <Breadcrumbs pagename1={`設定`} pagename2={title} />
             <Flex justify={`space-between`}>
               <Title title={title} />
-              <InternalLink href={'/settings/users/new'}>
-                <WideButton
-                  w={`${200 / 19.2}vw`}
-                  mt={`${13 / 19.2}vw`}
-                  text={`新規登録する`}
-                />
-              </InternalLink>
+
+              <WideButton
+                onClick={onOpen}
+                w={`${200 / 19.2}vw`}
+                mt={`${13 / 19.2}vw`}
+                text={`新規作成する`}
+                className="popup"
+              />
+              <Popup isOpen={isOpen} onClose={onClose} />
             </Flex>
 
             <ContentContainer h={`${702 / 19.2}vw`}>

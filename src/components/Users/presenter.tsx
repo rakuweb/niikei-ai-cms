@@ -43,7 +43,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               <UserTable data={data} />
             </ContentContainer>
 
-            <Pagination />
+            {/* <Pagination /> */}
           </Text>
         </OutsideContainer>
       </Box>
