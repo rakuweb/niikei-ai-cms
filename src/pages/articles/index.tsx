@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from 'src/firebase';
+import { Articles } from 'components/Articles';
 type UserData = {
   role: string;
   email: string;
@@ -56,7 +56,7 @@ const Home: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Users data={data} />
+        <Articles data={data} currentPage={0} />
       </Box>
     </>
   );

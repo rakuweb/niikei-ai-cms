@@ -101,14 +101,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                           w={`${140 / 19.2}vw`}
                           onClick={() => handleDelete(user.id)}
                         />
-                        <InternalLink href={`${url}/${user.id}`}>
-                          <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
-                        </InternalLink>
-                        <GrayButton
-                          text={`削除する`}
-                          w={`${140 / 19.2}vw`}
-                          onClick={() => handleDelete(user.id)}
-                        />
                       </Box>
                     </Td>
                   </Tr>
