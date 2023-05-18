@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <DefaultSeo {...SEO} />
       <ChakraProvider>
-        <Component {...pageProps} />
+        <Component {...pageProps} />{' '}
       </ChakraProvider>
     </>
   );

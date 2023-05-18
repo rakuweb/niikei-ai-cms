@@ -15,17 +15,40 @@ import { Text } from 'components/texts/Text';
 import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
+import { InternalLink } from 'components/links/InternalLink';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { auth, db } from 'src/firebase';
+import { deleteUser } from 'firebase/auth';
 
 export type PresenterProps = {
   data?: {
     role: string;
     email: string;
     name: string;
-    password: string;
+    id: string;
   }[];
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const url = '/settings/users';
+
+  const handleDelete = async (id: string) => {
+    try {
+      const docRef = doc(db, 'companies', id);
+      const user = auth.currentUser;
+
+      if (user) {
+        await deleteUser(user);
+        await deleteDoc(docRef);
+        window.alert('データと認証情報の削除が成功しました');
+      } else {
+        window.alert('認証情報の取得に失敗しました');
+      }
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return (
     <>
       <Box>
@@ -67,10 +90,17 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                     <Td>{user.name}</Td>
                     <Td>{user.email}</Td>
                     <Td>{user.role}</Td>
+
                     <Td>
                       <Box display={'flex'} justifyContent={'space-around'}>
-                        <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
-                        <GrayButton text={`削除する`} w={`${140 / 19.2}vw`} />
+                        <InternalLink href={`${url}/${user.id}`}>
+                          <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
+                        </InternalLink>
+                        <GrayButton
+                          text={`削除する`}
+                          w={`${140 / 19.2}vw`}
+                          onClick={() => handleDelete(user.id)}
+                        />
                       </Box>
                     </Td>
                   </Tr>

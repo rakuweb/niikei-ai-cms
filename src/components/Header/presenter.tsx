@@ -5,7 +5,6 @@ import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
 import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import router from 'next/router';
 
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
@@ -32,28 +31,16 @@ export const Presenter: FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user && router.pathname !== '/signin') {
-        router.push('/signin');
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   const [userName, setUserName] = useState<string>('');
 
   const getNameEmail = async () => {
     const user = currentUser;
     if (user) {
       const db = getFirestore();
-      const usersRef = collection(db, 'allowedEmails');
+      const usersRef = collection(db, 'employees');
       const querySnapshot = await getDocs(usersRef);
       querySnapshot.forEach((doc) => {
-        if (doc.data().email === user.email) {
+        if (doc.id === user.uid) {
           setUserName(doc.data().name);
         }
       });
@@ -101,7 +88,10 @@ export const Presenter: FC = () => {
           display={'flex'}
           alignItems={'center'}
           _hover={{ textDecoration: 'none' }}
-          onClick={() => auth.signOut()}
+          onClick={async () => {
+            await auth.signOut();
+            router.push('/signin');
+          }}
         >
           ログアウト
           <Box as="span" pr={'0.35vw'} />

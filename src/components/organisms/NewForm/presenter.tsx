@@ -12,11 +12,12 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
+import { PasswordPopupComponent } from '../RenewForm/PasswordPopupComponent';
 
 type FormData = {
   name: string;
@@ -36,16 +37,30 @@ export const Presenter: FC<PresenterProps> = () => {
     mode: 'onChange',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const onSubmit = async (data: FormData) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
-      const docRef = collection(db, 'allowedEmails');
-      await addDoc(docRef, { ...data });
-      window.alert('送信しました');
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const { user } = userCredential;
+      const { password, ...dataWithoutPassword } = data;
+      if (user) {
+        const companyDocRef = doc(db, 'companies', user.uid);
+        const employeeDocRef = doc(db, 'employees', user.uid);
+        await setDoc(companyDocRef, dataWithoutPassword);
+        await setDoc(employeeDocRef, dataWithoutPassword);
+
+        window.alert('送信しました。サインアウトします。');
+        auth.signOut();
+        setShowPopup(true);
+      }
     } catch (error) {
       console.error('Error adding document: ', error);
-      alert('既に登録されているメールアドレスです。');
+      alert(error);
     }
   };
 
@@ -54,30 +69,30 @@ export const Presenter: FC<PresenterProps> = () => {
       <Box
         as="form"
         onSubmit={handleSubmit(onSubmit)}
-        w={'600px'}
+        w={'30vw'}
         color={'#222526'}
       >
-        <FormControl isInvalid={!!errors.name} mb={'20px'}>
+        <FormControl isInvalid={!!errors.name} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="ユーザ名" />
             <Input
-              mt={'10px'}
+              mt={'0.5vw'}
               type="text"
               placeholder="ユーザ名を入力"
               {...register('name', { required: true })}
               borderRadius={'none'}
             />
           </FormLabel>
-          <FormErrorMessage fontSize={'10px'}>
+          <FormErrorMessage fontSize={'0.5vw'}>
             ユーザ名を入力してください
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.email} mb={'20px'}>
+        <FormControl isInvalid={!!errors.email} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="Email" />
             <Input
-              mt={'10px'}
+              mt={'0.5vw'}
               type="email"
               placeholder="Emailを入力"
               {...register('email', {
@@ -87,16 +102,16 @@ export const Presenter: FC<PresenterProps> = () => {
               borderRadius={'none'}
             />
           </FormLabel>
-          <FormErrorMessage fontSize={'10px'}>
+          <FormErrorMessage fontSize={'0.5vw'}>
             正しい形式でメールアドレスを入力してください
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.role} mb={'20px'}>
+        <FormControl isInvalid={!!errors.role} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="Role" />
             <Select
-              mt={'10px'}
+              mt={'0.5vw'}
               placeholder="Roleを選択"
               {...register('role', { required: true })}
               borderRadius={'none'}
@@ -105,14 +120,14 @@ export const Presenter: FC<PresenterProps> = () => {
               <option value="編集者">編集者</option>
             </Select>
           </FormLabel>
-          <FormErrorMessage fontSize={'10px'}>
+          <FormErrorMessage fontSize={'0.5vw'}>
             Roleを選択してください
           </FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.password} mb={'20px'}>
+        <FormControl isInvalid={!!errors.password} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="パスワード" />
-            <InputGroup mt={'10px'}>
+            <InputGroup mt={'0.5vw'}>
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="パスワードを入力"
@@ -125,19 +140,19 @@ export const Presenter: FC<PresenterProps> = () => {
                 })}
                 borderRadius={'none'}
               />
-              <InputRightElement width="3rem">
+              <InputRightElement width="2.4vw">
                 <IconButton
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                   onClick={() => setShowPassword(!showPassword)}
-                  h="1.75rem"
+                  minH="1.2vw"
                   variant="ghost"
                   size="sm"
                 />
               </InputRightElement>
             </InputGroup>
             {errors.password && (
-              <FormErrorMessage fontSize={'10px'}>
+              <FormErrorMessage fontSize={'0.5vw'}>
                 {errors.password.message}
               </FormErrorMessage>
             )}
@@ -148,6 +163,7 @@ export const Presenter: FC<PresenterProps> = () => {
           <WideButton text={`送信する`} w={`${140 / 19.2}vw`} />
         </Box>
       </Box>
+      {showPopup && <PasswordPopupComponent isOpen={true} />}
     </>
   );
 };

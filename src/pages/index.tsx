@@ -23,7 +23,7 @@ const Home: NextPage<HomeProps> = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const allowedEmailsRef = collection(db, 'allowedEmails');
+        const allowedEmailsRef = collection(db, 'test');
         const querySnapshot = await getDocs(allowedEmailsRef);
         const fetchedData: UserData[] = [];
         querySnapshot.forEach((doc) => {
