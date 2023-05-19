@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -14,7 +14,7 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const title = `データを読み込む`;
-
+  const [selectedFileContent, setSelectedFileContent] = useState(null);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
@@ -52,8 +52,8 @@ export const Presenter: FC = () => {
                 pl={`${30 / 19.2}vw`}
                 justify={`space-between`}
               >
-                <Fileselect />
-                <Read />
+                <Fileselect setSelectedFileContent={setSelectedFileContent} />
+                <Read text={selectedFileContent} />
               </Flex>
             </ContentContainer>
           </Text>

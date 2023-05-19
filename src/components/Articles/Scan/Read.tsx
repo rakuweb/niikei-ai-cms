@@ -3,7 +3,7 @@ import { Box, Flex, Textarea } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { BigWideButton } from 'components/Button/BigWideButton';
 
-const Read = () => {
+const Read = ({ text }) => {
   return (
     <div>
       <Text mb={`${40 / 19.2}vw`} letterSpacing={`0`}>
@@ -14,6 +14,7 @@ const Read = () => {
           borderRadius={`0`}
           borderColor={`#D6D6D6`}
           fontSize={`${16 / 19.2}vw`}
+          value={text}
         />
       </Text>
       <Flex justify={`space-between`}>

@@ -14,7 +14,7 @@ type UserData = {
   id: string;
 };
 
-const Home: NextPage = () => {
+const Articleslist: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
   const router = useRouter();
   const user = auth.currentUser;
@@ -48,9 +48,9 @@ const Home: NextPage = () => {
   if (!data) {
     return <div>Loading...</div>;
   }
-  if (user && user.uid !== process.env.NEXT_PUBLIC_COMPANIES) {
-    return <div>このページにはアクセスできません。</div>;
-  }
+  // if (user && user.uid !== process.env.NEXT_PUBLIC_COMPANIES) {
+  //   return <div>このページにはアクセスできません。</div>;
+  // }
 
   return (
     <>
@@ -62,4 +62,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Articleslist;

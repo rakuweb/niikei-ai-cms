@@ -7890,6 +7890,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"attr-accept@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "attr-accept@npm:2.2.2"
+  checksum: 6f52140c7278abb47155c44ee92032a57a64f4ad18c38f31182f5daf42597064157e839921fcba7c8a36d3dada3e25251afbd1ec83f090426a83f3d3888c444a
+  languageName: node
+  linkType: hard
+
 "available-typed-arrays@npm:^1.0.5":
   version: 1.0.5
   resolution: "available-typed-arrays@npm:1.0.5"
@@ -11574,6 +11581,15 @@ __metadata:
   dependencies:
     flat-cache: "npm:^3.0.4"
   checksum: cac7f7775980e696eceb922313887c03204eaea3659e0cd5b9f83ef29c7e5c613a6aa7662a3e9d0f78cf68060b093b82572e554f5464c0b2f626db32ef969cdc
+  languageName: node
+  linkType: hard
+
+"file-selector@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "file-selector@npm:0.6.0"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: f7af2ddd9e27d6b7105f0395019fdb3dd89f6359dd47531bce4135c911032e099fccc8686fbed8c12ecd5c6ed63cafc8cbcefb3c4e2e435894368c0cc52dc784
   languageName: node
   linkType: hard
 
@@ -16075,6 +16091,7 @@ __metadata:
     prettier: "npm:^2.8.7"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
+    react-dropzone: "npm:^14.2.3"
     react-firebase-hooks: "npm:^5.1.1"
     react-hook-form: "npm:^7.43.9"
     react-router-dom: "npm:^6.11.1"
@@ -17701,6 +17718,19 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7c5b915fb793d63563cec1f721e059e6ff0e2855ac116ab5cb7450b6c59398f5e25f95c960ce5cb93504cc58ab724a75a78e99282354e702a0e667d0d787d028
+  languageName: node
+  linkType: hard
+
+"react-dropzone@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "react-dropzone@npm:14.2.3"
+  dependencies:
+    attr-accept: "npm:^2.2.2"
+    file-selector: "npm:^0.6.0"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    react: ">= 16.8 || 18.0.0"
+  checksum: 621cf18663c6bd9f8257083e5300b007090ac464c1e225e672e87d727e6b4ea84140bf0d81da362fa3a73ef5907210edc549b4d41d935d8e3f3d09fc877af6a9
   languageName: node
   linkType: hard
 

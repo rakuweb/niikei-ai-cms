@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Center,
-  CircularProgress,
-  CircularProgressLabel,
-  Flex,
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
-import styled from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 
-const RoundedCircularProgress = styled(CircularProgress)`
-  svg {
-    stroke-linecap: round;
-  }
-`;
+const Fileselect = ({ setSelectedFileContent }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isButtonActive, setButtonActive] = useState(false);
+  const loadFileContent = () => {
+    if (!selectedFile) {
+      alert('まずファイルを選択してください。');
+      return;
+    }
 
-const Fileselect = () => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 0 : prevProgress + 5
-      );
-    }, 800);
-    return () => {
-      clearInterval(timer);
+    const fileReader = new FileReader();
+    fileReader.onloadend = () => {
+      setSelectedFileContent(fileReader.result);
     };
-  }, []);
+    fileReader.readAsText(selectedFile);
+  };
 
+  const { getRootProps, getInputProps, open } = useDropzone({
+    accept: { 'text/plain': ['.txt'] },
+    noClick: false,
+    noKeyboard: true,
+    onDrop: (acceptedFiles) => {
+      setSelectedFile(acceptedFiles[0]);
+      setButtonActive(true);
+    },
+  });
   return (
     <div>
       <Flex
@@ -42,56 +41,51 @@ const Fileselect = () => {
         alignItems={`center`}
         justifyContent={'center'}
       >
-        {/* <Text letterSpacing={`0`}>
-          <Box bg={`#D6D6D6`} w={`${540 / 19.2}vw`} h={`${300 / 19.2}vw`}>
-            <Box
-              fontSize={`${16 / 19.2}vw`}
-              color={`#525D6B`}
-              p={`${110 / 19.2}vw ${102 / 19.2}vw`}
-              whiteSpace={`nowrap`}
+        <Text letterSpacing={`0`} className="file">
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <Flex
+              flexFlow={'column'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              bg={`#D6D6D6`}
+              w={`${540 / 19.2}vw`}
+              h={`${300 / 19.2}vw`}
             >
-              <WideButton
-                text="ファイルを選択"
-                w={`${200 / 19.2}vw`}
-                mb={`${16 / 19.2}vw`}
-                mx={`auto`}
-              />
-              {`または、ファイルをここにドラッグ&ドロップ`}
-            </Box>
-          </Box>
-        </Text> */}
-        <RoundedCircularProgress
-          value={progress}
-          color="#49BAC0"
-          trackColor="rgba(73, 186, 192, 0.3)"
-          w={'90%'}
-          h={'90%'}
-          size={'100%'}
-          m={'auto'}
-        >
-          <CircularProgressLabel fontSize={'2.5vw'} m={'auto'}>
-            <Box as={'span'} fontWeight={'bold'} fontSize={'3vw'}>
-              {progress}
-            </Box>
-            <Box as={'span'} fontWeight={'bold'} fontSize={'1.5vw'}>
-              %
-            </Box>
-          </CircularProgressLabel>
-        </RoundedCircularProgress>
+              <Box>
+                <WideButton
+                  onClick={open}
+                  text="ファイルを選択"
+                  w={`${200 / 19.2}vw`}
+                  mb={`${16 / 19.2}vw`}
+                  mx={`auto`}
+                />
+                <Box fontSize={'1vw'} color={'#525D6B'}>
+                  {selectedFile
+                    ? selectedFile.name
+                    : `または、ファイルをここにドラッグ&ドロップ`}
+                </Box>
+              </Box>
+            </Flex>
+          </div>
+        </Text>
       </Flex>
-      <BigWideButton
-        src="/images/button/rightarrow_gray.png"
-        text="生成する"
-        w={`${280 / 19.2}vw`}
-        bg={`#D6D6D6`}
-        color={`#BABABA`}
-      />
-      {/* ファイル選択後はこちらにボタン変更 
-      <BigWideButton
-        src="/images/button/rightarrow.png"
-        text="生成する"
-        w={`${280 / 19.2}vw`}
-      /> */}
+      {!isButtonActive ? (
+        <BigWideButton
+          src="/images/button/rightarrow_gray.png"
+          text="生成する"
+          w={`${280 / 19.2}vw`}
+          bg={`#D6D6D6`}
+          color={`#BABABA`}
+        />
+      ) : (
+        <BigWideButton
+          onClick={loadFileContent}
+          src="/images/button/rightarrow.png"
+          text="生成する"
+          w={`${280 / 19.2}vw`}
+        />
+      )}
     </div>
   );
 };
