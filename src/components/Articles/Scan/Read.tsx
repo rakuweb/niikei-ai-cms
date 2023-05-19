@@ -1,9 +1,18 @@
 import React from 'react';
-import { Box, Flex, Textarea } from '@chakra-ui/react';
+import { Flex, Textarea } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { BigWideButton } from 'components/Button/BigWideButton';
 
 const Read = ({ text }) => {
+  const downloadText = () => {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'download.txt';
+    a.click();
+  };
+
   return (
     <div>
       <Text mb={`${40 / 19.2}vw`} letterSpacing={`0`}>
@@ -19,6 +28,7 @@ const Read = ({ text }) => {
       </Text>
       <Flex justify={`space-between`}>
         <BigWideButton
+          onClick={downloadText}
           src="/images/button/rightarrow_big.png"
           text="保存する"
           w={`${280 / 19.2}vw`}

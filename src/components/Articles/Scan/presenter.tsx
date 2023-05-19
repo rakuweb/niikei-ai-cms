@@ -3,10 +3,8 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
-import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import { CrawlerTable } from 'components/ContentTable/CrawlerTable';
 import Fileselect from './Fileselect';
 import Read from './Read';
 

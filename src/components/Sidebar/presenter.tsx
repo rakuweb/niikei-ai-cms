@@ -27,8 +27,11 @@ export const Presenter: FC = () => {
     { text: 'リンク2', url: '/' },
     { text: 'リンク3', url: '/' },
   ];
-
-  const setting = [
+  const articlepage = [
+    { text: '記事一覧', url: '/articles' },
+    { text: 'データを読み込む', url: '/articles/scan' },
+  ];
+  const settingpage = [
     { text: 'ユーザ一覧', url: '/settings/users' },
     { text: 'ユーザ新規作成', url: '/settings/users/new' },
     { text: 'アカウント詳細', url: user ? `${url}/${user.uid}` : '' },
@@ -49,11 +52,11 @@ export const Presenter: FC = () => {
               </Box>
               <Popup title="" logo={<HomeSvg />} links={links} />
               <Popup title="" logo={<RobotSvg />} links={links} />
-              <Popup title="" logo={<DescriptionSvg />} links={links} />
+              <Popup title="" logo={<DescriptionSvg />} links={articlepage} />
               <Popup title="" logo={<EditnoteSvg />} links={links} />
               <Popup title="" logo={<AutorenewSvg />} links={links} />
               <Popup title="" logo={<AntennaSvg />} links={links} />
-              <Popup title="" logo={<GearSvg />} links={setting} />
+              <Popup title="" logo={<GearSvg />} links={settingpage} />
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
                   <RightmarkSvg />
@@ -66,7 +69,11 @@ export const Presenter: FC = () => {
               </Box>
               <Popup title="ホーム" logo={<HomeSvg />} links={links} />
               <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
-              <Popup title="記事管理" logo={<DescriptionSvg />} links={links} />
+              <Popup
+                title="記事管理"
+                logo={<DescriptionSvg />}
+                links={articlepage}
+              />
               <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
@@ -82,7 +89,7 @@ export const Presenter: FC = () => {
                 logo={<AntennaSvg />}
                 links={links}
               />
-              <Popup title="設定" logo={<GearSvg />} links={setting} />
+              <Popup title="設定" logo={<GearSvg />} links={settingpage} />
               <SidebarToggle onClick={toggleSidebar}>
                 <Box
                   fontFamily={`'Noto Sans JP', sans-serif`}
