@@ -46,7 +46,7 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose }) => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <InternalLink href="/articles/scan">
+            <InternalLink href="/articles/document">
               <WideButton
                 onClick={onClose}
                 text=" Googleドキュメントで記事を作成する"
