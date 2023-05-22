@@ -23,7 +23,6 @@ export const Presenter: FC = () => {
             <Title title={title} />
             <ContentContainer px={`0`}>
               <Flex
-                fontSize={`${16 / 19.2}vw`}
                 letterSpacing={`0`}
                 borderBottom={`1px solid #D6D6D6`}
                 px={`${30 / 19.2}vw`}
