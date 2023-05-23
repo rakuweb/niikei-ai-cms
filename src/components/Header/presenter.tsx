@@ -7,13 +7,7 @@ import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
 import router from 'next/router';
 
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export type PresenterProps = Record<string, unknown>;
 
