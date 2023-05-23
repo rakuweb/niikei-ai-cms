@@ -24,7 +24,6 @@ const UserPage: NextPage = () => {
     const fetchData = async () => {
       try {
         if (id) {
-          // ①db, 'employees', idにあるrefフィールドの文字列を取得
           const employeeDocRef = doc(db, 'employees', id as string);
           const employeeDocSnap = await getDoc(employeeDocRef);
 
@@ -32,7 +31,6 @@ const UserPage: NextPage = () => {
             const ref = employeeDocSnap.data()?.ref;
 
             if (ref) {
-              // ②db,'company',refフィールドの文字列,'employees', idにアクセスして情報を取得
               const companyDocRef = doc(
                 db,
                 'company',

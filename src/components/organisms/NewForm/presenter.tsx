@@ -11,16 +11,17 @@ import {
   FormErrorMessage,
   Switch,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
 import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from 'src/firebase';
+import { db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { PasswordPopupComponent } from '../RenewForm/PasswordPopupComponent';
 
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { usenameStore } from '../../../lib/store';
 type FormData = {
   name: string;
   email: string;
@@ -43,9 +44,9 @@ export const Presenter: FC<PresenterProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showAdditionalField, setShowAdditionalField] = useState(false);
-
-  const [currentUserUid, setCurrentUserUid] = useState<string>('');
-
+  const currentUserUid = usenameStore((state) => state.currentUserUid);
+  const setCurrentUserUid = usenameStore((state) => state.setCurrentUserUid);
+  const { control } = useForm();
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
@@ -63,7 +64,6 @@ export const Presenter: FC<PresenterProps> = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      // 現在のユーザーのトークンを取得
       const auth = getAuth();
       const currentUser = auth.currentUser;
       let userToken = '';
@@ -79,15 +79,12 @@ export const Presenter: FC<PresenterProps> = () => {
       const { user } = userCredential;
       const { password, is_company, ...dataWithoutPassword } = data;
       if (user) {
-        const auth = getAuth(); // Authオブジェクトの取得
+        const auth = getAuth();
 
         let companyDocRef;
         if (is_company) {
-          // is_companyがtrueの場合は'company'コレクションに保存
-
           companyDocRef = doc(db, 'company', user.uid, 'employees', user.uid);
         } else {
-          // is_companyがfalseの場合は'employees'コレクションに保存
           companyDocRef = doc(
             db,
             'company',
@@ -101,19 +98,24 @@ export const Presenter: FC<PresenterProps> = () => {
         await setDoc(companyDocRef, {
           ...dataWithoutPassword,
           is_company: data.is_company,
+          ref: currentUserUid,
         });
-        await setDoc(employeeDocRef, dataWithoutPassword);
+
+        await setDoc(employeeDocRef, {
+          is_company: data.is_company,
+          ref: currentUserUid,
+        });
 
         if (!is_company) {
-          // is_companyがfalseの場合の追加の保存処理
           await setDoc(employeeDocRef, {
-            ...dataWithoutPassword,
             is_company: data.is_company,
+            ref: currentUserUid,
           });
         }
 
         window.alert('送信しました。サインアウトします。');
-        // auth.signOut();
+
+        setShowPopup(true);
       }
     } catch (error) {
       console.error('Error adding document: ', error);
@@ -131,7 +133,7 @@ export const Presenter: FC<PresenterProps> = () => {
       >
         <FormControl isInvalid={!!errors.is_company} mb={'1vw'}>
           <FormLabel>
-            追加フィールド
+            is_company
             <Switch
               mt={'0.5vw'}
               colorScheme="teal"
@@ -140,7 +142,6 @@ export const Presenter: FC<PresenterProps> = () => {
               isChecked={showAdditionalField}
             />
           </FormLabel>
-          {/* エラーメッセージの表示などを適宜追加 */}
         </FormControl>
 
         <FormControl isInvalid={!!errors.name} mb={'1vw'}>
@@ -162,13 +163,19 @@ export const Presenter: FC<PresenterProps> = () => {
         <FormControl isInvalid={!!errors.ref} mb={'1vw'}>
           <FormLabel>
             <NameLabel name="ref" />
-            <Input
-              mt={'0.5vw'}
-              type="text"
-              placeholder="refを入力"
-              {...register('ref', { required: true })}
-              borderRadius={'ref'}
-              value={currentUserUid}
+            <Controller
+              control={control}
+              name="ref"
+              render={({ field }) => (
+                <Input
+                  mt={'0.5vw'}
+                  type="text"
+                  placeholder="refを入力"
+                  {...field}
+                  borderRadius={'ref'}
+                  value={field.value || currentUserUid}
+                />
+              )}
             />
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>

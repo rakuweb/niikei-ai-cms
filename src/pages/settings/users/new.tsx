@@ -34,11 +34,9 @@ const Home: NextPage = () => {
               const employeeData = employeeDoc.data() as EmployeeData;
 
               if (!employeeData.is_company) {
-                router.push('/');
                 return;
               }
             } else {
-              router.push('/');
               return;
             }
 

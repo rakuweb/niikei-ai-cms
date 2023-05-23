@@ -20,17 +20,32 @@ const UserPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const user = auth.currentUser; // 現在のログインユーザーを取得
+  const user = auth.currentUser;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
-          const docRef = doc(db, 'employees', id as string);
-          const docSnap = await getDoc(docRef);
+          const employeeDocRef = doc(db, 'employees', id as string);
+          const employeeDocSnap = await getDoc(employeeDocRef);
 
-          if (docSnap.exists()) {
-            setData(docSnap.data() as DataType);
+          if (employeeDocSnap.exists()) {
+            const ref = employeeDocSnap.data()?.ref;
+
+            if (ref) {
+              const companyDocRef = doc(
+                db,
+                'company',
+                ref,
+                'employees',
+                id as string
+              );
+              const companyDocSnap = await getDoc(companyDocRef);
+
+              if (companyDocSnap.exists()) {
+                setData(companyDocSnap.data() as DataType);
+              }
+            }
           }
         }
       } catch (error) {
