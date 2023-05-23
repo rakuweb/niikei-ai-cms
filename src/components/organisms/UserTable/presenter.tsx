@@ -33,7 +33,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      // User認証情報の削除
       const response = await fetch('/api/deleteUsers', {
         method: 'POST',
         headers: {
@@ -56,7 +55,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
       if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        // User情報とCompany情報の削除
         await deleteDoc(userDocRef);
         await deleteDoc(companyEmployeeDocRef);
 

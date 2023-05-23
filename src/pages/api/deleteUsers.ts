@@ -1,14 +1,14 @@
-var admin = require('firebase-admin');
-
-var serviceAccount = require('niikei-39d3f-466153f0ce0d.json');
+import admin from 'firebase-admin';
+import serviceAccount from 'niikei-39d3f-466153f0ce0d.json';
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
     databaseURL: 'https://niikei-39d3f.firebaseio.com',
   });
 }
-export default async (req, res) => {
+
+const deleteUser = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(400).send('Invalid request method');
   }
@@ -22,3 +22,5 @@ export default async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+export default deleteUser;
