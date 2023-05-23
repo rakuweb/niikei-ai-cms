@@ -16,7 +16,7 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
 import { updateEmail, updatePassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 import { PasswordPopupComponent } from './PasswordPopupComponent';
@@ -42,26 +42,44 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
-
+  const API_URL = '/api/updateUserPassword';
   const onSubmit = async (data: FormData) => {
     try {
       const user = auth.currentUser;
-      if (user) {
-        await updatePassword(user, data.password);
-        const docRef = doc(
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: id,
+          newPassword: data.password,
+        }),
+      });
+      if (response.ok) {
+        const employeeDocRef = doc(db, 'employees', id as string);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+        const ref = employeeDocSnap.data()?.ref;
+        console.log({ ref });
+        const companyDocRef = doc(
           db,
-          'companies',
-          'employees',
+          'company',
+          ref,
           'employees',
           id as string
         );
-        await setDoc(docRef, { password: data.password }, { merge: true });
+        await setDoc(
+          companyDocRef,
+          { password: data.password },
+          { merge: true }
+        );
         setPassword(data.password);
+        window.alert('パスワードが更新されました');
       }
     } catch (error) {
       console.error('Error updating password: ', error);
       setShowPopup(true);
-      window.alert('パスワードが更新されました');
+      window.alert('エラー');
     }
   };
 

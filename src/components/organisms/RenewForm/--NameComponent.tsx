@@ -15,7 +15,7 @@ import { auth, db } from 'src/firebase';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 
 type FormData = {
   name: string;
@@ -25,12 +25,9 @@ type NameComponentProps = PresenterProps & {
   id: string;
 };
 export const NameComponent: FC<NameComponentProps> = ({ data }) => {
-  const router = useRouter();
   const { id } = router.query;
-  const [name, setName] = useState(data.name);
-  useEffect(() => {
-    setName(data.name);
-  }, [data.name]);
+
+  const [name, setName] = useState('');
   const {
     register,
     handleSubmit,
@@ -38,6 +35,36 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    const fetchName = async () => {
+      try {
+        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+        const ref = employeeDocSnap.data()?.ref;
+
+        if (ref) {
+          const companyDocRef = doc(
+            db,
+            'company',
+            ref,
+            'employees',
+            id as string
+          );
+          const companyDocSnap = await getDoc(companyDocRef);
+
+          if (companyDocSnap.exists()) {
+            setName(companyDocSnap.data()?.name || '');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching name: ', error);
+      }
+    };
+
+    fetchName();
+  }, [id]);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -49,7 +76,6 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'employees', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
-        console.log({ ref });
         const companyDocRef = doc(
           db,
           'company',

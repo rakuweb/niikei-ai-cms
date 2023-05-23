@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 
@@ -42,14 +42,18 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     try {
       const user = auth.currentUser;
       if (user) {
-        const docRef = doc(
+        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+        const ref = employeeDocSnap.data()?.ref;
+        console.log({ ref });
+        const companyDocRef = doc(
           db,
-          'companies',
-          'employees',
+          'company',
+          ref,
           'employees',
           id as string
         );
-        await setDoc(docRef, { role: data.role }, { merge: true });
+        await setDoc(companyDocRef, { role: data.role }, { merge: true });
         window.alert('Roleが更新されました');
         setRole(data.role);
       }

@@ -34,15 +34,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const docRef = doc(db, 'companies', id);
-      const user = auth.currentUser;
+      const response = await fetch('/api/deleteUsers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uid: id }),
+      });
 
-      if (user) {
-        await deleteUser(user);
-        await deleteDoc(docRef);
+      if (response.ok) {
         window.alert('データと認証情報の削除が成功しました');
       } else {
-        window.alert('認証情報の取得に失敗しました');
+        window.alert('認証情報の削除に失敗しました');
       }
     } catch (error) {
       window.alert(error);

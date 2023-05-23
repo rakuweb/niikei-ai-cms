@@ -13,7 +13,7 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
 import { updateEmail } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 import { PasswordPopupComponent } from './PasswordPopupComponent';
@@ -39,28 +39,47 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     mode: 'onChange',
   });
 
+  const API_URL = '/api/updateUserEmail';
+
   const onSubmit = async (data: FormData) => {
     try {
-      const user = auth.currentUser;
-      if (user) {
-        await updateEmail(user, data.email);
-        const docRef = doc(
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: id,
+          newEmail: data.email,
+        }),
+      });
+
+      if (response.ok) {
+        const employeeDocRef = doc(db, 'employees', id as string);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+        const ref = employeeDocSnap.data()?.ref;
+        console.log({ ref });
+        const companyDocRef = doc(
           db,
-          'companies',
-          'employees',
+          'company',
+          ref,
           'employees',
           id as string
         );
-        await setDoc(docRef, { email: data.email }, { merge: true });
+        await setDoc(companyDocRef, { email: data.email }, { merge: true });
         window.alert('メールアドレスが更新されました');
         setEmail(data.email);
+      } else {
+        throw new Error('メールアドレスの更新に失敗しました');
       }
     } catch (error) {
       console.error('Error updating email: ', error);
+      window.alert(error);
       window.alert('再ログイン後もう一度ご入力下さい');
-      setShowPopup(true);
+      // setShowPopup(true);
     }
   };
+
   const [showPopup, setShowPopup] = useState(false);
 
   const handleEmailSubmit = (e) => {
