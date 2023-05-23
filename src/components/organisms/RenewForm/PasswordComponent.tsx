@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
-import { updateEmail, updatePassword } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
@@ -57,13 +56,13 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         }),
       });
       if (response.ok) {
-        const employeeDocRef = doc(db, 'employees', id as string);
+        const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
         console.log({ ref });
         const companyDocRef = doc(
           db,
-          'company',
+          'companies',
           ref,
           'employees',
           id as string

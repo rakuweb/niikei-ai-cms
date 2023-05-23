@@ -46,13 +46,13 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         await updateProfile(user, {
           displayName: data.name,
         });
-        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
         console.log({ ref });
         const companyDocRef = doc(
           db,
-          'company',
+          'companies',
           ref,
           'employees',
           id as string

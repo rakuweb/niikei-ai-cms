@@ -42,13 +42,13 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     try {
       const user = auth.currentUser;
       if (user) {
-        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
         console.log({ ref });
         const companyDocRef = doc(
           db,
-          'company',
+          'companies',
           ref,
           'employees',
           id as string

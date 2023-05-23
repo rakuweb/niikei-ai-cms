@@ -27,7 +27,7 @@ const Home: NextPage = () => {
       if (user) {
         const fetchUserData = async () => {
           try {
-            const employeeRef = doc(db, 'employees', user.uid);
+            const employeeRef = doc(db, 'users', user.uid);
             const employeeDoc = await getDoc(employeeRef);
 
             if (employeeDoc.exists()) {
@@ -40,7 +40,7 @@ const Home: NextPage = () => {
               return;
             }
 
-            const allowedEmailsRef = collection(db, 'employees');
+            const allowedEmailsRef = collection(db, 'users');
             const querySnapshot = await getDocs(allowedEmailsRef);
             const fetchedData: UserData[] = [];
             querySnapshot.forEach((doc) => {

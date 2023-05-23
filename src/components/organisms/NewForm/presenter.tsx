@@ -83,18 +83,18 @@ export const Presenter: FC<PresenterProps> = () => {
 
         let companyDocRef;
         if (is_company) {
-          companyDocRef = doc(db, 'company', user.uid, 'employees', user.uid);
+          companyDocRef = doc(db, 'companies', user.uid, 'employees', user.uid);
         } else {
           companyDocRef = doc(
             db,
-            'company',
+            'companies',
             currentUserUid,
             'employees',
             user.uid
           );
         }
 
-        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocRef = doc(db, 'users', user.uid);
         await setDoc(companyDocRef, {
           ...dataWithoutPassword,
           is_company: data.is_company,

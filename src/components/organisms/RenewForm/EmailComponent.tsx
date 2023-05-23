@@ -11,8 +11,8 @@ import { WideButton } from 'components/Button/WideButton';
 import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { auth, db } from 'src/firebase';
-import { updateEmail } from 'firebase/auth';
+import { db } from 'src/firebase';
+
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
@@ -55,13 +55,13 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       });
 
       if (response.ok) {
-        const employeeDocRef = doc(db, 'employees', id as string);
+        const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
         console.log({ ref });
         const companyDocRef = doc(
           db,
-          'company',
+          'companies',
           ref,
           'employees',
           id as string
@@ -76,7 +76,6 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       console.error('Error updating email: ', error);
       window.alert(error);
       window.alert('再ログイン後もう一度ご入力下さい');
-      // setShowPopup(true);
     }
   };
 

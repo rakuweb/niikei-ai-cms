@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         if (user) {
           const allowedEmailsRef = collection(
             db,
-            'company',
+            'companies',
             user.uid,
             'employees'
           );

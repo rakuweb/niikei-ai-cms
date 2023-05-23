@@ -45,21 +45,21 @@ export const Presenter: FC = () => {
     try {
       if (user) {
         const db = getFirestore();
-        const employeeDocRef = doc(db, 'employees', user.uid);
+        const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
 
         const ref = employeeDocSnap.data()?.ref;
 
         const companyEmployeeRef = doc(
           db,
-          'company',
+          'companies',
           ref,
           'employees',
           user.uid
         );
 
         const companyEmployeeSnap = await getDoc(companyEmployeeRef);
-
+        console.log(companyEmployeeSnap.data());
         if (companyEmployeeSnap.exists()) {
           setUserName(companyEmployeeSnap.data().name);
         }

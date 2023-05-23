@@ -16,9 +16,6 @@ import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
 import { InternalLink } from 'components/links/InternalLink';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { auth, db } from 'src/firebase';
-import { deleteUser } from 'firebase/auth';
 
 export type PresenterProps = {
   data?: {

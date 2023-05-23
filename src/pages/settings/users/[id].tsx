@@ -24,7 +24,7 @@ const UserPage: NextPage = () => {
     const fetchData = async () => {
       try {
         if (id) {
-          const employeeDocRef = doc(db, 'employees', id as string);
+          const employeeDocRef = doc(db, 'users', id as string);
           const employeeDocSnap = await getDoc(employeeDocRef);
 
           if (employeeDocSnap.exists()) {
@@ -33,7 +33,7 @@ const UserPage: NextPage = () => {
             if (ref) {
               const companyDocRef = doc(
                 db,
-                'company',
+                'companies',
                 ref,
                 'employees',
                 id as string
