@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Box,
   Table,
@@ -12,14 +12,11 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
-import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
 import { InternalLink } from 'components/links/InternalLink';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { auth, db } from 'src/firebase';
-import { deleteUser } from 'firebase/auth';
-// ArticlesTable
+import { css } from '@emotion/react';
+
 export type PresenterProps = {
   data?: {
     role: string;
@@ -34,8 +31,9 @@ export const Presenter: FC<PresenterProps> = ({ data, currentPage }) => {
   const url = '/settings/users';
   const itemsPerPage = 10;
 
-  const handleDelete = async (id: string) => {};
-
+  const handleDelete = async (id: string) => {
+    console.log('Handle delete for id:', id);
+  };
   return (
     <>
       <Box>
