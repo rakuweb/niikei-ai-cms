@@ -7,6 +7,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import Fileselect from './Fileselect';
 import Read from './Read';
+import Mp3select from './Mp3select';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -42,6 +43,7 @@ export const Presenter: FC = () => {
                   w={`${71 / 19.2}vw`}
                   textAlign={`center`}
                   pb={`${12 / 19.2}vw`}
+                  color={isPDFSelected ? '#1a202c' : '#D6D6D6'}
                   borderBottom={`3px solid ${
                     isPDFSelected ? '#49BAC0' : '#D6D6D6'
                   }`}
@@ -53,7 +55,7 @@ export const Presenter: FC = () => {
                   as="button"
                   w={`${71 / 19.2}vw`}
                   textAlign={`center`}
-                  color={`#D6D6D6`}
+                  color={isPDFSelected ? '#D6D6D6' : '#1a202c'}
                   pb={`${12 / 19.2}vw`}
                   // mb={'3px'}
                   borderBottom={`3px solid ${
@@ -73,7 +75,7 @@ export const Presenter: FC = () => {
                 {isPDFSelected ? (
                   <Fileselect setSelectedFileContent={setSelectedFileContent} />
                 ) : (
-                  <mp3select setSelectedFileContent={setSelectedFileContent} />
+                  <Mp3select setSelectedFileContent={setSelectedFileContent} />
                 )}
                 <Read text={selectedFileContent} />
               </Flex>
