@@ -13,6 +13,16 @@ export type PresenterProps = Record<string, unknown>;
 export const Presenter: FC = () => {
   const title = `データを読み込む`;
   const [selectedFileContent, setSelectedFileContent] = useState(null);
+  const [isPDFSelected, setIsPDFSelected] = useState(true);
+
+  const handlePDFButtonClick = () => {
+    setIsPDFSelected(true);
+  };
+
+  const handleMP3ButtonClick = () => {
+    setIsPDFSelected(false);
+  };
+
   return (
     <>
       <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
@@ -28,17 +38,28 @@ export const Presenter: FC = () => {
                 px={`${30 / 19.2}vw`}
               >
                 <Box
+                  as="button"
                   w={`${71 / 19.2}vw`}
                   textAlign={`center`}
                   pb={`${12 / 19.2}vw`}
-                  borderBottom={`3px solid #49BAC0`}
+                  borderBottom={`3px solid ${
+                    isPDFSelected ? '#49BAC0' : '#D6D6D6'
+                  }`}
+                  onClick={handlePDFButtonClick}
                 >
                   PDF
                 </Box>
                 <Box
+                  as="button"
                   w={`${71 / 19.2}vw`}
                   textAlign={`center`}
                   color={`#D6D6D6`}
+                  pb={`${12 / 19.2}vw`}
+                  // mb={'3px'}
+                  borderBottom={`3px solid ${
+                    isPDFSelected ? '#D6D6D6' : '#49BAC0'
+                  }`}
+                  onClick={handleMP3ButtonClick}
                 >
                   音声
                 </Box>
@@ -49,7 +70,11 @@ export const Presenter: FC = () => {
                 pl={`${30 / 19.2}vw`}
                 justify={`space-between`}
               >
-                <Fileselect setSelectedFileContent={setSelectedFileContent} />
+                {isPDFSelected ? (
+                  <Fileselect setSelectedFileContent={setSelectedFileContent} />
+                ) : (
+                  <mp3select setSelectedFileContent={setSelectedFileContent} />
+                )}
                 <Read text={selectedFileContent} />
               </Flex>
             </ContentContainer>
