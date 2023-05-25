@@ -28,7 +28,7 @@ const UserPage: NextPage = () => {
           const employeeDocSnap = await getDoc(employeeDocRef);
 
           if (employeeDocSnap.exists()) {
-            const ref = employeeDocSnap.data()?.ref;
+            const ref = employeeDocSnap.data()?.company_ref;
 
             if (ref) {
               const companyDocRef = doc(

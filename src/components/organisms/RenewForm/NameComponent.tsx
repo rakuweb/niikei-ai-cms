@@ -48,7 +48,7 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         });
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
-        const ref = employeeDocSnap.data()?.ref;
+        const ref = employeeDocSnap.data()?.company_ref;
         console.log({ ref });
         const companyDocRef = doc(
           db,

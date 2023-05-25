@@ -28,7 +28,7 @@ type FormData = {
   role: string;
   password: string;
   is_company: boolean;
-  ref: string;
+  company_ref: string;
 };
 export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
@@ -101,13 +101,13 @@ export const Presenter: FC<PresenterProps> = () => {
 
         await setDoc(employeeDocRef, {
           is_company: data.is_company,
-          ref: currentUserUid,
+          company_ref: currentUserUid,
         });
 
         if (!is_company) {
           await setDoc(employeeDocRef, {
             is_company: data.is_company,
-            ref: currentUserUid,
+            company_ref: currentUserUid,
           });
         }
 
@@ -162,7 +162,11 @@ export const Presenter: FC<PresenterProps> = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.ref} mb={'1vw'} display={'none'}>
+        <FormControl
+          isInvalid={!!errors.company_ref}
+          mb={'1vw'}
+          display={'none'}
+        >
           <FormLabel>
             <NameLabel name="ref" />
             <Controller

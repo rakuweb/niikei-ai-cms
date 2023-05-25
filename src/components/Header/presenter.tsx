@@ -42,7 +42,7 @@ export const Presenter: FC = () => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
 
-        const ref = employeeDocSnap.data()?.ref;
+        const ref = employeeDocSnap.data()?.company_ref;
 
         const companyEmployeeRef = doc(
           db,

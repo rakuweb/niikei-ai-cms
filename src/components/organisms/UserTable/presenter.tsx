@@ -43,7 +43,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
       const userDocRef = doc(db, 'users', id);
       const userDoc = await getDoc(userDocRef);
-      const refFieldString = userDoc.data().ref;
+      const refFieldString = userDoc.data().company_ref;
 
       const companyEmployeeDocRef = doc(
         db,

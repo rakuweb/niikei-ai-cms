@@ -58,7 +58,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
       if (response.ok) {
         const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
-        const ref = employeeDocSnap.data()?.ref;
+        const ref = employeeDocSnap.data()?.company_ref;
         const companyDocRef = doc(
           db,
           'companies',
