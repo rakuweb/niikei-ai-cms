@@ -79,8 +79,6 @@ export const Presenter: FC<PresenterProps> = () => {
       const { user } = userCredential;
       const { password, is_company, ...dataWithoutPassword } = data;
       if (user) {
-        const auth = getAuth();
-
         let companyDocRef;
         if (is_company) {
           companyDocRef = doc(db, 'companies', user.uid, 'employees', user.uid);
