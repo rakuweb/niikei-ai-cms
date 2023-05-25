@@ -41,7 +41,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
-  const API_URL = '/api/updateUserPassword';
+  const API_URL = '/api/update-user-password';
   const onSubmit = async (data: FormData) => {
     try {
       const user = auth.currentUser;
@@ -59,7 +59,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
-        console.log({ ref });
         const companyDocRef = doc(
           db,
           'companies',
@@ -78,7 +77,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
     } catch (error) {
       console.error('Error updating password: ', error);
       setShowPopup(true);
-      window.alert('エラー');
+      window.alert('エラーが発生しました。' + error);
     }
   };
 

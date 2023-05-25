@@ -53,7 +53,7 @@ export const Presenter: FC = () => {
         );
 
         const companyEmployeeSnap = await getDoc(companyEmployeeRef);
-        console.log(companyEmployeeSnap.data());
+
         if (companyEmployeeSnap.exists()) {
           setUserName(companyEmployeeSnap.data().name);
         }

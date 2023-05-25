@@ -21,7 +21,7 @@ import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { PasswordPopupComponent } from '../RenewForm/PasswordPopupComponent';
 
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { usenameStore } from '../../../lib/store';
+import { useNameStore } from '../../../lib/store';
 type FormData = {
   name: string;
   email: string;
@@ -44,8 +44,8 @@ export const Presenter: FC<PresenterProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showAdditionalField, setShowAdditionalField] = useState(false);
-  const currentUserUid = usenameStore((state) => state.currentUserUid);
-  const setCurrentUserUid = usenameStore((state) => state.setCurrentUserUid);
+  const currentUserUid = useNameStore((state) => state.currentUserUid);
+  const setCurrentUserUid = useNameStore((state) => state.setCurrentUserUid);
   const { control } = useForm();
   useEffect(() => {
     const auth = getAuth();
@@ -97,8 +97,6 @@ export const Presenter: FC<PresenterProps> = () => {
         const employeeDocRef = doc(db, 'users', user.uid);
         await setDoc(companyDocRef, {
           ...dataWithoutPassword,
-          is_company: data.is_company,
-          ref: currentUserUid,
         });
 
         await setDoc(employeeDocRef, {
@@ -131,7 +129,11 @@ export const Presenter: FC<PresenterProps> = () => {
         w={'30vw'}
         color={'#222526'}
       >
-        <FormControl isInvalid={!!errors.is_company} mb={'1vw'}>
+        <FormControl
+          isInvalid={!!errors.is_company}
+          mb={'1vw'}
+          display={'none'}
+        >
           <FormLabel>
             is_company
             <Switch
@@ -160,7 +162,7 @@ export const Presenter: FC<PresenterProps> = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.ref} mb={'1vw'}>
+        <FormControl isInvalid={!!errors.ref} mb={'1vw'} display={'none'}>
           <FormLabel>
             <NameLabel name="ref" />
             <Controller

@@ -39,7 +39,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     mode: 'onChange',
   });
 
-  const API_URL = '/api/updateUserEmail';
+  const API_URL = '/api/update-user-email';
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -58,7 +58,6 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.ref;
-        console.log({ ref });
         const companyDocRef = doc(
           db,
           'companies',
@@ -74,7 +73,6 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       }
     } catch (error) {
       console.error('Error updating email: ', error);
-      window.alert(error);
       window.alert('再ログイン後もう一度ご入力下さい');
     }
   };

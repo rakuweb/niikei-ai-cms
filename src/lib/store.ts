@@ -34,7 +34,7 @@ type State = {
   setCurrentUserUid: (uid: string) => void;
 };
 
-export const usenameStore = create<State>((set) => ({
+export const useNameStore = create<State>((set) => ({
   userName: '',
   userPassword: '',
   setUserName: (name) => set({ userName: name }),

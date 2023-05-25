@@ -33,7 +33,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch('/api/deleteUsers', {
+      const response = await fetch('/api/delete-users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
