@@ -23,6 +23,9 @@ export const Presenter: FC = () => {
   const handleMP3ButtonClick = () => {
     setIsPDFSelected(false);
   };
+  const handleFileSelection = (selectedFile) => {
+    setSelectedFileContent(selectedFile);
+  };
 
   return (
     <>

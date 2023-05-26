@@ -4,7 +4,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-const Mp3select = () => {
+const Mp3select = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [transcription, setTranscription] = useState('');
@@ -19,8 +19,9 @@ const Mp3select = () => {
         }); // Uint8Arrayを普通の配列に変換してPOST
 
         const transcript = response.data.transcript;
-
-        setTranscription(transcript); // メモリに保存
+        console.log(transcript);
+        setTranscription(transcript);
+        props.setSelectedFileContent(transcript);
       } else {
         console.error('FileReader result is not an ArrayBuffer');
       }

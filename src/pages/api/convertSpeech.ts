@@ -1,28 +1,18 @@
 import { SpeechClient, protos } from '@google-cloud/speech';
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
-const ffmpeg = createFFmpeg({ log: true });
-
-type IRecognitionConfig = protos.google.cloud.speech.v1.IRecognitionConfig;
+type IRecognitionConfig =
+  protos.google.cloud.speech.v1p1beta1.IRecognitionConfig;
 
 export default async (req, res) => {
-  const mp3Data = req.body;
+  const mp3Data = req.body.data;
 
-  const name = 'input.mp3';
-
-  await ffmpeg.load(); // ffmpegがロードされるまで待つ
-  ffmpeg.FS('writeFile', name, await fetchFile(mp3Data));
-
-  await ffmpeg.run('-i', name, 'output.flac');
-
-  const flacData = ffmpeg.FS('readFile', 'output.flac');
   const audio = {
-    content: new Uint8Array(flacData.buffer), // Uint8Arrayに変換
+    content: mp3Data, // Uint8Arrayに変換
   };
 
   const config: IRecognitionConfig = {
-    encoding: 'FLAC',
-    sampleRateHertz: 8000,
+    encoding: 'MP3' as any,
+    sampleRateHertz: 8000, // MP3 file's sample rate
     languageCode: 'ja-JP',
   };
 
