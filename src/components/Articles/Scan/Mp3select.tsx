@@ -8,17 +8,26 @@ const Mp3select = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [transcription, setTranscription] = useState('');
+
   const handleFileSelection = async (file) => {
     const fileReader = new FileReader();
     fileReader.onloadend = async () => {
       if (fileReader.result instanceof ArrayBuffer) {
         const mp3Data = new Uint8Array(fileReader.result);
 
-        const response = await axios.post('/api/convertSpeech', {
+        // Google Cloud Storageにファイルをアップロード
+        const response = await axios.post('/api/upload-file', {
+          filename: file.name,
           data: Array.from(mp3Data),
-        }); // Uint8Arrayを普通の配列に変換してPOST
+        });
+        const gcsUri = response.data;
 
-        const transcript = response.data.transcript;
+        // 文字起こし
+        const response2 = await axios.post('/api/convertSpeech', {
+          uri: gcsUri,
+        });
+
+        const transcript = response2.data.transcript;
         console.log(transcript);
         setTranscription(transcript);
         props.setSelectedFileContent(transcript);
@@ -96,7 +105,7 @@ const Mp3select = (props) => {
         />
       ) : (
         <BigWideButton
-          onClick={() => handleFileSelection(selectedFile)} // 選択したファイルを引数に渡す
+          onClick={() => handleFileSelection(selectedFile)}
           src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}

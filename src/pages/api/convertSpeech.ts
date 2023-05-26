@@ -2,17 +2,18 @@ import { SpeechClient, protos } from '@google-cloud/speech';
 
 type IRecognitionConfig =
   protos.google.cloud.speech.v1p1beta1.IRecognitionConfig;
-
+const bucketName = 'test-niikei';
 export default async (req, res) => {
-  const mp3Data = req.body.data;
+  const filename = req.body.filename;
+  const gcsUri = `gs://${bucketName}/${filename}`;
 
   const audio = {
-    content: mp3Data, // Uint8Arrayに変換
+    uri: gcsUri,
   };
 
   const config: IRecognitionConfig = {
     encoding: 'MP3' as any,
-    sampleRateHertz: 8000, // MP3 file's sample rate
+    sampleRateHertz: 48000, // MP3 file's sample rate
     languageCode: 'ja-JP',
   };
 
