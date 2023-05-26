@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
@@ -57,30 +57,34 @@ const Mp3select = (props) => {
         alignItems={`center`}
         justifyContent={'center'}
       >
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <Flex
-            flexFlow={'column'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            bg={`#D6D6D6`}
-            w={`${540 / 19.2}vw`}
-            h={`${300 / 19.2}vw`}
-          >
-            <WideButton
-              onClick={open}
-              text="ファイルを選択"
-              w={`${200 / 19.2}vw`}
-              mb={`${16 / 19.2}vw`}
-              mx={`auto`}
-            />
-            <Box fontSize={'1vw'} color={'#525D6B'}>
-              {selectedFile
-                ? selectedFile.name
-                : `または、ファイルをここにドラッグ&ドロップ`}
-            </Box>
-          </Flex>
-        </div>
+        <Text letterSpacing={`0`} className="file">
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <Flex
+              flexFlow={'column'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              bg={`#D6D6D6`}
+              w={`${540 / 19.2}vw`}
+              h={`${300 / 19.2}vw`}
+            >
+              <Box>
+                <WideButton
+                  onClick={open}
+                  text="ファイルを選択"
+                  w={`${200 / 19.2}vw`}
+                  mb={`${16 / 19.2}vw`}
+                  mx={`auto`}
+                />
+                <Box fontSize={'1vw'} color={'#525D6B'}>
+                  {selectedFile
+                    ? selectedFile.name
+                    : `または、ファイルをここにドラッグ&ドロップ`}
+                </Box>
+              </Box>
+            </Flex>
+          </div>
+        </Text>
       </Flex>
       {!isButtonActive ? (
         <BigWideButton
