@@ -1,28 +1,42 @@
 import React, { useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
-
-const Fileselect = ({ setSelectedFileContent }) => {
+import axios from 'axios';
+const Mp3select = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
-  const loadFileContent = () => {
-    if (!selectedFile) {
-      alert('まずファイルを選択してください。');
-      return;
-    }
-
+  const [transcription, setTranscription] = useState('');
+  const handleFileSelection = async (file) => {
     const fileReader = new FileReader();
-    fileReader.onloadend = () => {
-      setSelectedFileContent(fileReader.result);
+    fileReader.onloadend = async () => {
+      if (fileReader.result instanceof ArrayBuffer) {
+        const mp3Data = new Uint8Array(fileReader.result);
+
+        const response = await axios.post('/api/convertSpeech', {
+          data: Array.from(mp3Data),
+        }); // Uint8Arrayを普通の配列に変換してPOST
+
+        const transcript = response.data.transcript;
+
+        setTranscription(transcript); // メモリに保存
+      } else {
+        console.error('FileReader result is not an ArrayBuffer');
+      }
     };
-    fileReader.readAsText(selectedFile);
+    fileReader.readAsArrayBuffer(file);
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      handleFileSelection(selectedFile);
+    }
   };
 
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: { 'text/plain': ['.txt'] },
+    accept: { 'audio/mp3': ['.mp3'] },
     noClick: false,
     noKeyboard: true,
     onDrop: (acceptedFiles) => {
@@ -30,6 +44,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
       setButtonActive(true);
     },
   });
+
   return (
     <div>
       <Flex
@@ -41,34 +56,30 @@ const Fileselect = ({ setSelectedFileContent }) => {
         alignItems={`center`}
         justifyContent={'center'}
       >
-        <Text letterSpacing={`0`} className="file">
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            <Flex
-              flexFlow={'column'}
-              alignItems={'center'}
-              justifyContent={'center'}
-              bg={`#D6D6D6`}
-              w={`${540 / 19.2}vw`}
-              h={`${300 / 19.2}vw`}
-            >
-              <Box>
-                <WideButton
-                  onClick={open}
-                  text="ファイルを選択"
-                  w={`${200 / 19.2}vw`}
-                  mb={`${16 / 19.2}vw`}
-                  mx={`auto`}
-                />
-                <Box fontSize={'1vw'} color={'#525D6B'}>
-                  {selectedFile
-                    ? selectedFile.name
-                    : `または、ファイルをここにドラッグ&ドロップ`}
-                </Box>
-              </Box>
-            </Flex>
-          </div>
-        </Text>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <Flex
+            flexFlow={'column'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            bg={`#D6D6D6`}
+            w={`${540 / 19.2}vw`}
+            h={`${300 / 19.2}vw`}
+          >
+            <WideButton
+              onClick={open}
+              text="ファイルを選択"
+              w={`${200 / 19.2}vw`}
+              mb={`${16 / 19.2}vw`}
+              mx={`auto`}
+            />
+            <Box fontSize={'1vw'} color={'#525D6B'}>
+              {selectedFile
+                ? selectedFile.name
+                : `または、ファイルをここにドラッグ&ドロップ`}
+            </Box>
+          </Flex>
+        </div>
       </Flex>
       {!isButtonActive ? (
         <BigWideButton
@@ -80,7 +91,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
         />
       ) : (
         <BigWideButton
-          onClick={loadFileContent}
+          onClick={() => handleFileSelection(selectedFile)} // 選択したファイルを引数に渡す
           src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
@@ -90,4 +101,4 @@ const Fileselect = ({ setSelectedFileContent }) => {
   );
 };
 
-export default Fileselect;
+export default Mp3select;
