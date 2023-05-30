@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { handleSubmit } = useForm({
     defaultValues: { name: '', iconUrl: '' },
@@ -15,7 +16,8 @@ const Mp3select = ({ setSelectedFileContent }) => {
   const [file, setFile] = useState<File>();
 
   const uploadMp3 = useCallback(async (file: File) => {
-    const fileName = 'mp3text';
+    setIsLoading(true); // アップロード開始
+    const fileName = 'mp3text.mp3';
     const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
@@ -44,6 +46,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     } else {
       console.error('Upload failed.');
     }
+    setIsLoading(false); // アップロード終了
   }, []);
 
   const handleClick = handleSubmit(async () => {
@@ -57,7 +60,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     setFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {},
+    accept: { 'audio/mp3': ['.mp3'] },
     noClick: false,
     noKeyboard: true,
     onDrop,
@@ -86,18 +89,24 @@ const Mp3select = ({ setSelectedFileContent }) => {
               h={`${300 / 19.2}vw`}
             >
               <Box>
-                <WideButton
-                  onClick={open}
-                  text="ファイルを選択"
-                  w={`${200 / 19.2}vw`}
-                  mb={`${16 / 19.2}vw`}
-                  mx={`auto`}
-                />
-                <Box fontSize={'1vw'} color={'#525D6B'}>
-                  {selectedFile
-                    ? selectedFile.name
-                    : `または、ファイルをここにドラッグ&ドロップ`}
-                </Box>
+                {isLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <>
+                    <WideButton
+                      onClick={open}
+                      text="ファイルを選択"
+                      w={`${200 / 19.2}vw`}
+                      mb={`${16 / 19.2}vw`}
+                      mx={`auto`}
+                    />
+                    <Box fontSize={'1vw'} color={'#525D6B'}>
+                      {selectedFile
+                        ? selectedFile.name
+                        : `または、ファイルをここにドラッグ&ドロップ`}
+                    </Box>
+                  </>
+                )}
               </Box>
             </Flex>
           </div>
