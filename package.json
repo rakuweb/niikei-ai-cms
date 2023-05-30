@@ -24,6 +24,7 @@
     "@ffmpeg/core": "^0.11.0",
     "@ffmpeg/ffmpeg": "^0.11.6",
     "@google-cloud/speech": "^5.5.0",
+    "@google-cloud/storage": "^6.10.1",
     "@vanilla-extract/css": "^1.11.0",
     "axios": "^1.4.0",
     "emotion": "^11.0.0",

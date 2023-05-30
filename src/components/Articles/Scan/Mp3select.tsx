@@ -1,58 +1,69 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
-const Mp3select = (props) => {
+import { useForm } from 'react-hook-form';
+
+const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
-  const [transcription, setTranscription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFileSelection = async (file) => {
-    const fileReader = new FileReader();
-    fileReader.onloadend = async () => {
-      if (fileReader.result instanceof ArrayBuffer) {
-        const mp3Data = new Uint8Array(fileReader.result);
+  const { handleSubmit } = useForm({
+    defaultValues: { name: '', iconUrl: '' },
+  });
+  const [file, setFile] = useState<File>();
 
-        // Google Cloud Storageにファイルをアップロード
-        const response = await axios.post('/api/upload-file', {
-          filename: file.name,
-          data: Array.from(mp3Data),
-        });
-        const gcsUri = response.data;
+  const uploadMp3 = useCallback(async (file: File) => {
+    setIsLoading(true); // アップロード開始
+    const fileName = 'mp3text';
+    const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
+    const { url, fields } = await res.json();
+    const body = new FormData();
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      body.append(key, value as string | Blob);
+    });
+    const upload = await fetch(url, { method: 'POST', body });
 
-        // 文字起こし
-        const response2 = await axios.post('/api/convertSpeech', {
-          uri: gcsUri,
-        });
+    if (upload.ok) {
+      console.log('Uploaded successfully!');
 
-        const transcript = response2.data.transcript;
-        console.log(transcript);
-        setTranscription(transcript);
-        props.setSelectedFileContent(transcript);
+      const textRes = await fetch(`/api/convert-text?file=${fileName}`, {
+        method: 'POST',
+      });
+      const json = await textRes.json();
+      console.log(json);
+      const { text } = json;
+      if (textRes.ok) {
+        console.log('Converted to text successfully!');
+        console.log(text);
+
+        setSelectedFileContent(text);
       } else {
-        console.error('FileReader result is not an ArrayBuffer');
+        console.error('Conversion to text failed.');
       }
-    };
-    fileReader.readAsArrayBuffer(file);
-  };
-
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      handleFileSelection(selectedFile);
+    } else {
+      console.error('Upload failed.');
     }
-  };
+    setIsLoading(false); // アップロード終了
+  }, []);
 
+  const handleClick = handleSubmit(async () => {
+    if (file) {
+      uploadMp3(file);
+    }
+  });
+  const onDrop = useCallback((acceptedFiles) => {
+    setSelectedFile(acceptedFiles[0]);
+    setButtonActive(true);
+    setFile(acceptedFiles[0]);
+  }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
     accept: { 'audio/mp3': ['.mp3'] },
     noClick: false,
     noKeyboard: true,
-    onDrop: (acceptedFiles) => {
-      setSelectedFile(acceptedFiles[0]);
-      setButtonActive(true);
-    },
+    onDrop,
   });
 
   return (
@@ -78,18 +89,24 @@ const Mp3select = (props) => {
               h={`${300 / 19.2}vw`}
             >
               <Box>
-                <WideButton
-                  onClick={open}
-                  text="ファイルを選択"
-                  w={`${200 / 19.2}vw`}
-                  mb={`${16 / 19.2}vw`}
-                  mx={`auto`}
-                />
-                <Box fontSize={'1vw'} color={'#525D6B'}>
-                  {selectedFile
-                    ? selectedFile.name
-                    : `または、ファイルをここにドラッグ&ドロップ`}
-                </Box>
+                {isLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <>
+                    <WideButton
+                      onClick={open}
+                      text="ファイルを選択"
+                      w={`${200 / 19.2}vw`}
+                      mb={`${16 / 19.2}vw`}
+                      mx={`auto`}
+                    />
+                    <Box fontSize={'1vw'} color={'#525D6B'}>
+                      {selectedFile
+                        ? selectedFile.name
+                        : `または、ファイルをここにドラッグ&ドロップ`}
+                    </Box>
+                  </>
+                )}
               </Box>
             </Flex>
           </div>
@@ -105,7 +122,7 @@ const Mp3select = (props) => {
         />
       ) : (
         <BigWideButton
-          onClick={() => handleFileSelection(selectedFile)}
+          onClick={handleClick}
           src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
