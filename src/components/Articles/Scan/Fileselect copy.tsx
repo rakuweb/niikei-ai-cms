@@ -1,66 +1,34 @@
-import React, { useCallback, useState } from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
-import { useForm } from 'react-hook-form';
 
 const Fileselect = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
-
-  const { handleSubmit } = useForm({
-    defaultValues: { name: '', iconUrl: '' },
-  });
-  const [file, setFile] = useState<File>();
-
-  const uploadpdf = useCallback(async (file: File) => {
-    const fileName = 'pdftext';
-    const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
-    const { url, fields } = await res.json();
-    const body = new FormData();
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      body.append(key, value as string | Blob);
-    });
-    const upload = await fetch(url, { method: 'POST', body });
-
-    if (upload.ok) {
-      console.log('Uploaded successfully!');
-
-      const textRes = await fetch(`/api/convert-pdf?file=${fileName}`, {
-        method: 'POST',
-      });
-      const json = await textRes.json();
-      console.log(json);
-      const { text } = json;
-      if (textRes.ok) {
-        console.log('Converted to text successfully!');
-        console.log(text);
-
-        setSelectedFileContent(text);
-      } else {
-        console.error('Conversion to text failed.');
-      }
-    } else {
-      console.error('Upload failed.');
+  const loadFileContent = () => {
+    if (!selectedFile) {
+      alert('まずファイルを選択してください。');
+      return;
     }
-  }, []);
 
-  const handleClick = handleSubmit(async () => {
-    if (file) {
-      uploadpdf(file);
-    }
-  });
-  const onDrop = useCallback((acceptedFiles) => {
-    setSelectedFile(acceptedFiles[0]);
-    setButtonActive(true);
-    setFile(acceptedFiles[0]);
-  }, []);
+    const fileReader = new FileReader();
+    fileReader.onloadend = () => {
+      setSelectedFileContent(fileReader.result);
+    };
+    fileReader.readAsText(selectedFile);
+  };
+
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {},
+    accept: { 'text/plain': ['.txt'] },
     noClick: false,
     noKeyboard: true,
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      setSelectedFile(acceptedFiles[0]);
+      setButtonActive(true);
+    },
   });
 
   return (
@@ -113,7 +81,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
         />
       ) : (
         <BigWideButton
-          onClick={handleClick}
+          onClick={loadFileContent}
           src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}

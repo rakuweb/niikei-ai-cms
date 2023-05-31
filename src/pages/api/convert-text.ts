@@ -3,6 +3,7 @@ import * as speech from '@google-cloud/speech';
 export default async function handler(req: any, res: any) {
   if (req.query.file && req.method === 'POST') {
     const bucketName = 'niikei2';
+    const fileName = 'mp3text';
     const client = new speech.SpeechClient();
     const gcsUri = `gs://${bucketName}/mp3text`;
     const audio = {
