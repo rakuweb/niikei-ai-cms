@@ -16,7 +16,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
 
   const uploadMp3 = useCallback(async (file: File) => {
     const fileName = 'mp3text';
-    const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
+    const res = await fetch(`/api/fix-bitrate?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
