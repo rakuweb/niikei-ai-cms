@@ -5,6 +5,16 @@ import { ImageAnnotatorClient } from '@google-cloud/vision';
 const storage = new Storage();
 const client = new ImageAnnotatorClient();
 
+async function deleteOldFiles(bucketName, prefix, newFileName) {
+  const bucket = storage.bucket(bucketName);
+  const [files] = await bucket.getFiles({ prefix: prefix });
+  for (const file of files) {
+    if (file.name !== newFileName) {
+      await file.delete();
+    }
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -32,7 +42,8 @@ export default async function handler(
         uri: gcsDestinationUri,
       },
     };
-    const features = [{ type: 'DOCUMENT_TEXT_DETECTION' }];
+    const features = [{ type: 'DOCUMENT_TEXT_DETECTION' as const }];
+
     const request = {
       requests: [
         {
@@ -47,7 +58,6 @@ export default async function handler(
     const [filesResponse] = await operation[0].promise();
 
     const outputConfigResult = filesResponse.responses[0].outputConfig;
-
     const textFiles = outputConfigResult.gcsDestination.uri;
     const files = await storage
       .bucket(bucketName)
@@ -62,10 +72,16 @@ export default async function handler(
 
       const parsedText = JSON.parse(text.toString());
 
-      if (parsedText.responses[0].fullTextAnnotation) {
-        texts += parsedText.responses[0].fullTextAnnotation.text;
+      if (parsedText.responses) {
+        for (const response of parsedText.responses) {
+          if (response.fullTextAnnotation) {
+            texts += response.fullTextAnnotation.text;
+          }
+        }
       }
     }
+
+    await deleteOldFiles(bucketName, `${fileName}-result/`, `${fileName}.json`);
 
     return res.status(200).json({ text: texts });
   } catch (err) {
