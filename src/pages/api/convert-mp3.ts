@@ -10,7 +10,7 @@ export default async function handler(req: any, res: any) {
       uri: gcsUri,
     };
     const config = {
-      encoding: 'MP3',
+      encoding: 'MP3' as any,
       sampleRateHertz: 16000,
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,

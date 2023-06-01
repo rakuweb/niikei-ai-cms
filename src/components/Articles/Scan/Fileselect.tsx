@@ -10,7 +10,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [uploadProgress, setUploadProgress] = useState(0);
   const { handleSubmit } = useForm({
     defaultValues: { name: '', iconUrl: '' },
   });
@@ -18,6 +18,9 @@ const Fileselect = ({ setSelectedFileContent }) => {
 
   const uploadpdf = useCallback(async (file: File) => {
     setIsLoading(true);
+    setUploadProgress(0);
+    let progressInterval;
+
     try {
       const fileName = 'pdftext';
       const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
@@ -26,11 +29,21 @@ const Fileselect = ({ setSelectedFileContent }) => {
       Object.entries({ ...fields, file }).forEach(([key, value]) => {
         body.append(key, value as string | Blob);
       });
+      progressInterval = setInterval(() => {
+        setUploadProgress((prevProgress) =>
+          prevProgress < 70 ? prevProgress + 1 : prevProgress
+        );
+      }, 1000);
       const upload = await fetch(url, { method: 'POST', body });
 
       if (upload.ok) {
         console.log('Uploaded successfully!');
-
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+          setUploadProgress((prevProgress) =>
+            prevProgress < 99 ? prevProgress + 1 : prevProgress
+          );
+        }, 1000);
         const textRes = await fetch(`/api/convert-pdf?file=${fileName}`, {
           method: 'POST',
         });
@@ -39,10 +52,10 @@ const Fileselect = ({ setSelectedFileContent }) => {
         const { text } = json;
         if (textRes.ok) {
           console.log('Converted to text successfully!');
+          clearInterval(progressInterval);
+          setUploadProgress(100);
           setSelectedFileContent(text);
           setIsLoading(false);
-
-          setSelectedFileContent(text);
         } else {
           console.error('Conversion to text failed.');
           setIsLoading(false);
@@ -88,7 +101,10 @@ const Fileselect = ({ setSelectedFileContent }) => {
         justifyContent={'center'}
       >
         {isLoading ? (
-          <LordingComponent />
+          <>
+            {' '}
+            <LordingComponent progress={uploadProgress} />
+          </>
         ) : (
           <Box letterSpacing={`0`} className="file">
             <div {...getRootProps()}>

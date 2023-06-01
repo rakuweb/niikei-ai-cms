@@ -4,11 +4,13 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
+import LordingComponent from './LordingComponent';
 
 const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const { handleSubmit } = useForm({
     defaultValues: { name: '', iconUrl: '' },
@@ -17,6 +19,17 @@ const Mp3select = ({ setSelectedFileContent }) => {
 
   const uploadMp3 = useCallback(async (file: File) => {
     setIsLoading(true);
+    setUploadProgress(0);
+
+    let progressInterval = setInterval(() => {
+      setUploadProgress((oldProgress) => {
+        if (oldProgress >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return oldProgress + 1;
+      });
+    }, 1000);
     try {
       const fileName = 'mp3text';
       const res = await fetch(`/api/fix-bitrate?file=${fileName}`);
@@ -30,7 +43,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(`/api/convert-text?file=${fileName}`, {
+        const textRes = await fetch(`/api/convert-mp3?file=${fileName}`, {
           method: 'POST',
         });
         const json = await textRes.json();
@@ -38,6 +51,12 @@ const Mp3select = ({ setSelectedFileContent }) => {
         const { text } = json;
         if (textRes.ok) {
           console.log('Converted to text successfully!');
+          clearInterval(progressInterval);
+          progressInterval = setInterval(() => {
+            setUploadProgress((prevProgress) =>
+              prevProgress < 99 ? prevProgress + 1 : prevProgress
+            );
+          }, 100);
           setSelectedFileContent(text);
           setIsLoading(false);
 
@@ -52,6 +71,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
       }
     } catch (error) {
       alert('アップロード失敗 ');
+      clearInterval(progressInterval);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -87,7 +107,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
         justifyContent={'center'}
       >
         {isLoading ? (
-          <Spinner size="xl" />
+          <LordingComponent progress={uploadProgress} />
         ) : (
           <Box letterSpacing={`0`} className="file">
             <div {...getRootProps()}>

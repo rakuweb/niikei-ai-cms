@@ -1,6 +1,4 @@
 import { CircularProgress, CircularProgressLabel, Box } from '@chakra-ui/react';
-
-import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -8,13 +6,18 @@ const GlobalStyle = createGlobalStyle`
     stroke-linecap: round;
   }
 `;
-const LordingComponent = () => {
+const LordingComponent = ({ progress }) => {
   return (
-    <div>
+    <Box
+      display={'flex'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      h={'40vh'}
+    >
       <GlobalStyle />
       <CircularProgress
         className="rounded-progress-bar"
-        // value={progress}
+        value={progress}
         color="#49BAC0"
         trackColor="rgba(73, 186, 192, 0.3)"
         w={'80%'}
@@ -24,14 +27,14 @@ const LordingComponent = () => {
       >
         <CircularProgressLabel fontSize={'2.5vw'} m={'auto'}>
           <Box as={'span'} fontWeight={'bold'} fontSize={'3vw'}>
-            {/* {progress} */}
+            {progress}
           </Box>
           <Box as={'span'} fontWeight={'bold'} fontSize={'1.5vw'}>
             %
           </Box>
         </CircularProgressLabel>
       </CircularProgress>
-    </div>
+    </Box>
   );
 };
 
