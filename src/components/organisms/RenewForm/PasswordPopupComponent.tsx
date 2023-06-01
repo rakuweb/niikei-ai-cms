@@ -14,7 +14,7 @@ import {
 import { Text } from 'components/texts/Text';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FC, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+
 import { auth } from 'src/firebase';
 
 export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
