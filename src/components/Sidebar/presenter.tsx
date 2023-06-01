@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Link } from '@chakra-ui/react';
 import HomeSvg from 'public/svg/home.svg';
 import AutorenewSvg from 'public/svg/autorenew.svg';
@@ -15,6 +15,8 @@ import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
 import Popup from './Popup';
 import { Header } from 'components/Header';
 import { useStore, useUserStore } from 'lib/store';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from 'src/firebase';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -27,17 +29,32 @@ export const Presenter: FC = () => {
     { text: 'リンク2', url: '/' },
     { text: 'リンク3', url: '/' },
   ];
-  const articlepage = [
-    { text: '記事一覧', url: '/articles' },
-    { text: 'データを読み込む', url: '/articles/scan' },
-  ];
-  const settingpage = [
-    { text: 'ユーザ一覧', url: '/settings/users' },
-    { text: 'ユーザ新規作成', url: '/settings/users/new' },
+
+  const [isCompany, setIsCompany] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      const fetchUserDoc = async () => {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setIsCompany(userDoc.data()?.is_company);
+        }
+      };
+      fetchUserDoc();
+    }
+  }, [user]);
+
+  const setting = [
+    ...(!isCompany
+      ? []
+      : [
+          { text: 'ユーザ一覧', url: '/settings/users' },
+          { text: 'ユーザ新規作成', url: '/settings/users/new' },
+        ]),
     { text: 'アカウント詳細', url: user ? `${url}/${user.uid}` : '' },
   ];
-  const isOpen = useStore((state) => state.open);
 
+  const isOpen = useStore((state) => state.open);
   const toggleSidebar = useStore((state) => state.toggleOpen);
 
   return (

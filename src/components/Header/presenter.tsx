@@ -7,7 +7,7 @@ import { useStore, useUserStore } from 'lib/store';
 import { auth } from 'src/firebase';
 import router from 'next/router';
 
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -35,15 +35,31 @@ export const Presenter: FC = () => {
 
   const getNameEmail = async () => {
     const user = currentUser;
-    if (user) {
-      const db = getFirestore();
-      const usersRef = collection(db, 'employees');
-      const querySnapshot = await getDocs(usersRef);
-      querySnapshot.forEach((doc) => {
-        if (doc.id === user.uid) {
-          setUserName(doc.data().name);
+
+    try {
+      if (user) {
+        const db = getFirestore();
+        const employeeDocRef = doc(db, 'users', user.uid);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+
+        const ref = employeeDocSnap.data()?.company_ref;
+
+        const companyEmployeeRef = doc(
+          db,
+          'companies',
+          ref,
+          'employees',
+          user.uid
+        );
+
+        const companyEmployeeSnap = await getDoc(companyEmployeeRef);
+
+        if (companyEmployeeSnap.exists()) {
+          setUserName(companyEmployeeSnap.data().name);
         }
-      });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

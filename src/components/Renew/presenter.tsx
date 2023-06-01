@@ -17,7 +17,7 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const title = `登録情報一覧`;
+  const title = `アカウント情報`;
 
   return (
     <>

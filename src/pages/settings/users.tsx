@@ -3,10 +3,11 @@ import { Box } from '@chakra-ui/react';
 import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../../src/firebase';
+import { db, auth } from '../../../src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from 'src/firebase';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+
 type UserData = {
   role: string;
   email: string;
@@ -17,39 +18,48 @@ type UserData = {
 const Home: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
   const router = useRouter();
-  const user = auth.currentUser;
+
   useEffect(() => {
     const fetchUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
       try {
-        const allowedEmailsRef = collection(db, 'companies');
-        const querySnapshot = await getDocs(allowedEmailsRef);
+        if (user) {
+          const allowedEmailsRef = collection(
+            db,
+            'companies',
+            user.uid,
+            'employees'
+          );
+          const querySnapshot = await getDocs(allowedEmailsRef);
 
-        const fetchedData: UserData[] = [];
-        querySnapshot.forEach((doc) => {
-          fetchedData.push({
-            id: doc.id,
-            ...(doc.data() as { role: string; email: string; name: string }),
+          const fetchedData: UserData[] = [];
+          querySnapshot.forEach((doc) => {
+            fetchedData.push({
+              id: doc.id,
+              ...(doc.data() as { role: string; email: string; name: string }),
+            });
           });
-          fetchedData.push({
-            id: doc.id,
-            ...(doc.data() as { role: string; email: string; name: string }),
-          });
-        });
 
-        setData(fetchedData);
+          setData(fetchedData);
+        } else {
+          router.push('/');
+        }
       } catch (error) {
-        router.push('/signin');
+        window.alert(error);
       }
     };
 
-    fetchUserData();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      fetchUserData();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   if (!data) {
     return <div>Loading...</div>;
-  }
-  if (user && user.uid !== process.env.NEXT_PUBLIC_COMPANIES) {
-    return <div>このページにはアクセスできません。</div>;
   }
 
   return (
