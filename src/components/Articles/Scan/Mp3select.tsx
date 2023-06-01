@@ -89,7 +89,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     setFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {},
+    accept: { 'audio/mp3': ['.mp3'] },
     noClick: false,
     noKeyboard: true,
     onDrop,

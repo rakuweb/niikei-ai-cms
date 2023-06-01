@@ -83,7 +83,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
     setFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {},
+    accept: { 'text/pdf': ['.pdf'] },
     noClick: false,
     noKeyboard: true,
     onDrop,
