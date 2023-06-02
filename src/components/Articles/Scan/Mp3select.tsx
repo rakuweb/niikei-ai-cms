@@ -16,7 +16,6 @@ const Mp3select = ({ setSelectedFileContent }) => {
     defaultValues: { name: '', iconUrl: '' },
   });
   const [file, setFile] = useState<File>();
-
   const uploadMp3 = useCallback(async (file: File) => {
     setIsLoading(true);
     setUploadProgress(0);
@@ -30,9 +29,13 @@ const Mp3select = ({ setSelectedFileContent }) => {
         return oldProgress + 1;
       });
     }, 1000);
+
     try {
       const fileName = 'mp3text';
-      const res = await fetch(`/api/fix-bitrate?file=${fileName}`);
+
+      const res = await fetch(`/api/uplord-file?file=${fileName}`, {
+        method: 'POST',
+      });
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {
@@ -43,26 +46,37 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(`/api/convert-mp3?file=${fileName}`, {
-          method: 'POST',
-        });
-        const json = await textRes.json();
-        console.log(json);
-        const { text } = json;
-        if (textRes.ok) {
-          console.log('Converted to text successfully!');
-          clearInterval(progressInterval);
-          progressInterval = setInterval(() => {
-            setUploadProgress((prevProgress) =>
-              prevProgress < 99 ? prevProgress + 1 : prevProgress
-            );
-          }, 100);
-          setSelectedFileContent(text);
-          setIsLoading(false);
+        const fixWavRes = await fetch(`/api/fix-wav?file=${fileName}`);
+        const json = await fixWavRes.json();
 
-          setSelectedFileContent(text);
+        if (fixWavRes.ok) {
+          console.log('Converted to wav successfully!');
+
+          const textRes = await fetch(
+            `/api/convert-mp3?file=${fileName}-fixed.wav`,
+            {
+              method: 'POST',
+            }
+          );
+          const json = await textRes.json();
+          const { text } = json;
+
+          if (textRes.ok) {
+            console.log('Converted to text successfully!');
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+              setUploadProgress((prevProgress) =>
+                prevProgress < 99 ? prevProgress + 1 : prevProgress
+              );
+            }, 100);
+            setSelectedFileContent(text);
+            setIsLoading(false);
+          } else {
+            console.error('Conversion to text failed.');
+            setIsLoading(false);
+          }
         } else {
-          console.error('Conversion to text failed.');
+          console.error('Conversion to wav failed.');
           setIsLoading(false);
         }
       } else {
@@ -70,7 +84,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
         setIsLoading(false);
       }
     } catch (error) {
-      alert('アップロード失敗 ');
+      alert('アップロード失敗');
       clearInterval(progressInterval);
       console.error(error);
     } finally {
@@ -89,7 +103,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     setFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: { 'audio/mp3': ['.mp3'] },
+    accept: {},
     noClick: false,
     noKeyboard: true,
     onDrop,

@@ -43,8 +43,13 @@ export const Presenter: FC = () => {
       fetchUserDoc();
     }
   }, [user]);
-
-  const setting = [
+  const home = [];
+  const articlepage = [
+    { text: '記事一覧', url: '/articles' },
+    { text: 'リンク2', url: '/' },
+    { text: 'リンク3', url: '/' },
+  ];
+  const settingpage = [
     ...(!isCompany
       ? []
       : [
@@ -67,7 +72,7 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
-              <Popup title="" logo={<HomeSvg />} links={links} />
+              <Popup title="" logo={<HomeSvg />} links={home} />
               <Popup title="" logo={<RobotSvg />} links={links} />
               <Popup title="" logo={<DescriptionSvg />} links={articlepage} />
               <Popup title="" logo={<EditnoteSvg />} links={links} />
@@ -84,7 +89,7 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
-              <Popup title="ホーム" logo={<HomeSvg />} links={links} />
+              <Popup title="ホーム" logo={<HomeSvg />} links={home} />
               <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
               <Popup
                 title="記事管理"

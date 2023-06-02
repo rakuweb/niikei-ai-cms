@@ -1,17 +1,25 @@
 import * as speech from '@google-cloud/speech';
+import { Storage } from '@google-cloud/storage';
 
 export default async function handler(req: any, res: any) {
   if (req.query.file && req.method === 'POST') {
     const bucketName = 'niikei2';
     const fileName = 'mp3text';
     const client = new speech.SpeechClient();
-    const gcsUri = `gs://${bucketName}/mp3text`;
+
+    const storage = new Storage({
+      projectId: process.env.GCP_PROJECT_ID,
+      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    });
+    const bucket = storage.bucket(bucketName);
+
+    const gcsUri = `gs://${bucketName}/${fileName}-fixed.wav`;
     const audio = {
       uri: gcsUri,
     };
     const config = {
-      encoding: 'MP3' as any,
-      sampleRateHertz: 16000,
+      encoding: 'LINEAR16' as any,
+      sampleRateHertz: 44100,
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,
     };
@@ -27,6 +35,7 @@ export default async function handler(req: any, res: any) {
       const transcription = response.results
         .map((result: any) => result.alternatives[0].transcript)
         .join('\n');
+
       res.status(200).json({ text: transcription });
     } else {
       res.status(500).json({

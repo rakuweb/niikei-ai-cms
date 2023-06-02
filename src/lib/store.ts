@@ -1,18 +1,26 @@
-import { create } from 'zustand';
+import { StateCreator, create } from 'zustand';
 import { User } from 'firebase/auth';
-
+import { persist } from 'zustand/middleware';
 type Open = {
   open: boolean;
   toggleOpen: () => void;
 };
 
-export const useStore = create<Open>((set) => ({
-  open: false,
-  toggleOpen: () =>
-    set((state) => {
-      return { open: !state.open };
+export const useStore = create<Open>(
+  persist(
+    (set) => ({
+      open: false,
+      toggleOpen: () =>
+        set((state) => {
+          return { open: !state.open };
+        }),
     }),
-}));
+    {
+      name: 'sidebar_storage',
+      getStorage: () => localStorage,
+    }
+  ) as unknown as StateCreator<Open>
+);
 
 type UserState = {
   currentUser: User | null;

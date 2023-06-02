@@ -29,7 +29,7 @@ export const Presenter: FC = () => {
 
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
+      <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`記事管理`} pagename2={title} />

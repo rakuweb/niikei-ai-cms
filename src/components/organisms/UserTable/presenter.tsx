@@ -26,12 +26,17 @@ export type PresenterProps = {
     name: string;
     id: string;
   }[];
+  currentPage: number;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, currentPage }) => {
   const url = '/settings/users';
-
+  const itemsPerPage = 10;
   const handleDelete = async (id: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
     try {
       const response = await fetch('/api/delete-users', {
         method: 'POST',
@@ -89,45 +94,53 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               </Thead>
 
               <Tbody>
-                {data?.map((user, index) => (
-                  <Tr key={index} css={tdstyles}>
-                    <Td
-                      w={`${52 / 19.2}vw`}
-                      h={`${59 / 19.2}vw`}
-                      borderLeft={`1px`}
-                    >
-                      <Flex justify={`center`} alignItems={`center`}>
-                        <Checkbox
-                          borderColor={`#707070`}
-                          size={{ lg: `sm`, '2xl': `md` }}
-                          sx={{
-                            '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                              {
-                                backgroundColor: '#49BAC0',
-                                borderColor: `#49BAC0`,
-                              },
-                          }}
-                        />
-                      </Flex>
-                    </Td>
-                    <Td>{user.name}</Td>
-                    <Td>{user.email}</Td>
-                    <Td>{user.role}</Td>
+                {data
+                  ?.slice(
+                    (currentPage - 1) * itemsPerPage,
+                    currentPage * itemsPerPage
+                  )
+                  .map((user, index) => (
+                    <Tr key={index} css={tdstyles}>
+                      <Td
+                        w={`${52 / 19.2}vw`}
+                        h={`${59 / 19.2}vw`}
+                        borderLeft={`1px`}
+                      >
+                        <Flex justify={`center`} alignItems={`center`}>
+                          <Checkbox
+                            borderColor={`#707070`}
+                            size={{ lg: `sm`, '2xl': `md` }}
+                            sx={{
+                              '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
+                                {
+                                  backgroundColor: '#49BAC0',
+                                  borderColor: `#49BAC0`,
+                                },
+                            }}
+                          />
+                        </Flex>
+                      </Td>
+                      <Td>{user.name}</Td>
+                      <Td>{user.email}</Td>
+                      <Td>{user.role}</Td>
 
-                    <Td>
-                      <Box display={'flex'} justifyContent={'space-around'}>
-                        <InternalLink href={`${url}/${user.id}`}>
-                          <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
-                        </InternalLink>
-                        <GrayButton
-                          text={`削除する`}
-                          w={`${140 / 19.2}vw`}
-                          onClick={() => handleDelete(user.id)}
-                        />
-                      </Box>
-                    </Td>
-                  </Tr>
-                ))}
+                      <Td>
+                        <Box display={'flex'} justifyContent={'space-around'}>
+                          <InternalLink href={`${url}/${user.id}`}>
+                            <WideButton
+                              text={`編集する`}
+                              w={`${140 / 19.2}vw`}
+                            />
+                          </InternalLink>
+                          <GrayButton
+                            text={`削除する`}
+                            w={`${140 / 19.2}vw`}
+                            onClick={() => handleDelete(user.id)}
+                          />
+                        </Box>
+                      </Td>
+                    </Tr>
+                  ))}
               </Tbody>
             </Table>
           </TableContainer>

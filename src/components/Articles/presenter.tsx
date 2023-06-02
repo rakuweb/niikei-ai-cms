@@ -31,7 +31,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
+      <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />
