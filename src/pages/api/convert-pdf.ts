@@ -1,19 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { google } from 'googleapis';
+import fs from 'fs';
+import path from 'path';
 import { Storage } from '@google-cloud/storage';
-import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 const storage = new Storage();
-const client = new ImageAnnotatorClient();
-
-async function deleteOldFiles(bucketName, prefix, newFileName) {
-  const bucket = storage.bucket(bucketName);
-  const [files] = await bucket.getFiles({ prefix: prefix });
-  for (const file of files) {
-    if (file.name !== newFileName) {
-      await file.delete();
-    }
-  }
-}
+const drive = google.drive('v3');
+const docs = google.docs('v1');
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,62 +21,50 @@ export default async function handler(
   }
 
   try {
-    const gcsSourceUri = `gs://${bucketName}/${fileName}`;
-    const gcsDestinationUri = `gs://${bucketName}/${fileName}-result/`;
-
-    const inputConfig = {
-      mimeType: 'application/pdf',
-      gcsSource: {
-        uri: gcsSourceUri,
-      },
-    };
-    const outputConfig = {
-      gcsDestination: {
-        uri: gcsDestinationUri,
-      },
-    };
-    const features = [{ type: 'DOCUMENT_TEXT_DETECTION' as const }];
-
-    const request = {
-      requests: [
-        {
-          inputConfig: inputConfig,
-          features: features,
-          outputConfig: outputConfig,
-        },
-      ],
-    };
-
-    const operation = await client.asyncBatchAnnotateFiles(request);
-    const [filesResponse] = await operation[0].promise();
-
-    const outputConfigResult = filesResponse.responses[0].outputConfig;
-    const textFiles = outputConfigResult.gcsDestination.uri;
-    const files = await storage
+    // Download the PDF file from Cloud Storage
+    const filePath = path.join('/tmp', fileName);
+    await storage
       .bucket(bucketName)
-      .getFiles({ prefix: textFiles.replace('gs://' + bucketName + '/', '') });
+      .file(fileName)
+      .download({ destination: filePath });
 
-    let texts = '';
-    for (const file of files[0]) {
-      const [text] = await storage
-        .bucket(bucketName)
-        .file(file.name)
-        .download();
+    // Upload the PDF file to Google Drive and convert it into Google Docs format
+    const driveResponse = await drive.files.create({
+      requestBody: {
+        name: fileName,
+      },
+      media: {
+        mimeType: 'application/pdf',
+        body: fs.createReadStream(filePath),
+      },
+      fields: 'id',
+      supportsAllDrives: true,
+    });
 
-      const parsedText = JSON.parse(text.toString());
+    const fileId = driveResponse.data.id;
 
-      if (parsedText.responses) {
-        for (const response of parsedText.responses) {
-          if (response.fullTextAnnotation) {
-            texts += response.fullTextAnnotation.text;
+    // Get the content of the Google Docs document as text
+    const docsResponse = await docs.documents.get({
+      documentId: fileId,
+      fields: 'body/content',
+    });
+
+    let text = '';
+    for (const content of docsResponse.data.body.content) {
+      if (content.paragraph) {
+        for (const element of content.paragraph.elements) {
+          if (element.textRun) {
+            text += element.textRun.content;
           }
         }
       }
     }
 
-    await deleteOldFiles(bucketName, `${fileName}-result/`, `${fileName}.json`);
+    // Delete the temporary file and the Google Docs document
+    fs.unlinkSync(filePath);
+    await drive.files.delete({ fileId: fileId });
 
-    return res.status(200).json({ text: texts });
+    return res.status(200).json({ text: text });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

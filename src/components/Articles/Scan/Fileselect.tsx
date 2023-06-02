@@ -23,7 +23,11 @@ const Fileselect = ({ setSelectedFileContent }) => {
 
     try {
       const fileName = 'pdftext';
-      const res = await fetch(`/api/generate-upload-url?file=${fileName}`);
+      console.log(fileName);
+      const res = await fetch(`/api/generate-upload-url?file=${fileName}`, {
+        method: 'POST',
+      });
+
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {
