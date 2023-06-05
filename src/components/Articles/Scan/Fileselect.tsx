@@ -19,55 +19,83 @@ const Fileselect = ({ setSelectedFileContent }) => {
   const uploadpdf = useCallback(async (file: File) => {
     setIsLoading(true);
     setUploadProgress(0);
-    let progressInterval;
+
+    let progressInterval = setInterval(() => {
+      setUploadProgress((oldProgress) => {
+        if (oldProgress >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return oldProgress + 1;
+      });
+    }, 1000);
 
     try {
-      const fileName = 'pdftext';
-      console.log(fileName);
-      const res = await fetch(`/api/generate-upload-url?file=${fileName}`, {
-        method: 'POST',
-      });
+      const fileName = file.name;
+      const reader = new FileReader();
 
-      const { url, fields } = await res.json();
-      const body = new FormData();
-      Object.entries({ ...fields, file }).forEach(([key, value]) => {
-        body.append(key, value as string | Blob);
-      });
-      progressInterval = setInterval(() => {
-        setUploadProgress((prevProgress) =>
-          prevProgress < 70 ? prevProgress + 1 : prevProgress
-        );
-      }, 1000);
-      const upload = await fetch(url, { method: 'POST', body });
+      reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        if (typeof reader.result === 'string') {
+          const base64data = reader.result;
+          const base64string = base64data.split(',')[1];
+          progressInterval = setInterval(() => {
+            setUploadProgress((prevProgress) =>
+              prevProgress < 70 ? prevProgress + 1 : prevProgress
+            );
+          }, 1000);
 
-      if (upload.ok) {
-        console.log('Uploaded successfully!');
-        clearInterval(progressInterval);
-        progressInterval = setInterval(() => {
-          setUploadProgress((prevProgress) =>
-            prevProgress < 99 ? prevProgress + 1 : prevProgress
+          const upload = await fetch(
+            `/api/generate-upload-url?file=${fileName}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/pdf',
+              },
+              body: base64string,
+            }
           );
-        }, 1000);
-        const textRes = await fetch(`/api/convert-pdf?file=${fileName}`, {
-          method: 'POST',
-        });
-        const json = await textRes.json();
-        console.log(json);
-        const { text } = json;
-        if (textRes.ok) {
-          console.log('Converted to text successfully!');
-          clearInterval(progressInterval);
-          setUploadProgress(100);
-          setSelectedFileContent(text);
-          setIsLoading(false);
+
+          if (upload.ok) {
+            const uploadResponse = await upload.json();
+            const { fileId } = uploadResponse;
+            console.log('Uploaded successfully!');
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+              setUploadProgress((prevProgress) =>
+                prevProgress < 99 ? prevProgress + 1 : prevProgress
+              );
+            }, 1000);
+            const textRes = await fetch(`/api/convert-pdf?file=${fileName}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ fileId: fileId }),
+            });
+            const json = await textRes.json();
+            console.log(json);
+            const { text } = json;
+            if (textRes.ok) {
+              console.log('Converted to text successfully!');
+              clearInterval(progressInterval);
+              setUploadProgress(100);
+              setSelectedFileContent(text);
+              setIsLoading(false);
+            } else {
+              console.error('Conversion to text failed.');
+              setIsLoading(false);
+            }
+          } else {
+            console.error('Upload failed.');
+            setIsLoading(false);
+          }
         } else {
-          console.error('Conversion to text failed.');
-          setIsLoading(false);
+          console.error(
+            'Expected the file to be read as a Data URL, but the result was not a string.'
+          );
         }
-      } else {
-        console.error('Upload failed.');
-        setIsLoading(false);
-      }
+      };
     } catch (error) {
       alert('アップロード失敗 ');
       console.error(error);

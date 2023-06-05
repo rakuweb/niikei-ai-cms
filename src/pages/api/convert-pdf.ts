@@ -1,90 +1,52 @@
+import { google, drive_v3 } from 'googleapis';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Storage } from '@google-cloud/storage';
-import { ImageAnnotatorClient } from '@google-cloud/vision';
-
-const storage = new Storage();
-const client = new ImageAnnotatorClient();
-
-async function deleteOldFiles(bucketName, prefix, newFileName) {
-  const bucket = storage.bucket(bucketName);
-  const [files] = await bucket.getFiles({ prefix: prefix });
-  for (const file of files) {
-    if (file.name !== newFileName) {
-      await file.delete();
-    }
-  }
-}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const fileName = 'pdftext';
-  const bucketName = 'niikei2';
-  if (!bucketName || !fileName) {
-    return res
-      .status(400)
-      .json({ error: 'bucketName and fileName are required' });
-  }
+  const { method } = req;
 
-  try {
-    const gcsSourceUri = `gs://${bucketName}/${fileName}`;
-    const gcsDestinationUri = `gs://${bucketName}/${fileName}-result/`;
+  if (method === 'POST') {
+    const fileId = req.body.fileId;
 
-    const inputConfig = {
-      mimeType: 'application/pdf',
-      gcsSource: {
-        uri: gcsSourceUri,
-      },
-    };
-    const outputConfig = {
-      gcsDestination: {
-        uri: gcsDestinationUri,
-      },
-    };
-    const features = [{ type: 'DOCUMENT_TEXT_DETECTION' as const }];
+    const auth = new google.auth.GoogleAuth({
+      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      scopes: ['https://www.googleapis.com/auth/drive'],
+    });
 
-    const request = {
-      requests: [
-        {
-          inputConfig: inputConfig,
-          features: features,
-          outputConfig: outputConfig,
-        },
-      ],
-    };
+    const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
 
-    const operation = await client.asyncBatchAnnotateFiles(request);
-    const [filesResponse] = await operation[0].promise();
-
-    const outputConfigResult = filesResponse.responses[0].outputConfig;
-    const textFiles = outputConfigResult.gcsDestination.uri;
-    const files = await storage
-      .bucket(bucketName)
-      .getFiles({ prefix: textFiles.replace('gs://' + bucketName + '/', '') });
-
-    let texts = '';
-    for (const file of files[0]) {
-      const [text] = await storage
-        .bucket(bucketName)
-        .file(file.name)
-        .download();
-
-      const parsedText = JSON.parse(text.toString());
-
-      if (parsedText.responses) {
-        for (const response of parsedText.responses) {
-          if (response.fullTextAnnotation) {
-            texts += response.fullTextAnnotation.text;
-          }
-        }
+    try {
+      if (typeof req.query.file !== 'string') {
+        throw new Error('Expected a single file name');
       }
+
+      const response = await drive.files.copy({
+        fileId: fileId,
+        requestBody: {
+          name: req.query.file,
+          parents: ['1Y7wx5pBYOfliThVdr2wULSlYKYW_EWfX'],
+          mimeType: 'application/vnd.google-apps.document',
+        },
+      });
+
+      const docId = response.data.id;
+
+      // Get the text content of the document
+      const doc = await drive.files.export({
+        fileId: docId,
+        mimeType: 'text/plain',
+      });
+
+      const text = doc.data;
+
+      res.status(200).json({ text: text });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+      console.error(err);
     }
-
-    await deleteOldFiles(bucketName, `${fileName}-result/`, `${fileName}.json`);
-
-    return res.status(200).json({ text: texts });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
+  } else {
+    res.status(405).json({ message: 'Method Not Allowed' });
   }
 }

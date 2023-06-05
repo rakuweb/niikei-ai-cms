@@ -1,10 +1,13 @@
 import { google, drive_v3 } from 'googleapis';
-import { parse } from 'url';
 import { Readable } from 'stream';
 
 export default async function uploadHandler(req: any, res: any) {
   const { method } = req;
   if (method === 'POST') {
+    const base64String = await req.body;
+
+    const data = Buffer.from(base64String, 'base64');
+
     const drive: drive_v3.Drive = google.drive({
       version: 'v3',
       auth: new google.auth.GoogleAuth({
@@ -14,7 +17,7 @@ export default async function uploadHandler(req: any, res: any) {
     });
 
     const bufferStream = new Readable();
-    bufferStream.push(req.body.file, 'base64');
+    bufferStream.push(data);
     bufferStream.push(null);
 
     const media = {
@@ -31,12 +34,10 @@ export default async function uploadHandler(req: any, res: any) {
         media: media,
       });
 
-      res
-        .status(200)
-        .json({
-          message: 'File uploaded successfully',
-          fileId: response.data.id,
-        });
+      res.status(200).json({
+        message: 'File uploaded successfully',
+        fileId: response.data.id,
+      });
       console.log('File uploaded successfully:', response.data.id);
     } catch (err) {
       res.status(500).json({ message: 'Error uploading file', error: err });
