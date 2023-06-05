@@ -29,7 +29,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
 
       setUploadProgress(progressInterval);
       progressInterval++;
-      interval *= 1.05;
+      interval *= 1.06;
       timerId = setTimeout(incrementProgress, interval);
     };
 
@@ -118,7 +118,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     setFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {},
+    accept: { 'audio/mpeg': ['.mp3'] },
     noClick: false,
     noKeyboard: true,
     onDrop,
