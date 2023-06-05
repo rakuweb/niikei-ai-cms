@@ -5,6 +5,7 @@ import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import LordingComponent from './LordingComponent';
+import { error } from 'console';
 
 const Fileselect = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,9 +91,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
             setIsLoading(false);
           }
         } else {
-          console.error(
-            'Expected the file to be read as a Data URL, but the result was not a string.'
-          );
+          console.error(error);
         }
       };
     } catch (error) {
