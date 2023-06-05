@@ -74,7 +74,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
             if (textRes.ok) {
               console.log('Converted to text successfully!');
               clearInterval(progressInterval);
-              clearTimeout(timerId); // Here we stop the timer
+              clearTimeout(timerId);
               setUploadProgress(100);
 
               setSelectedFileContent(text);
