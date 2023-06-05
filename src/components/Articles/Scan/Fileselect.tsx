@@ -17,18 +17,23 @@ const Fileselect = ({ setSelectedFileContent }) => {
   const [file, setFile] = useState<File>();
 
   const uploadpdf = useCallback(async (file: File) => {
-    setIsLoading(true);
-    setUploadProgress(0);
+    let progressInterval = 0;
+    let interval = 100;
+    let timerId = null;
+    const incrementProgress = () => {
+      if (progressInterval >= 100) {
+        setUploadProgress(100);
 
-    let progressInterval = setInterval(() => {
-      setUploadProgress((oldProgress) => {
-        if (oldProgress >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return oldProgress + 1;
-      });
-    }, 1000);
+        return;
+      }
+
+      setUploadProgress(progressInterval);
+      progressInterval++;
+      interval *= 1.03;
+      timerId = setTimeout(incrementProgress, interval);
+    };
+
+    incrementProgress();
 
     try {
       const fileName = file.name;
@@ -39,11 +44,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
         if (typeof reader.result === 'string') {
           const base64data = reader.result;
           const base64string = base64data.split(',')[1];
-          progressInterval = setInterval(() => {
-            setUploadProgress((prevProgress) =>
-              prevProgress < 70 ? prevProgress + 1 : prevProgress
-            );
-          }, 1000);
 
           const upload = await fetch(
             `/api/generate-upload-url?file=${fileName}`,
@@ -60,12 +60,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
             const uploadResponse = await upload.json();
             const { fileId } = uploadResponse;
             console.log('Uploaded successfully!');
-            clearInterval(progressInterval);
-            progressInterval = setInterval(() => {
-              setUploadProgress((prevProgress) =>
-                prevProgress < 99 ? prevProgress + 1 : prevProgress
-              );
-            }, 1000);
+
             const textRes = await fetch(`/api/convert-pdf?file=${fileName}`, {
               method: 'POST',
               headers: {
@@ -79,9 +74,13 @@ const Fileselect = ({ setSelectedFileContent }) => {
             if (textRes.ok) {
               console.log('Converted to text successfully!');
               clearInterval(progressInterval);
+              clearTimeout(timerId); // Here we stop the timer
               setUploadProgress(100);
+
               setSelectedFileContent(text);
-              setIsLoading(false);
+              setTimeout(() => {
+                setIsLoading(false);
+              }, 1000);
             } else {
               console.error('Conversion to text failed.');
               setIsLoading(false);
@@ -107,6 +106,8 @@ const Fileselect = ({ setSelectedFileContent }) => {
   const handleClick = handleSubmit(async () => {
     if (file) {
       uploadpdf(file);
+      setIsLoading(true);
+      setUploadProgress(0);
     }
   });
   const onDrop = useCallback((acceptedFiles) => {

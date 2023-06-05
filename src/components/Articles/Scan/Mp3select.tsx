@@ -16,19 +16,24 @@ const Mp3select = ({ setSelectedFileContent }) => {
     defaultValues: { name: '', iconUrl: '' },
   });
   const [file, setFile] = useState<File>();
-  const uploadMp3 = useCallback(async (file: File) => {
-    setIsLoading(true);
-    setUploadProgress(0);
 
-    let progressInterval = setInterval(() => {
-      setUploadProgress((oldProgress) => {
-        if (oldProgress >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return oldProgress + 1;
-      });
-    }, 1000);
+  const uploadMp3 = useCallback(async (file: File) => {
+    let progressInterval = 0;
+    let interval = 100;
+    let timerId = null;
+    const incrementProgress = () => {
+      if (progressInterval >= 100) {
+        setUploadProgress(100);
+        return;
+      }
+
+      setUploadProgress(progressInterval);
+      progressInterval++;
+      interval *= 1.05;
+      timerId = setTimeout(incrementProgress, interval);
+    };
+
+    incrementProgress();
 
     try {
       const fileName = 'mp3text';
@@ -64,37 +69,47 @@ const Mp3select = ({ setSelectedFileContent }) => {
           if (textRes.ok) {
             console.log('Converted to text successfully!');
             clearInterval(progressInterval);
-            progressInterval = setInterval(() => {
-              setUploadProgress((prevProgress) =>
-                prevProgress < 99 ? prevProgress + 1 : prevProgress
-              );
-            }, 100);
+            clearTimeout(timerId); // Here we stop the timer
+            setUploadProgress(100);
+
             setSelectedFileContent(text);
-            setIsLoading(false);
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
           } else {
             console.error('Conversion to text failed.');
-            setIsLoading(false);
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
           }
         } else {
           console.error('Conversion to wav failed.');
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
         }
       } else {
         console.error('Upload failed.');
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       }
     } catch (error) {
       alert('アップロード失敗');
       clearInterval(progressInterval);
       console.error(error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   }, []);
 
   const handleClick = handleSubmit(async () => {
     if (file) {
       uploadMp3(file);
+      setIsLoading(true);
+      setUploadProgress(0);
     }
   });
   const onDrop = useCallback((acceptedFiles) => {
