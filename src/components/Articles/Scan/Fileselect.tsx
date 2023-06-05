@@ -5,7 +5,6 @@ import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import LordingComponent from './LordingComponent';
-import { error } from 'console';
 
 const Fileselect = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,8 +89,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
             console.error('Upload failed.');
             setIsLoading(false);
           }
-        } else {
-          console.error(error);
         }
       };
     } catch (error) {
