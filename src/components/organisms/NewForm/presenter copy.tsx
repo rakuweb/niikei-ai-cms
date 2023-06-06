@@ -63,26 +63,58 @@ export const Presenter: FC<PresenterProps> = () => {
   }, []);
 
   const onSubmit = async (data: FormData) => {
-    if (!window.confirm('この内容で新規作成しますか？')) {
-      return;
-    }
     try {
-      const response = await fetch('/api/createUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...data, currentUserUid }),
-      });
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+      let userToken = '';
+      if (currentUser) {
+        const tokenResult = await currentUser.getIdTokenResult();
+        userToken = tokenResult.token;
+      }
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const { user } = userCredential;
+      const { password, is_company, ...dataWithoutPassword } = data;
+      if (user) {
+        let companyDocRef;
+        if (is_company) {
+          companyDocRef = doc(db, 'companies', user.uid, 'employees', user.uid);
+        } else {
+          companyDocRef = doc(
+            db,
+            'companies',
+            currentUserUid,
+            'employees',
+            user.uid
+          );
+        }
 
-      if (response.ok) {
-        window.alert('ユーザー新規作成しました。');
-      } else {
-        console.error('Error creating user: ', response.statusText);
-        alert(response.statusText);
+        const employeeDocRef = doc(db, 'users', user.uid);
+        await setDoc(companyDocRef, {
+          ...dataWithoutPassword,
+        });
+
+        await setDoc(employeeDocRef, {
+          is_company: data.is_company,
+          company_ref: currentUserUid,
+        });
+
+        if (!is_company) {
+          await setDoc(employeeDocRef, {
+            is_company: data.is_company,
+            company_ref: currentUserUid,
+          });
+        }
+
+        window.alert('送信しました。サインアウトします。');
+
+        setShowPopup(true);
       }
     } catch (error) {
-      console.error('Error creating user: ', error);
+      console.error('Error adding document: ', error);
       alert(error);
     }
   };
