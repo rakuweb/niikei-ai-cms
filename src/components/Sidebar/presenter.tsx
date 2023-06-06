@@ -75,10 +75,12 @@ export const Presenter: FC = () => {
               <Popup title="" logo={<HomeSvg />} links={home} />
               <Popup title="" logo={<RobotSvg />} links={links} />
               <Popup title="" logo={<DescriptionSvg />} links={articlepage} />
+     
               <Popup title="" logo={<EditnoteSvg />} links={links} />
               <Popup title="" logo={<AutorenewSvg />} links={links} />
               <Popup title="" logo={<AntennaSvg />} links={links} />
               <Popup title="" logo={<GearSvg />} links={settingpage} />
+
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
                   <RightmarkSvg />
@@ -96,6 +98,7 @@ export const Presenter: FC = () => {
                 logo={<DescriptionSvg />}
                 links={articlepage}
               />
+    
               <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
@@ -112,6 +115,7 @@ export const Presenter: FC = () => {
                 links={links}
               />
               <Popup title="設定" logo={<GearSvg />} links={settingpage} />
+    
               <SidebarToggle onClick={toggleSidebar}>
                 <Box
                   fontFamily={`'Noto Sans JP', sans-serif`}
