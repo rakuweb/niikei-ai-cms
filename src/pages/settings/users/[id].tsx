@@ -12,6 +12,7 @@ type DataType = {
   email: string;
   name: string;
   password: string;
+  id: string;
 };
 
 const UserPage: NextPage = () => {
@@ -23,17 +24,26 @@ const UserPage: NextPage = () => {
     const fetchData = async () => {
       try {
         if (id) {
-          const docRef = doc(
-            db,
-            'companies',
-            'employees',
-            'employees',
-            id as string
-          );
-          const docSnap = await getDoc(docRef);
+          const employeeDocRef = doc(db, 'users', id as string);
+          const employeeDocSnap = await getDoc(employeeDocRef);
 
-          if (docSnap.exists()) {
-            setData(docSnap.data() as DataType);
+          if (employeeDocSnap.exists()) {
+            const ref = employeeDocSnap.data()?.company_ref;
+
+            if (ref) {
+              const companyDocRef = doc(
+                db,
+                'companies',
+                ref,
+                'employees',
+                id as string
+              );
+              const companyDocSnap = await getDoc(companyDocRef);
+
+              if (companyDocSnap.exists()) {
+                setData(companyDocSnap.data() as DataType);
+              }
+            }
           }
         }
       } catch (error) {

@@ -16,9 +16,8 @@ import { css } from '@emotion/react';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
 import { InternalLink } from 'components/links/InternalLink';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { auth, db } from 'src/firebase';
-import { deleteUser } from 'firebase/auth';
+import { doc, deleteDoc, getDoc } from 'firebase/firestore';
+import { db } from 'src/firebase';
 
 export type PresenterProps = {
   data?: {
@@ -34,15 +33,39 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const docRef = doc(db, 'companies', id);
-      const user = auth.currentUser;
+      const response = await fetch('/api/delete-users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uid: id }),
+      });
 
-      if (user) {
-        await deleteUser(user);
-        await deleteDoc(docRef);
-        window.alert('データと認証情報の削除が成功しました');
+      const userDocRef = doc(db, 'users', id);
+      const userDoc = await getDoc(userDocRef);
+      const refFieldString = userDoc.data().company_ref;
+
+      const companyEmployeeDocRef = doc(
+        db,
+        'companies',
+        refFieldString,
+        'employees',
+        id
+      );
+      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+      if (userDoc.exists() && companyEmployeeDoc.exists()) {
+        await deleteDoc(userDocRef);
+        await deleteDoc(companyEmployeeDocRef);
+
+        if (response.ok) {
+          window.alert('データと認証情報の削除が成功しました');
+          location.reload();
+        } else {
+          window.alert('認証情報の削除に失敗しました');
+        }
       } else {
-        window.alert('認証情報の取得に失敗しました');
+        window.alert('指定したユーザー情報が存在しません');
       }
     } catch (error) {
       window.alert(error);

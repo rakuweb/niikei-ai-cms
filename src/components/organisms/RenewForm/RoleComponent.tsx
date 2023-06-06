@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth, db } from 'src/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 
@@ -42,14 +42,17 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     try {
       const user = auth.currentUser;
       if (user) {
-        const docRef = doc(
+        const employeeDocRef = doc(db, 'users', user.uid);
+        const employeeDocSnap = await getDoc(employeeDocRef);
+        const ref = employeeDocSnap.data()?.company_ref;
+        const companyDocRef = doc(
           db,
           'companies',
-          'employees',
+          ref,
           'employees',
           id as string
         );
-        await setDoc(docRef, { role: data.role }, { merge: true });
+        await setDoc(companyDocRef, { role: data.role }, { merge: true });
         window.alert('Roleが更新されました');
         setRole(data.role);
       }
@@ -71,17 +74,17 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
       <FormControl isInvalid={!!errors.role} mb={'1vw'}>
         <FormLabel>
           <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在のRole</Text>
+            <Text w={'35%'}>現在の権限</Text>
             <Text textAlign={'left'} w={'65%'}>
               {role}
             </Text>
           </Flex>
           <Box>
             <Flex alignItems={'center'}>
-              <Text w={'35%'}>変更後のRole</Text>
+              <Text w={'35%'}>変更後の権限</Text>
               <Box w={'65%'}>
                 <Select
-                  placeholder="Roleを選択"
+                  placeholder="権限を選択"
                   {...register('role', { required: true })}
                   borderRadius={'none'}
                 >
@@ -89,7 +92,7 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
                   <option value="編集者">編集者</option>
                 </Select>
                 <FormErrorMessage fontSize={'0.5vw'}>
-                  Roleを選択してください
+                  権限を選択してください
                 </FormErrorMessage>
               </Box>
             </Flex>
