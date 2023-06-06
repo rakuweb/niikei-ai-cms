@@ -2,11 +2,21 @@
 import React, { FC, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Pagecircle } from './Pagecircle';
+// ページネーションコンポーネント
+export type PresenterProps = {
+  currentPage: number;
+  totalData: number;
+  itemsPerPage: number;
+  handlePageChange: (newPage: number) => void;
+};
 
-export type PresenterProps = Record<string, unknown>;
-
-export const Presenter: FC = () => {
-  const [pagenumber, setPagenumber] = useState(1);
+export const Presenter: FC<PresenterProps> = ({
+  currentPage,
+  totalData,
+  itemsPerPage,
+  handlePageChange,
+}) => {
+  const totalPages = Math.ceil(totalData / itemsPerPage);
   return (
     <Flex
       w={`fit-content`}
@@ -18,46 +28,49 @@ export const Presenter: FC = () => {
       fontSize={`${16 / 19.2}vw`}
     >
       <Box
-        display={pagenumber == 1 ? `none` : `block`}
-        onClick={() => setPagenumber(pagenumber - 1)}
-        _hover={{
-          cursor: `pointer`,
-          color: `#49BAC0`,
-          borderBottom: `1px`,
+        onClick={() => {
+          if (currentPage !== 1) {
+            handlePageChange(currentPage - 1);
+          }
         }}
-      >{`戻る`}</Box>
-      <Box
-        display={pagenumber == 1 ? `none` : `block`}
-        ml={`${10 / 19.2}vw`}
-        mr={`${17 / 19.2}vw`}
-      >{`…`}</Box>
+        // style
+        color={currentPage === 1 ? 'gray' : 'inherit'}
+        cursor={currentPage === 1 ? 'default' : 'pointer'}
+        pointerEvents={currentPage === 1 ? 'none' : 'auto'}
+        mr={`1vw`}
+      >
+        戻る
+      </Box>
 
-      <Pagecircle
-        pagenumber={pagenumber}
-        _hover={{}}
-        border={`1px solid #49BAC0`}
-      />
-      <Pagecircle
-        pagenumber={pagenumber + 1}
-        onClick={() => setPagenumber(pagenumber + 1)}
-      />
-      <Pagecircle
-        pagenumber={pagenumber + 2}
-        onClick={() => setPagenumber(pagenumber + 2)}
-      />
-      <Pagecircle
-        pagenumber={pagenumber + 3}
-        onClick={() => setPagenumber(pagenumber + 3)}
-      />
-      <Box ml={`${10 / 19.2}vw`} mr={`${17 / 19.2}vw`}>{`…`}</Box>
+      {currentPage > 2 && <Box>{`…`}</Box>}
+
+      {Array.from({ length: 4 }, (_, i) => currentPage - 2 + i).map(
+        (pageNumber) =>
+          pageNumber > 0 &&
+          pageNumber <= totalPages && (
+            <Pagecircle
+              key={pageNumber}
+              pagenumber={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+              border={
+                pageNumber === currentPage ? `1px solid #49BAC0` : undefined
+              }
+            />
+          )
+      )}
+
+      {currentPage < totalPages - 1 && <Box>{`…`}</Box>}
+
       <Box
-        onClick={() => setPagenumber(pagenumber + 1)}
-        _hover={{
-          cursor: `pointer`,
-          color: `#49BAC0`,
-          borderBottom: `1px`,
-        }}
-      >{`次へ`}</Box>
+        onClick={() => handlePageChange(currentPage + 1)}
+        // style
+        color={currentPage == totalPages ? 'gray' : 'inherit'}
+        cursor={currentPage == totalPages ? 'default' : 'pointer'}
+        pointerEvents={currentPage === totalPages ? 'none' : 'auto'}
+        ml={`1vw`}
+      >
+        次へ
+      </Box>
     </Flex>
   );
 };

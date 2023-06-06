@@ -15,7 +15,8 @@ export const Presenter: FC<PresenterProps> = ({ pagenumber, ...props }) => {
       letterSpacing={`0`}
       alignItems={`center`}
       justify={`center`}
-      mr={`${10 / 19.2}vw`}
+      mr={`${5 / 19.2}vw`}
+      ml={`${5 / 19.2}vw`}
       _hover={{
         transition: `0.1s`,
         cursor: `pointer`,

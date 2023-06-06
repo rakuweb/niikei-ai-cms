@@ -62,7 +62,7 @@ export const Presenter: FC = () => {
             <ContentContainer h={`${702 / 19.2}vw`}>
               <CrawlerTable list={list} />
             </ContentContainer>
-            <Pagination />
+            {/* <Pagination /> */}
           </Text>
         </OutsideContainer>
       </Box>
