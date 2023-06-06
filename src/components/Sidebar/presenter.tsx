@@ -72,13 +72,43 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
-              <Popup title="" logo={<HomeSvg />} links={home} />
-              <Popup title="" logo={<RobotSvg />} links={links} />
-              <Popup title="" logo={<DescriptionSvg />} links={articlepage} />
-              <Popup title="" logo={<EditnoteSvg />} links={links} />
-              <Popup title="" logo={<AutorenewSvg />} links={links} />
-              <Popup title="" logo={<AntennaSvg />} links={links} />
-              <Popup title="" logo={<GearSvg />} links={settingpage} />
+              <Popup title="" logo={<HomeSvg />} links={home} href={'/'} />
+              <Popup
+                title=""
+                logo={<RobotSvg />}
+                links={links}
+                href={undefined}
+              />
+              <Popup
+                title=""
+                logo={<DescriptionSvg />}
+                links={articlepage}
+                href={undefined}
+              />
+              <Popup
+                title=""
+                logo={<EditnoteSvg />}
+                links={links}
+                href={undefined}
+              />
+              <Popup
+                title=""
+                logo={<AutorenewSvg />}
+                links={links}
+                href={undefined}
+              />
+              <Popup
+                title=""
+                logo={<AntennaSvg />}
+                links={links}
+                href={undefined}
+              />
+              <Popup
+                title=""
+                logo={<GearSvg />}
+                links={settingpage}
+                href={undefined}
+              />
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
                   <RightmarkSvg />
@@ -89,29 +119,48 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
-              <Popup title="ホーム" logo={<HomeSvg />} links={home} />
-              <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
+              <Popup
+                title="ホーム"
+                logo={<HomeSvg />}
+                links={home}
+                href={'/'}
+              />
+              <Popup
+                title="サイト管理"
+                logo={<RobotSvg />}
+                links={links}
+                href={undefined}
+              />
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
                 links={articlepage}
+                href={undefined}
               />
               <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
                 links={links}
+                href={undefined}
               />
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
                 links={links}
+                href={undefined}
               />
               <Popup
                 title="オリジナル配信管理"
                 logo={<AntennaSvg />}
                 links={links}
+                href={undefined}
               />
-              <Popup title="設定" logo={<GearSvg />} links={settingpage} />
+              <Popup
+                title="設定"
+                logo={<GearSvg />}
+                links={settingpage}
+                href={undefined}
+              />
               <SidebarToggle onClick={toggleSidebar}>
                 <Box
                   fontFamily={`'Noto Sans JP', sans-serif`}

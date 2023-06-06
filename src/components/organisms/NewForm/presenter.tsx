@@ -13,15 +13,12 @@ import {
 } from '@chakra-ui/react';
 import { Controller, useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
-import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { db } from 'src/firebase';
 import { NameLabel } from './NameLabel';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { PasswordPopupComponent } from '../RenewForm/PasswordPopupComponent';
-
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { useNameStore } from '../../../lib/store';
+
 type FormData = {
   name: string;
   email: string;
