@@ -137,6 +137,7 @@ export const Presenter: FC = () => {
                 links={articlepage}
                 href={undefined}
               />
+
               <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
