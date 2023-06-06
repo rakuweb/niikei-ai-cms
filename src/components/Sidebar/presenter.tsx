@@ -29,7 +29,7 @@ export const Presenter: FC = () => {
     { text: 'リンク2', url: '/' },
     { text: 'リンク3', url: '/' },
   ];
-
+  const articlepage = [];
   const [isCompany, setIsCompany] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const Presenter: FC = () => {
     }
   }, [user]);
 
-  const setting = [
+  const settingpage = [
     ...(!isCompany
       ? []
       : [
