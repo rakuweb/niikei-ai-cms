@@ -69,7 +69,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
               body: JSON.stringify({ fileId: fileId }),
             });
             const json = await textRes.json();
-            console.log(json);
+
             const { text } = json;
             if (textRes.ok) {
               console.log('Converted to text successfully!');
