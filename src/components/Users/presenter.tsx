@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -21,10 +21,14 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `ユーザ情報`;
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
+      <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />
@@ -40,10 +44,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             </Flex>
 
             <ContentContainer h={`${702 / 19.2}vw`}>
-              <UserTable data={data} />
+              <UserTable data={data} currentPage={currentPage as any} />
             </ContentContainer>
 
-            {/* <Pagination /> */}
+            <Pagination
+              currentPage={currentPage}
+              totalData={data ? data.length : 0}
+              itemsPerPage={10}
+              handlePageChange={handlePageChange}
+            />
           </Text>
         </OutsideContainer>
       </Box>

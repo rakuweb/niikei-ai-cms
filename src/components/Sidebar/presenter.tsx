@@ -29,7 +29,7 @@ export const Presenter: FC = () => {
     { text: 'リンク2', url: '/' },
     { text: 'リンク3', url: '/' },
   ];
-  const articlepage = [];
+
   const [isCompany, setIsCompany] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,12 @@ export const Presenter: FC = () => {
       fetchUserDoc();
     }
   }, [user]);
-
+  const home = [];
+  const articlepage = [
+    { text: '記事一覧', url: '/articles' },
+    { text: 'リンク2', url: '/' },
+    { text: 'リンク3', url: '/' },
+  ];
   const settingpage = [
     ...(!isCompany
       ? []
@@ -67,13 +72,15 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
-              <Popup title="" logo={<HomeSvg />} links={links} />
+              <Popup title="" logo={<HomeSvg />} links={home} />
               <Popup title="" logo={<RobotSvg />} links={links} />
               <Popup title="" logo={<DescriptionSvg />} links={articlepage} />
+     
               <Popup title="" logo={<EditnoteSvg />} links={links} />
               <Popup title="" logo={<AutorenewSvg />} links={links} />
               <Popup title="" logo={<AntennaSvg />} links={links} />
               <Popup title="" logo={<GearSvg />} links={settingpage} />
+
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
                   <RightmarkSvg />
@@ -84,13 +91,14 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
-              <Popup title="ホーム" logo={<HomeSvg />} links={links} />
+              <Popup title="ホーム" logo={<HomeSvg />} links={home} />
               <Popup title="サイト管理" logo={<RobotSvg />} links={links} />
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
                 links={articlepage}
               />
+    
               <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
@@ -107,6 +115,7 @@ export const Presenter: FC = () => {
                 links={links}
               />
               <Popup title="設定" logo={<GearSvg />} links={settingpage} />
+    
               <SidebarToggle onClick={toggleSidebar}>
                 <Box
                   fontFamily={`'Noto Sans JP', sans-serif`}

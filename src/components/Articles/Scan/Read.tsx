@@ -23,7 +23,7 @@ const Read = ({ text }) => {
           borderRadius={`0`}
           borderColor={`#D6D6D6`}
           fontSize={`${16 / 19.2}vw`}
-          value={text}
+          value={text || undefined}
         />
       </Text>
       <Flex justify={`space-between`}>

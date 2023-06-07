@@ -14,12 +14,12 @@ import { WideButton } from 'components/Button/WideButton';
 import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { auth, db } from 'src/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth } from 'src/firebase';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 import { PasswordPopupComponent } from './PasswordPopupComponent';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
+
 type FormData = {
   password: string;
 };
@@ -44,7 +44,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
   const API_URL = '/api/update-user-password';
   const onSubmit = async (data: FormData) => {
     try {
-      const user = auth.currentUser;
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -56,21 +55,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         }),
       });
       if (response.ok) {
-        const employeeDocRef = doc(db, 'users', id as string);
-        const employeeDocSnap = await getDoc(employeeDocRef);
-        const ref = employeeDocSnap.data()?.company_ref;
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
-        await setDoc(
-          companyDocRef,
-          { password: data.password },
-          { merge: true }
-        );
         setPassword(data.password);
         window.alert('パスワードが更新されました');
       }

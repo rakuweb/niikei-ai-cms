@@ -32,7 +32,8 @@
     "**/*.ts",
     "**/*.tsx",
     "./.eslintrc.js",
-    "src/firebase.js"
+    "src/firebase.js",
+    "src/pages/api/convert-text.js"
   ],
   "exclude": ["node_modules"]
 }

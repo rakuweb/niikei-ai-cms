@@ -14,7 +14,7 @@ export const Presenter: FC = () => {
 
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
+      <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />

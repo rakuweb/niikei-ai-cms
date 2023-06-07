@@ -16,6 +16,7 @@ module.exports = {
       version: 'detect',
     },
   },
+
   plugins: ['react-hooks', 'react', '@typescript-eslint'],
   extends: [
     'eslint:recommended',
