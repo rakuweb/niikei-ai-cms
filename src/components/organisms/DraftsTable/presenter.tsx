@@ -14,12 +14,14 @@ import {
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
-import { InternalLink } from 'components/links/InternalLink';
+
 import { css } from '@emotion/react';
 import moment from 'moment';
 import * as admin from 'firebase-admin';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
+import { DropDown } from '../DropDown';
+import { ExternalLink } from 'components/links/ExternalLink';
 
 export type PresenterProps = {
   data?: {
@@ -39,7 +41,7 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const url = '/articles/drafts';
+  // const url = '/articles/drafts';
   const itemsPerPage = 10;
   console.log('test', data);
   const handleDelete = async (id: string) => {
@@ -112,16 +114,16 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <InternalLink href={`${url}/`}>
+                              <ExternalLink href={`${data.url}`}>
                                 <WideButton
                                   text={`編集する`}
                                   w={`${140 / 19.2}vw`}
                                 />
-                              </InternalLink>
+                              </ExternalLink>
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleDelete(user.id)}
+                                onClick={() => handleDelete()}
                               />
                             </Box>
                           </Td>
@@ -134,12 +136,28 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           </Box>
         </TableContainer>
       </ContentContainer>
-      <Pagination
-        currentPage={currentPage}
-        totalData={data ? data.length : 0}
-        itemsPerPage={10}
-        handlePageChange={handlePageChange}
-      />
+      <Flex alignItems={'center'} position={'relative'}>
+        <Box position={'absolute'}>
+          <DropDown
+            selectedValue={''}
+            handleSelect={function (value: string): void {
+              throw new Error('Function not implemented.');
+            }}
+            handleExecute={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+            // selectedValue={selectedValue}
+            // handleSelect={setSelectedValue}
+            // handleExecute={handleExecute}
+          />
+        </Box>
+        <Pagination
+          currentPage={currentPage}
+          totalData={data ? data.length : 0}
+          itemsPerPage={10}
+          handlePageChange={handlePageChange}
+        />
+      </Flex>
     </>
   );
 };
