@@ -45,9 +45,13 @@ export const Presenter: FC = () => {
   }, [user]);
   const home = [];
   const articlepage = [
-    { text: '記事一覧', url: '/articles' },
-    { text: 'リンク2', url: '/' },
-    { text: 'リンク3', url: '/' },
+    { text: '下書き記事一覧', url: '/articles/drafts' },
+    { text: '新規作成する', url: '/articles/new' },
+    { text: '記事化リスト', url: '/articles/collections' },
+    { text: '確認記事一覧', url: '/articles/reviews' },
+    { text: '修正記事一覧', url: '/articles/collections' },
+    { text: '公開記事一覧', url: '/articles/published' },
+    { text: 'ゴミ箱', url: '/articles/trash' },
   ];
   const settingpage = [
     ...(!isCompany
@@ -56,7 +60,7 @@ export const Presenter: FC = () => {
           { text: 'ユーザ一覧', url: '/settings/users' },
           { text: 'ユーザ新規作成', url: '/settings/users/new' },
         ]),
-    { text: 'アカウント詳細', url: user ? `${url}/${user.uid}` : '' },
+    { text: 'ユーザ詳細', url: user ? `${url}/${user.uid}` : '' },
   ];
 
   const isOpen = useStore((state) => state.open);
