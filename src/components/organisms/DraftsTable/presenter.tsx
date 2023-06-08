@@ -123,7 +123,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleDelete()}
+                                // onClick={() => handleDelete()}
                               />
                             </Box>
                           </Td>
