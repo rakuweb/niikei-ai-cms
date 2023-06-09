@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Textarea } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { BigWideButton } from 'components/Button/BigWideButton';
+import { Popup } from '../PopupComponent';
 
 const Read = ({ text }) => {
+  const [isButtonActive, setButtonActive] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupText, setPopupText] = useState('');
+  useEffect(() => {
+    setButtonActive(!!text);
+    setPopupText(text);
+  }, [text]);
+
   const downloadText = () => {
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -11,6 +20,13 @@ const Read = ({ text }) => {
     a.href = url;
     a.download = 'download.txt';
     a.click();
+  };
+  const openPopup = () => {
+    setIsOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -27,18 +43,35 @@ const Read = ({ text }) => {
         />
       </Text>
       <Flex justify={`space-between`}>
-        <BigWideButton
-          onClick={downloadText}
-          src="/images/button/rightarrow_big.png"
-          text="保存する"
-          w={`${280 / 19.2}vw`}
-          bg={`#8D9696`}
-          color={`white`}
-        />
+        {!isButtonActive ? (
+          <BigWideButton
+            src="/images/button/rightarrow_gray.png"
+            text="保存する"
+            w={`${280 / 19.2}vw`}
+            bg={`#D6D6D6`}
+            color={`#BABABA`}
+          />
+        ) : (
+          <BigWideButton
+            onClick={downloadText}
+            src="/images/button/rightarrow_big.png"
+            text="保存する"
+            w={`${280 / 19.2}vw`}
+            bg={`#8D9696`}
+            color={`white`}
+          />
+        )}
         <BigWideButton
           src="/images/button/rightarrow_big.png"
           text="記事作成に進む"
+          onClick={openPopup}
           w={`${280 / 19.2}vw`}
+        />
+        <Popup
+          isOpen={isOpen}
+          onClose={closePopup}
+          text={popupText}
+          setText={setPopupText}
         />
       </Flex>
     </div>

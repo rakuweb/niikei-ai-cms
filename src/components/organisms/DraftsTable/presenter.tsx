@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Table,
@@ -43,9 +43,9 @@ export type PresenterProps = {
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   // const url = '/articles/drafts';
   const itemsPerPage = 10;
-  console.log('test', data);
+  // console.log('test', data);
   const handleDelete = async (id: string) => {
-    console.log('Handle delete for id:', id);
+    // console.log('Handle delete for id:', id);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +54,47 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
+  const [titles, setTitles] = useState<{ [url: string]: string }>({});
+  const [times, setTimes] = useState<{ [url: string]: string }>({});
+
+  useEffect(() => {
+    const fetchTitles = async () => {
+      const newTitles = {};
+      for (const item of data) {
+        const title = await getTitle(item.url);
+        newTitles[item.url] = title;
+      }
+      setTitles(newTitles);
+    };
+
+    fetchTitles();
+  }, [data]);
+
+  useEffect(() => {
+    const fetchTimes = async () => {
+      const newTimes = {};
+      for (const item of data) {
+        const times = await getTimes(item.url);
+        newTimes[item.url] = times;
+      }
+      setTimes(newTimes);
+    };
+
+    fetchTimes();
+  }, [data]);
+
+  async function getTitle(url: string) {
+    const response = await fetch(`/api/title?url=${url}`);
+    const data2 = await response.json();
+
+    return data2.title;
+  }
+  async function getTimes(url: string) {
+    const response = await fetch(`/api/modifiedTime?url=${url}`);
+    const data2 = await response.json();
+
+    return data2.modifiedTime;
+  }
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -101,20 +142,20 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {moment(data.updated_at.toDate()).format(
-                              'YYYY/MM/DD '
-                            )}
+                            {moment(times[data.url || ''])
+                              .utcOffset('+09:00')
+                              .format('YYYY/MM/DD')}
                           </Td>
-                          <Td>{data.category}</Td>
-                          <Td>{data.title}</Td>
-                          <Td>{data.name}</Td>
+                          <Td>{data?.category || ''}</Td>
+                          <Td>{titles[data?.url || '']}</Td>
+                          <Td>{data?.name || ''}</Td>
 
                           <Td>
                             <Box
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data.url}`}>
+                              <ExternalLink href={`${data?.url || ''}`}>
                                 <WideButton
                                   text={`編集する`}
                                   w={`${140 / 19.2}vw`}

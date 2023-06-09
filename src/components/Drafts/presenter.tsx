@@ -10,6 +10,8 @@ import { Pagination } from 'components/Pagination';
 import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { DraftsTable } from 'components/organisms/DraftsTable';
 import * as admin from 'firebase-admin';
+import { Popup } from 'components/Articles/PopupComponent';
+import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = {
   data?: {
@@ -35,7 +37,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
@@ -45,16 +46,16 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             <Flex justify={`space-between`}>
               <Title title={title} />
 
-              <WideButton
-                onClick={onOpen}
-                w={`${200 / 19.2}vw`}
-                mt={`${13 / 19.2}vw`}
-                text={`新規作成する`}
-                className="popup"
-              />
+              <InternalLink href={'/articles/new'}>
+                <WideButton
+                  w={`${200 / 19.2}vw`}
+                  mt={`${13 / 19.2}vw`}
+                  text={`新規作成する`}
+                />
+              </InternalLink>
             </Flex>
 
-            <DraftsTable data={data} currentPage={0} />
+            <DraftsTable data={data} currentPage={currentPage} />
           </Text>
         </OutsideContainer>
       </Box>
