@@ -7,11 +7,16 @@ import {
   Link,
 } from '@chakra-ui/react';
 
-const Popup = ({ title, logo, links }) => {
+const Popup = ({ title, logo, links, href }) => {
   return (
     <Popover trigger="hover" placement="right-start">
       <PopoverTrigger>
-        <Link color={'#BABABA'} display={'flex'} alignItems={'center'}>
+        <Link
+          color={'#BABABA'}
+          display={'flex'}
+          alignItems={'center'}
+          href={href}
+        >
           {logo}
           {title}
         </Link>
