@@ -33,7 +33,6 @@ export default async function handler(
 
       const docId = response.data.id;
 
-      // Get the text content of the document
       const doc = await drive.files.export({
         fileId: docId,
         mimeType: 'text/plain',
