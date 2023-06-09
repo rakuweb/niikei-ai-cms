@@ -49,6 +49,7 @@ export const Presenter: FC = () => {
     { text: 'リンク2', url: '/' },
     { text: 'リンク3', url: '/' },
   ];
+
   const settingpage = [
     ...(!isCompany
       ? []
