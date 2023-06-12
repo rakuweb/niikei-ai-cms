@@ -22,6 +22,9 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
+import { doc, getDoc, deleteDoc } from '@firebase/firestore';
+
+import { db, auth } from 'src/firebase';
 
 export type PresenterProps = {
   data?: {
@@ -41,12 +44,117 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  // const url = '/articles/drafts';
+  const user = auth.currentUser;
+  const id = user?.uid;
   const itemsPerPage = 10;
-  // console.log('test', data);
-  const handleDelete = async (id: string) => {
-    // console.log('Handle delete for id:', id);
+
+  const [selectedItems, setSelectedItems] = useState<{
+    [url: string]: boolean;
+  }>({});
+  const handleCheckboxClick = (url: string) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [url]: !prevState[url],
+    }));
   };
+
+  const handleDeleteSelected = async () => {
+    const selectedUrls = Object.keys(selectedItems).filter(
+      (url) => selectedItems[url]
+    );
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
+
+    for (const url of selectedUrls) {
+      await fetch('/api/delete-document', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ urls: [url] }),
+      });
+
+      const index = data.findIndex((item) => item.url === url);
+      const document_id = data[index]?.document_id;
+
+      const companyEmployeeDocRef = doc(
+        db,
+        'companies',
+        refFieldString,
+        'articles',
+        document_id
+      );
+      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+      if (userDoc.exists() && companyEmployeeDoc.exists()) {
+        await deleteDoc(companyEmployeeDocRef);
+      } else {
+        console.log('指定したユーザー情報が存在しません');
+      }
+    }
+
+    window.alert('選択項目を削除しました');
+    location.reload();
+
+    setSelectedItems({});
+  };
+  // DeleteSelected
+
+  // single
+  const handleDeleteSingle = async (url: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
+
+    await fetch('/api/delete-document', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ urls: [url] }),
+    });
+
+    const index = data.findIndex((item) => item.url === url);
+    const document_id = data[index]?.document_id;
+
+    const companyEmployeeDocRef = doc(
+      db,
+      'companies',
+      refFieldString,
+      'articles',
+      document_id
+    );
+    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+    if (userDoc.exists() && companyEmployeeDoc.exists()) {
+      await deleteDoc(companyEmployeeDocRef);
+    } else {
+      console.log('指定したユーザー情報が存在しません');
+    }
+
+    window.alert('選択項目を削除しました');
+    location.reload();
+  };
+  // single
+
+  // DropDown
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const handleExecute = () => {
+    if (selectedValue === 'まとめて削除する') {
+      handleDeleteSelected();
+    }
+  };
+  // DropDown
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -95,6 +203,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     return data2.modifiedTime;
   }
+
+  // 時間ソート
+  useEffect(() => {
+    const fetchTimes = async () => {
+      const newTimes = {};
+      for (const item of data) {
+        const times = await getTimes(item.url);
+        newTimes[item.url] = times;
+      }
+      setTimes(newTimes);
+    };
+
+    fetchTimes();
+  }, [data]);
+
+  const timesArray = Object.entries(times);
+
+  timesArray.sort((a, b) => {
+    return moment(b[1]).valueOf() - moment(a[1]).valueOf();
+  });
+
+  const sortedData = [...data].sort((a, b) => {
+    return moment(times[b.url]).valueOf() - moment(times[a.url]).valueOf();
+  });
+
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -115,8 +248,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                   </Thead>
 
                   <Tbody>
-                    {data
-                      ?.slice(
+                    {sortedData
+                      .slice(
                         (currentPage - 1) * itemsPerPage,
                         currentPage * itemsPerPage
                       )
@@ -138,6 +271,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                       borderColor: `#49BAC0`,
                                     },
                                 }}
+                                checked={selectedItems[data.url || '']}
+                                onChange={() =>
+                                  handleCheckboxClick(data.url || '')
+                                }
                               />
                             </Flex>
                           </Td>
@@ -164,7 +301,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                // onClick={() => handleDelete()}
+                                onClick={() =>
+                                  handleDeleteSingle(data?.url || '')
+                                }
                               />
                             </Box>
                           </Td>
@@ -180,16 +319,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Flex alignItems={'center'} position={'relative'}>
         <Box position={'absolute'}>
           <DropDown
-            selectedValue={''}
-            handleSelect={function (value: string): void {
-              throw new Error('Function not implemented.');
-            }}
-            handleExecute={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-            // selectedValue={selectedValue}
-            // handleSelect={setSelectedValue}
-            // handleExecute={handleExecute}
+            selectedValue={selectedValue}
+            handleSelect={setSelectedValue}
+            handleExecute={handleExecute}
           />
         </Box>
         <Pagination

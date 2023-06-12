@@ -49,7 +49,7 @@ export const Presenter: FC = () => {
     { text: '新規作成する', url: '/articles/new' },
     { text: '記事化リスト', url: '/articles/collections' },
     { text: '確認記事一覧', url: '/articles/reviews' },
-    { text: '修正記事一覧', url: '/articles/collections' },
+    { text: '修正記事一覧', url: '/articles/corrections' },
     { text: '公開記事一覧', url: '/articles/published' },
     { text: 'ゴミ箱', url: '/articles/trash' },
   ];
@@ -141,7 +141,6 @@ export const Presenter: FC = () => {
                 links={articlepage}
                 href={undefined}
               />
-
 
               <Popup
                 title="テンプレート管理"

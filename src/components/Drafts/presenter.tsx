@@ -5,12 +5,8 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
-import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { DraftsTable } from 'components/organisms/DraftsTable';
 import * as admin from 'firebase-admin';
-import { Popup } from 'components/Articles/PopupComponent';
 import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = {
@@ -27,9 +23,10 @@ export type PresenterProps = {
     created_by?: admin.firestore.DocumentReference;
     name?: string;
   }[];
+  titles?: string;
 };
-export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const title = `下書き記事一覧`;
+export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
+  const title = titles;
 
   const [currentPage, setCurrentPage] = useState(1);
 

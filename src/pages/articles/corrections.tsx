@@ -47,7 +47,7 @@ const Draftslist: NextPage = () => {
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
           const allowedEmailsRef = collection(db, 'companies', ref, 'articles');
-          const q = query(allowedEmailsRef, where('status', '==', 'editing'));
+          const q = query(allowedEmailsRef, where('status', '==', 'fixing'));
           const querySnapshot = await getDocs(q);
 
           const fetchedData: UserData[] = [];
@@ -90,7 +90,7 @@ const Draftslist: NextPage = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -99,7 +99,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Drafts data={data} titles={'下書き記事一覧'} />
+        <Drafts data={data} titles={'修正記事一覧'} />
       </Box>
     </>
   );

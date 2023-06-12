@@ -30,7 +30,6 @@ export type PresenterProps = {
     id: string;
   }[];
   currentPage: number;
-
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
@@ -43,40 +42,36 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       return;
     }
 
-    try {
-      const response = await fetch('/api/delete-users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ uid: id }),
-      });
+    const response = await fetch('/api/delete-users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uid: id }),
+    });
 
-      const userDocRef = doc(db, 'users', id);
-      const userDoc = await getDoc(userDocRef);
-      const refFieldString = userDoc.data().company_ref;
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
 
-      const companyEmployeeDocRef = doc(
-        db,
-        'companies',
-        refFieldString,
-        'employees',
-        id
-      );
-      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+    const companyEmployeeDocRef = doc(
+      db,
+      'companies',
+      refFieldString,
+      'employees',
+      id
+    );
+    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
-      if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(userDocRef);
-        await deleteDoc(companyEmployeeDocRef);
+    if (userDoc.exists() && companyEmployeeDoc.exists()) {
+      await deleteDoc(userDocRef);
+      await deleteDoc(companyEmployeeDocRef);
 
-        if (!response.ok) {
-          throw new Error('認証情報の削除に失敗しました');
-        }
-      } else {
-        throw new Error('指定したユーザー情報が存在しません');
+      if (!response.ok) {
+        throw new Error('認証情報の削除に失敗しました');
       }
-    } catch (error) {
-      throw error;
+    } else {
+      throw new Error('指定したユーザー情報が存在しません');
     }
   };
 

@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Drafts } from 'components/Drafts';
+
 type UserData = {
   title: string;
   url: string;
@@ -30,7 +31,6 @@ type UserData = {
 };
 type UserDataType = {
   name?: string;
-  titles: string;
 };
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<UserData[] | null>(null);
@@ -47,7 +47,7 @@ const Draftslist: NextPage = () => {
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
           const allowedEmailsRef = collection(db, 'companies', ref, 'articles');
-          const q = query(allowedEmailsRef, where('status', '==', 'editing'));
+          const q = query(allowedEmailsRef, where('status', '==', 'checking'));
           const querySnapshot = await getDocs(q);
 
           const fetchedData: UserData[] = [];
@@ -99,7 +99,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Drafts data={data} titles={'下書き記事一覧'} />
+        <Drafts data={data} titles={'確認記事一覧'} />
       </Box>
     </>
   );

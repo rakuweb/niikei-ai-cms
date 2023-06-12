@@ -45,7 +45,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                 text={`新規作成する`}
                 className="popup"
               />
-              <Popup isOpen={isOpen} onClose={onClose} />
+              <Popup
+                isOpen={isOpen}
+                onClose={onClose}
+                text={''}
+                setText={function (text: string): void {
+                  console.log('Function not implemented.');
+                }}
+              />
             </Flex>
 
             <ContentContainer h={`${702 / 19.2}vw`}>

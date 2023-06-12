@@ -13,8 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
-import { InternalLink } from 'components/links/InternalLink';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
 
@@ -25,12 +24,7 @@ export type PresenterProps = {
   setText: (text: string) => void;
 };
 
-export const Presenter: FC<PresenterProps> = ({
-  isOpen,
-  onClose,
-  text,
-  setText,
-}) => {
+export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
 
@@ -61,11 +55,14 @@ export const Presenter: FC<PresenterProps> = ({
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(db, 'companies', ref, 'articles');
-
-        await addDoc(allowedEmailsRef, {
+        const documentRef = doc(allowedEmailsRef, documentId);
+        await setDoc(documentRef, {
           document_id: documentId || '',
           category: category || '',
           url: url || '',
+          status: 'editing',
+          due_date: '',
+          wp_url: '',
           created_by: doc(db, 'companies', ref, 'employees', user.uid),
         });
         console.log(documentId);
