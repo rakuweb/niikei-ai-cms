@@ -39,7 +39,7 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
   const handleCreateDocument = async () => {
     try {
       text = text || '';
-      const response = await fetch('/api/createDocument', {
+      const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
