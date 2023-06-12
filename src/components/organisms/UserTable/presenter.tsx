@@ -30,13 +30,19 @@ export type PresenterProps = {
     id: string;
   }[];
   currentPage: number;
+
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const url = '/settings/users';
   const itemsPerPage = 10;
+
   const handleDelete = async (id: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
     try {
       const response = await fetch('/api/delete-users', {
         method: 'POST',

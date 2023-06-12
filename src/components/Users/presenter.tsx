@@ -21,7 +21,11 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `ユーザ情報`;
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
