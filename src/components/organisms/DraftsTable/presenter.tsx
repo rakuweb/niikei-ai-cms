@@ -198,7 +198,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     return data2.title;
   }
   async function getTimes(url: string) {
-    const response = await fetch(`/api/modifiedTime?url=${url}`);
+    const response = await fetch(`/api/modified-time?url=${url}`);
     const data2 = await response.json();
 
     return data2.modifiedTime;
