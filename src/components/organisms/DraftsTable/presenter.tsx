@@ -23,8 +23,15 @@ import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc, deleteDoc } from '@firebase/firestore';
-
 import { db, auth } from 'src/firebase';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale('ja');
 
 export type PresenterProps = {
   data?: {
@@ -221,11 +228,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const timesArray = Object.entries(times);
 
   timesArray.sort((a, b) => {
-    return moment(b[1]).valueOf() - moment(a[1]).valueOf();
+    return dayjs(b[1]).valueOf() - dayjs(a[1]).valueOf();
   });
 
   const sortedData = [...data].sort((a, b) => {
-    return moment(times[b.url]).valueOf() - moment(times[a.url]).valueOf();
+    return dayjs(times[b.url]).valueOf() - dayjs(times[a.url]).valueOf();
   });
 
   return (
@@ -279,8 +286,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {moment(times[data.url || ''])
-                              .utcOffset('+09:00')
+                            {dayjs(times[data.url || ''])
+                              .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
                           <Td>{data?.category || ''}</Td>
