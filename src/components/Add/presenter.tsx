@@ -5,12 +5,25 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import { NewForm } from 'components/organisms/NewForm';
+import * as admin from 'firebase-admin';
 import { AddForm } from 'components/organisms/AddForm';
 
-export type PresenterProps = Record<string, unknown>;
+export type PresenterProps = {
+  data?: {
+    id?: string;
+    name?: string;
+    url?: string;
+    xpath?: string;
+    interval1?: string;
+    interval2?: string;
+    created_at?: admin.firestore.Timestamp;
+    category?: string;
+    is_notified?: boolean;
+    is_renewal?: boolean;
+  }[];
+};
 
-export const Presenter: FC<PresenterProps> = () => {
+export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `サイトを登録`;
 
   return (

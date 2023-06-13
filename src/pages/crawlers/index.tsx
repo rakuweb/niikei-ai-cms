@@ -2,14 +2,7 @@ import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
 import * as admin from 'firebase-admin';
 import { Sidebar } from 'components/Sidebar';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../../src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
