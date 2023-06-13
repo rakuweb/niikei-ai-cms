@@ -15,7 +15,22 @@ import { NameLabel } from './NameLabel';
 import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { NameLabel2 } from './NameLabel2';
+import * as admin from 'firebase-admin';
 
+export type PresenterProps = {
+  data?: {
+    id?: string;
+    name?: string;
+    url?: string;
+    xpath?: string;
+    interval1?: string;
+    interval2?: string;
+    created_at?: admin.firestore.Timestamp;
+    category?: string;
+    is_notified?: boolean;
+    is_renewal?: boolean;
+  };
+};
 type FormData = {
   name: string;
   url: string;
@@ -25,11 +40,7 @@ type FormData = {
   interval2: string;
   is_notified: boolean;
 };
-
-export type StyleProps = Record<string, unknown>;
-export type PresenterProps = StyleProps;
-
-export const Presenter: FC<PresenterProps> = () => {
+export const Presenter: FC<PresenterProps> = ({ data }) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +48,8 @@ export const Presenter: FC<PresenterProps> = () => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
-
+  // console.log(data?.name);
+  const [category, setCategory] = useState<string>('');
   const onSubmit = async (data: FormData) => {
     if (!window.confirm('この内容で新規作成しますか？')) {
       return;
@@ -76,9 +88,10 @@ export const Presenter: FC<PresenterProps> = () => {
             <Input
               mt={'0.5vw'}
               type="text"
-              placeholder="登録名を入力"
+              placeholder={'登録名を入力'}
               {...register('name', { required: true })}
               borderRadius={'none'}
+              // value={data.name}
             />
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>

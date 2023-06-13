@@ -20,12 +20,12 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-  }[];
+  };
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `サイトを登録`;
-
+  console.log(data);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`100vh`}>
@@ -36,7 +36,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               <Title title={title} />
             </Flex>
             <ContentContainer h={`100%`}>
-              <AddForm />
+              <AddForm data={data} />
             </ContentContainer>
           </Text>
         </OutsideContainer>

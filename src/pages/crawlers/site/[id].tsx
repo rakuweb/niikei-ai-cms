@@ -1,21 +1,13 @@
 import { NextPage } from 'next';
-import { Box } from '@chakra-ui/react';
-import * as admin from 'firebase-admin';
-import { Sidebar } from 'components/Sidebar';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
-import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { Sites } from 'components/Sites';
+import { doc, getDoc } from 'firebase/firestore';
+import { db, auth } from 'src/firebase';
+import * as admin from 'firebase-admin';
+import { Box } from '@chakra-ui/react';
 import { Add } from 'components/Add';
+import { getAuth } from 'firebase/auth';
+
 type UserData = {
   id?: string;
   name?: string;
@@ -29,62 +21,55 @@ type UserData = {
   is_renewal?: boolean;
 };
 
-const Draftslist: NextPage = () => {
-  const [data, setData] = useState<UserData[] | null>(null);
+const SitePage: NextPage = () => {
+  const [data, setData] = useState<UserData | null>(null);
   const router = useRouter();
-
+  const { id } = router.query;
+  console.log(id);
   useEffect(() => {
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-
+    const fetchData = async () => {
       try {
-        if (user) {
-          const employeeDocRef = doc(db, 'users', user.uid);
+        if (id) {
+          const employeeDocRef = doc(db, 'users', id as string);
           const employeeDocSnap = await getDoc(employeeDocRef);
-          const ref = employeeDocSnap.data()?.company_ref;
-          const sitesRef = collection(db, 'companies', ref, 'sites');
-          const querySnapshot = await getDocs(sitesRef);
 
-          const fetchedData: UserData[] = [];
-          for (const doc of querySnapshot.docs) {
-            const data = doc.data();
-            fetchedData.push({
-              id: doc.id,
-              ...(data as UserData),
-            });
+          if (employeeDocSnap.exists()) {
+            const ref = employeeDocSnap.data()?.company_ref;
+
+            if (ref) {
+              const companyDocRef = doc(
+                db,
+                'companies',
+                ref,
+                'sites',
+                id as string
+              );
+              const companyDocSnap = await getDoc(companyDocRef);
+
+              if (companyDocSnap.exists()) {
+                setData(companyDocSnap.data() as UserData);
+              }
+            }
           }
-
-          setData(fetchedData);
-          console.log(fetchedData);
-        } else {
-          router.push('/');
         }
+        console.log(data);
       } catch (error) {
-        window.alert(error);
-        console.log(error);
+        router.push('/signin');
       }
     };
 
-    const unsubscribe = onAuthStateChanged(auth, () => {
-      fetchUserData();
-    });
+    fetchData();
+  }, [id]);
 
-    return () => unsubscribe();
-  }, []);
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
-    <>
-      <Sidebar />
-      <Box>
-        <Add data={data} />
-      </Box>
-    </>
+    <Box>
+      <Add data={data} />
+    </Box>
   );
 };
 
-export default Draftslist;
+export default SitePage;
