@@ -14,8 +14,9 @@ import { db, auth } from '../../../src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { Drafts } from 'components/Drafts';
+import { Sites } from 'components/Sites';
 type UserData = {
+  id?: string;
   name?: string;
   url?: string;
   xpath?: string;
@@ -41,28 +42,15 @@ const Draftslist: NextPage = () => {
           const employeeDocRef = doc(db, 'users', user.uid);
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
-          const allowedEmailsRef = collection(db, 'companies', ref, 'sites');
-          const q = query(allowedEmailsRef, where('status', '==', 'editing'));
-          const querySnapshot = await getDocs(q);
+          const sitesRef = collection(db, 'companies', ref, 'sites');
+          const querySnapshot = await getDocs(sitesRef);
 
           const fetchedData: UserData[] = [];
           for (const doc of querySnapshot.docs) {
             const data = doc.data();
-            const createdByRef = data.created_by;
-            const createdByDocSnap = await getDoc(createdByRef);
-
             fetchedData.push({
-              ...(data as {
-                name?: string;
-                url?: string;
-                xpath?: string;
-                interval1?: string;
-                interval2?: string;
-                created_at?: admin.firestore.Timestamp;
-                category?: string;
-                is_notified?: boolean;
-                is_renewal?: boolean;
-              }),
+              id: doc.id,
+              ...(data as UserData),
             });
           }
 
@@ -83,6 +71,7 @@ const Draftslist: NextPage = () => {
 
     return () => unsubscribe();
   }, []);
+
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -91,7 +80,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Sites data={data} titles={'下書き記事一覧'} />
+        <Sites data={data} titles={'登録サイト一覧'} />
       </Box>
     </>
   );

@@ -53,6 +53,15 @@ export const Presenter: FC = () => {
     { text: '公開記事一覧', url: '/articles/published' },
     { text: 'ゴミ箱', url: '/articles/trash' },
   ];
+
+  const crawlersPage = [
+    { text: '登録情報一覧', url: '/crawlers' },
+    { text: '登録情報詳細', url: '/crawlers/sites/' },
+    { text: 'サイトを登録', url: '/crawlers/add' },
+    { text: '新着情報一覧', url: '/crawlers/collections' },
+    { text: 'ゴミ箱', url: '/articles/trash' },
+  ];
+
   const settingPage = [
     ...(!isCompany
       ? []
@@ -80,7 +89,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<RobotSvg />}
-                links={links}
+                links={crawlersPage}
                 href={undefined}
               />
               <Popup
@@ -132,7 +141,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="サイト管理"
                 logo={<RobotSvg />}
-                links={links}
+                links={crawlersPage}
                 href={undefined}
               />
               <Popup
