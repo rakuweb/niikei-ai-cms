@@ -1,12 +1,11 @@
-import React, { FC, useState } from 'react';
-import { Box, Flex, TableContainer, useDisclosure } from '@chakra-ui/react';
+import React, { FC } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { DraftsTable } from 'components/organisms/DraftsTable';
-import * as admin from 'firebase-admin';
 import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = {
@@ -18,30 +17,20 @@ export type PresenterProps = {
     category: string;
     wp_url: string;
     created_at: Date;
-    updated_at: admin.firestore.Timestamp;
     due_date: Date;
-    created_by?: admin.firestore.DocumentReference;
     name?: string;
   }[];
   titles?: string;
 };
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
-  const title = titles;
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
-
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`設定`} pagename2={title} />
+            <Breadcrumbs pagename1={`設定`} pagename2={titles} />
             <Flex justify={`space-between`}>
-              <Title title={title} />
+              <Title title={titles} />
 
               <InternalLink href={'/articles/new'}>
                 <WideButton
@@ -52,7 +41,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               </InternalLink>
             </Flex>
 
-            <DraftsTable data={data} currentPage={currentPage} />
+            <DraftsTable data={data} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>

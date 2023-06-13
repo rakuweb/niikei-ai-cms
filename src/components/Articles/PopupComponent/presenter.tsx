@@ -65,7 +65,7 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
           wp_url: '',
           created_by: doc(db, 'companies', ref, 'employees', user.uid),
         });
-        console.log(documentId);
+
         onClose();
         window.open(url, '_blank');
       } else {

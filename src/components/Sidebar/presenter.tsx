@@ -44,7 +44,7 @@ export const Presenter: FC = () => {
     }
   }, [user]);
   const home = [];
-  const articlepage = [
+  const articlePage = [
     { text: '下書き記事一覧', url: '/articles/drafts' },
     { text: '新規作成する', url: '/articles/new' },
     { text: '記事化リスト', url: '/articles/collections' },
@@ -53,7 +53,7 @@ export const Presenter: FC = () => {
     { text: '公開記事一覧', url: '/articles/published' },
     { text: 'ゴミ箱', url: '/articles/trash' },
   ];
-  const settingpage = [
+  const settingPage = [
     ...(!isCompany
       ? []
       : [
@@ -86,7 +86,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
-                links={articlepage}
+                links={articlePage}
                 href={undefined}
               />
               <Popup
@@ -110,7 +110,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<GearSvg />}
-                links={settingpage}
+                links={settingPage}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>
@@ -138,7 +138,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
-                links={articlepage}
+                links={articlePage}
                 href={undefined}
               />
 
@@ -163,7 +163,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="設定"
                 logo={<GearSvg />}
-                links={settingpage}
+                links={settingPage}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>

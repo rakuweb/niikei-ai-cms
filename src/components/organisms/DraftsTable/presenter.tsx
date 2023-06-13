@@ -14,10 +14,7 @@ import {
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
-
 import { css } from '@emotion/react';
-import moment from 'moment';
-import * as admin from 'firebase-admin';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
@@ -42,9 +39,7 @@ export type PresenterProps = {
     category: string;
     wp_url: string;
     created_at: Date;
-    updated_at: admin.firestore.Timestamp;
     due_date: Date;
-    created_by?: admin.firestore.DocumentReference;
     name?: string;
   }[];
   currentPage: number;
