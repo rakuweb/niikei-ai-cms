@@ -23,7 +23,6 @@ export const Presenter: FC<PresenterProps> = ({
       h={`${37 / 19.2}vw`}
       letterSpacing={`0`}
       mt={`${40 / 19.2}vw`}
-      pb={`${40 / 19.2}vw`}
       mx={`auto`}
       alignItems={`center`}
       fontSize={`${16 / 19.2}vw`}

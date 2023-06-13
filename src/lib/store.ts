@@ -40,8 +40,6 @@ type State = {
   setUserName: (name: string) => void;
   setUserPassword: (password: string) => void;
   setCurrentUserUid: (uid: string) => void;
-  users: Record<string, string>;
-  setUser: (userId: string, name: string) => void;
 };
 
 export const useNameStore = create<State>((set) => ({
@@ -51,7 +49,4 @@ export const useNameStore = create<State>((set) => ({
   setUserPassword: (password) => set({ userPassword: password }),
   currentUserUid: '',
   setCurrentUserUid: (uid: string) => set({ currentUserUid: uid }),
-  users: {},
-  setUser: (userId, name) =>
-    set((state) => ({ users: { ...state.users, [userId]: name } })),
 }));

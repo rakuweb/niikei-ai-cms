@@ -28,7 +28,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
+      <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />
@@ -43,7 +43,16 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               </InternalLink>
             </Flex>
 
-            <UserTable data={data} currentPage={0} />
+            <ContentContainer h={`${702 / 19.2}vw`}>
+              <UserTable data={data} currentPage={currentPage as any} />
+            </ContentContainer>
+
+            <Pagination
+              currentPage={currentPage}
+              totalData={data ? data.length : 0}
+              itemsPerPage={10}
+              handlePageChange={handlePageChange}
+            />
           </Text>
         </OutsideContainer>
       </Box>

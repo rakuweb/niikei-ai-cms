@@ -44,23 +44,20 @@ export const Presenter: FC = () => {
     }
   }, [user]);
   const home = [];
-  const articlePage = [
-    { text: '下書き記事一覧', url: '/articles/drafts' },
-    { text: '新規作成する', url: '/articles/new' },
-    { text: '記事化リスト', url: '/articles/collections' },
-    { text: '確認記事一覧', url: '/articles/reviews' },
-    { text: '修正記事一覧', url: '/articles/corrections' },
-    { text: '公開記事一覧', url: '/articles/published' },
-    { text: 'ゴミ箱', url: '/articles/trash' },
+  const articlepage = [
+    { text: '記事一覧', url: '/articles' },
+    { text: 'リンク2', url: '/' },
+    { text: 'リンク3', url: '/' },
   ];
-  const settingPage = [
+
+  const settingpage = [
     ...(!isCompany
       ? []
       : [
           { text: 'ユーザ一覧', url: '/settings/users' },
           { text: 'ユーザ新規作成', url: '/settings/users/new' },
         ]),
-    { text: 'ユーザ詳細', url: user ? `${url}/${user.uid}` : '' },
+    { text: 'アカウント詳細', url: user ? `${url}/${user.uid}` : '' },
   ];
 
   const isOpen = useStore((state) => state.open);
@@ -86,7 +83,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
-                links={articlePage}
+                links={articlepage}
                 href={undefined}
               />
               <Popup
@@ -110,7 +107,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<GearSvg />}
-                links={settingPage}
+                links={settingpage}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>
@@ -138,7 +135,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
-                links={articlePage}
+                links={articlepage}
                 href={undefined}
               />
 
@@ -163,7 +160,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="設定"
                 logo={<GearSvg />}
-                links={settingPage}
+                links={settingpage}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>
