@@ -55,7 +55,6 @@ export const Presenter: FC<PresenterProps> = () => {
         'sites'
       );
 
-      // Here we add the data to Firestore
       await addDoc(companyEmployeeDocRef, data);
     } catch (error) {
       console.error('Error creating user: ', error);
@@ -135,8 +134,12 @@ export const Presenter: FC<PresenterProps> = () => {
               {...register('category', { required: true })}
               borderRadius={'none'}
             >
-              <option value="確認者">確認者</option>
-              <option value="編集者">編集者</option>
+              <option value="社会">社会</option>
+              <option value="政治">政治</option>
+              <option value="経済">経済</option>
+              <option value="文化">文化</option>
+              <option value="生活">生活</option>
+              <option value="ビジネス">ビジネス</option>
             </Select>
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
@@ -181,10 +184,7 @@ export const Presenter: FC<PresenterProps> = () => {
         <FormControl mb={'1vw'}>
           <FormLabel>
             <NameLabel2 name="通知の有無" />
-            <Switch
-              className="is_notified"
-              {...register('is_notified')} // チェックされているかどうかを取得
-            />
+            <Switch className="is_notified" {...register('is_notified')} />
           </FormLabel>
         </FormControl>
 
