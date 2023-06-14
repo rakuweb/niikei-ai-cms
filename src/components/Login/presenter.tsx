@@ -1,12 +1,19 @@
-import { Box, Input, IconButton } from '@chakra-ui/react';
-import { InternalLink } from 'components/links/InternalLink';
-import { Text } from 'components/texts/Text';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-
 import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from 'src/firebase';
+import { Box, Input, IconButton } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+
+import { InternalLink } from 'components/links/InternalLink';
+import { Text } from 'components/texts/Text';
+
+import { auth } from 'src/firebase';
+import { getUser } from 'src/firebase/firestore/users';
+import { getEmployee } from 'src/firebase/firestore/employees';
+import { routes } from 'constants/routes';
+import { selectSetAccount, useAccountStore } from 'features/account';
+import { selectSetCompany, useCompanyStore } from 'features/company';
+import { fetchCompanyByPath } from '@/firebase/firestore/companies';
 
 // type layer
 export type StyleProps = Record<string, unknown>;
@@ -20,6 +27,8 @@ export const Presenter: FC<PresenterProps> = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const setAccount = useAccountStore(selectSetAccount);
+  const setCompany = useCompanyStore(selectSetCompany);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(event.target.value);
@@ -37,9 +46,40 @@ export const Presenter: FC<PresenterProps> = () => {
 
   const signInWithEmailAndPasswordHandler = async () => {
     try {
-      await signInWithEmailAndPassword(auth, userEmail, password);
-      router.push('/');
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        password
+      );
+
+      const user = userCredential.user;
+      const own = await getUser(user.uid);
+
+      const companyPath = own.company_ref.path;
+      const company = await fetchCompanyByPath(companyPath);
+      const companyData = company.data();
+      const companyInfo = {
+        uid: company.id,
+        name: companyData.name,
+        twitterId: companyData.twitter_id,
+        facebookId: companyData.facebook_id,
+      };
+      setCompany(companyInfo);
+
+      const employee = await getEmployee(company.id, user.uid);
+      const accountInfo = {
+        uid: user.uid,
+        name: employee.name,
+        email: user.email,
+        role: employee.role,
+        newInfoNotification: employee.new_info_notification,
+        autoPublishNotification: employee.auto_publish_notification,
+      };
+      setAccount(accountInfo);
+
+      router.push(routes.articlesNew);
     } catch (error) {
+      console.error(error);
       if (
         error.code === 'auth/invalid-email' ||
         error.code === 'auth/user-not-found'
@@ -51,14 +91,15 @@ export const Presenter: FC<PresenterProps> = () => {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.push('/');
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
+  // account,company保存処理は下記内に記載した方が良い可能性があるためとってある
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       router.push(routes.articlesNew);
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [router]);
 
   return (
     <>

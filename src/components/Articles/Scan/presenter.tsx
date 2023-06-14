@@ -47,9 +47,8 @@ export const Presenter: FC = () => {
                   textAlign={`center`}
                   pb={`${12 / 19.2}vw`}
                   color={isPDFSelected ? '#1a202c' : '#D6D6D6'}
-                  borderBottom={`3px solid ${
-                    isPDFSelected ? '#49BAC0' : '#D6D6D6'
-                  }`}
+                  borderBottom={`3px solid ${isPDFSelected ? '#49BAC0' : '#D6D6D6'
+                    }`}
                   onClick={handlePDFButtonClick}
                 >
                   PDF
@@ -61,9 +60,8 @@ export const Presenter: FC = () => {
                   color={isPDFSelected ? '#D6D6D6' : '#1a202c'}
                   pb={`${12 / 19.2}vw`}
                   // mb={'3px'}
-                  borderBottom={`3px solid ${
-                    isPDFSelected ? '#D6D6D6' : '#49BAC0'
-                  }`}
+                  borderBottom={`3px solid ${isPDFSelected ? '#D6D6D6' : '#49BAC0'
+                    }`}
                   onClick={handleMP3ButtonClick}
                 >
                   音声
