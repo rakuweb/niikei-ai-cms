@@ -42,6 +42,7 @@ type FormData = {
   interval1: string;
   interval2: string;
   is_notified: boolean;
+  is_renewal: boolean;
 };
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const {
@@ -59,6 +60,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       interval1: data?.interval1 || '',
       interval2: data?.interval2 || '',
       is_notified: data?.is_notified || false,
+      is_renewal: data?.is_renewal || false,
     },
   });
 
@@ -82,6 +84,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setValue('interval2', data.interval2);
     }
     setValue('is_notified', data?.is_notified || false);
+    setValue('is_renewal', data?.is_renewal || false);
   }, [
     data?.name,
     data?.url,
@@ -90,6 +93,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     data?.interval1,
     data?.interval2,
     data?.is_notified,
+    data?.is_renewal,
     setValue,
   ]);
 
@@ -251,6 +255,20 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               時間を入力してください
             </FormErrorMessage>
           )}
+        </FormControl>
+
+        <FormControl mb={'1vw'}>
+          <FormLabel>
+            <NameLabel2 name="自動処理" />
+            <Switch
+              {...register('is_renewal')}
+              sx={{
+                '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
+                  backgroundColor: '#49BAC0',
+                },
+              }}
+            />
+          </FormLabel>
         </FormControl>
 
         <FormControl mb={'1vw'}>
