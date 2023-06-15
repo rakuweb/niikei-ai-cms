@@ -1,14 +1,14 @@
 import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import { Add } from 'components/Add';
 import { Sidebar } from 'components/Sidebar';
+import { Trash } from 'components/Trash';
 
 const Home: NextPage = () => {
   return (
     <>
       <Sidebar />
       <Box>
-        <Add />
+        <Trash titles="ゴミ箱" />
       </Box>
     </>
   );

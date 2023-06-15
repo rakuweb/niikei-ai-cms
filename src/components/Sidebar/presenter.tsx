@@ -56,12 +56,15 @@ export const Presenter: FC = () => {
 
   const crawlersPage = [
     { text: '登録情報一覧', url: '/crawlers' },
-    { text: '登録情報詳細', url: '/crawlers/sites/' },
     { text: 'サイトを登録', url: '/crawlers/add' },
     { text: '新着情報一覧', url: '/crawlers/collections' },
-    { text: 'ゴミ箱', url: '/articles/trash' },
+    { text: 'ゴミ箱', url: '/crawlers/trash' },
   ];
-
+  const autoPostsPage = [
+    { text: 'サイト一覧', url: '/crawlers' },
+    { text: 'サイト情報詳細', url: '/crawlers/add' },
+    { text: '記事一覧', url: '/crawlers/collections' },
+  ];
   const settingPage = [
     ...(!isCompany
       ? []
@@ -107,7 +110,7 @@ export const Presenter: FC = () => {
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
-                links={links}
+                links={autoPostsPage}
                 href={undefined}
               />
               <Popup
@@ -160,7 +163,7 @@ export const Presenter: FC = () => {
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
-                links={links}
+                links={autoPostsPage}
                 href={undefined}
               />
               <Popup

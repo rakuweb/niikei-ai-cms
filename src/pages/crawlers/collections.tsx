@@ -1,14 +1,15 @@
 import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import { Add } from 'components/Add';
+
 import { Sidebar } from 'components/Sidebar';
+import { Collections } from 'components/Collections';
 
 const Home: NextPage = () => {
   return (
     <>
       <Sidebar />
       <Box>
-        <Add />
+        <Collections titles="新着情報一覧" />
       </Box>
     </>
   );
