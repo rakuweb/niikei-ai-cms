@@ -80,7 +80,7 @@ const SitePage: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Add data={data} />
+        <Add data={data} id={id as string} />
       </Box>
     </>
   );

@@ -12,10 +12,11 @@ import {
 import { useForm } from 'react-hook-form';
 import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { NameLabel2 } from './NameLabel2';
 import * as admin from 'firebase-admin';
+import router, { useRouter } from 'next/router';
 
 export type PresenterProps = {
   data?: {
@@ -30,8 +31,10 @@ export type PresenterProps = {
     is_notified?: boolean;
     is_renewal?: boolean;
   };
+  id?: string;
 };
 type FormData = {
+  id: string;
   name: string;
   url: string;
   xpath: string;
@@ -40,7 +43,7 @@ type FormData = {
   interval2: string;
   is_notified: boolean;
 };
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const {
     register,
     handleSubmit,
@@ -91,13 +94,13 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   ]);
 
   const onSubmit = async (data: FormData) => {
-    if (!window.confirm('この内容で新規作成しますか？')) {
+    if (!window.confirm('この内容で登録しますか？')) {
       return;
     }
     const user = auth.currentUser;
-    const id = user?.uid;
+
     try {
-      const userDocRef = doc(db, 'users', id);
+      const userDocRef = doc(db, 'users', user?.uid);
       const userDoc = await getDoc(userDocRef);
       const refFieldString = userDoc.data().company_ref;
       const companyEmployeeDocRef = collection(
@@ -112,7 +115,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         url: `https://${data.url}`,
       };
 
-      await addDoc(companyEmployeeDocRef, updatedData);
+      if (id) {
+        const docRef = doc(companyEmployeeDocRef, id);
+        await updateDoc(docRef, updatedData);
+      } else {
+        await addDoc(companyEmployeeDocRef, updatedData);
+      }
+
+      window.alert('登録しました。');
+      router.push('/crawlers');
     } catch (error) {
       console.error('Error creating user: ', error);
       alert(error);
