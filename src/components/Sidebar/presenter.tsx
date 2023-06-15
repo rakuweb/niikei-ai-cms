@@ -61,9 +61,9 @@ export const Presenter: FC = () => {
     { text: 'ゴミ箱', url: '/crawlers/trash' },
   ];
   const autoPostsPage = [
-    { text: 'サイト一覧', url: '/crawlers' },
-    { text: 'サイト情報詳細', url: '/crawlers/add' },
-    { text: '記事一覧', url: '/crawlers/collections' },
+    { text: 'サイト一覧', url: '/auto-posts/sites' },
+    // { text: 'サイト情報詳細', url: '/crawlers/add' },
+    { text: '記事一覧', url: '/auto-posts/articles' },
   ];
   const settingPage = [
     ...(!isCompany
