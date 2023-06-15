@@ -1,73 +1,24 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
-import LogoutSvg from '../../../public/svg/logout.svg';
-import OpenSvg from '../../../public/svg/open_in_new.svg';
 import { css } from '@emotion/react';
-import { useStore, useUserStore } from 'lib/store';
-import { auth } from 'src/firebase';
 import router from 'next/router';
 
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { useStore } from 'lib/store';
+import { auth } from 'src/firebase';
+import { selectSignout, useAccountStore } from 'features/account';
+
+import LogoutSvg from 'public/svg/logout.svg';
+import OpenSvg from 'public/svg/open_in_new.svg';
+import { ExternalLink } from '../links/ExternalLink';
+import { niikeiURL } from 'constants/routes';
+import { InternalLink } from '../links/InternalLink';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
-  const currentUser = useUserStore((state) => state.currentUser);
-
-  useEffect(() => {
-    const onAuthStateChanged = (user) => {
-      if (user) {
-        useUserStore.setState({ currentUser: user });
-      } else {
-        useUserStore.setState({ currentUser: null });
-      }
-    };
-
-    auth.onAuthStateChanged(onAuthStateChanged);
-
-    return () => {
-      auth.onAuthStateChanged(onAuthStateChanged);
-    };
-  }, []);
-
-  const [userName, setUserName] = useState<string>('');
-
-  const getNameEmail = async () => {
-    const user = currentUser;
-
-    try {
-      if (user) {
-        const db = getFirestore();
-        const employeeDocRef = doc(db, 'users', user.uid);
-        const employeeDocSnap = await getDoc(employeeDocRef);
-
-        const ref = employeeDocSnap.data()?.company_ref;
-
-        const companyEmployeeRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          user.uid
-        );
-
-        const companyEmployeeSnap = await getDoc(companyEmployeeRef);
-
-        if (companyEmployeeSnap.exists()) {
-          setUserName(companyEmployeeSnap.data().name);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (currentUser) {
-      getNameEmail();
-    }
-  }, [currentUser]);
+  const userName = useAccountStore((state) => state.name);
+  const signout = useAccountStore(selectSignout);
 
   return (
     <Box css={styles}>
@@ -85,7 +36,8 @@ export const Presenter: FC = () => {
       >
         <Text fontSize={`${24 / 19.2}vw`}>{userName ? userName : ''}</Text>
 
-        <Link
+        <ExternalLink
+          href={niikeiURL}
           ml={'auto'}
           mr={'1.4vw'}
           borderBottom={`1px solid`}
@@ -95,7 +47,7 @@ export const Presenter: FC = () => {
           サイトを表示する
           <Box as="span" pr={'0.35vw'} />
           <OpenSvg fontSize={'1vw'} />
-        </Link>
+        </ExternalLink>
         <Link
           bgColor={'#444857'}
           color={'white'}
@@ -105,6 +57,7 @@ export const Presenter: FC = () => {
           alignItems={'center'}
           _hover={{ textDecoration: 'none' }}
           onClick={async () => {
+            signout();
             await auth.signOut();
             router.push('/signin');
           }}
