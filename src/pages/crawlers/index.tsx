@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Sites } from 'components/Sites';
+
 type UserData = {
   id?: string;
   name?: string;

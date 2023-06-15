@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Box,
   Table,
@@ -8,25 +8,23 @@ import {
   Th,
   Td,
   TableContainer,
-  Checkbox,
   Flex,
   Switch,
 } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
-import { WideButton } from 'components/Button/WideButton';
-import { GrayButton } from 'components/Button/GrayButton';
 import { css } from '@emotion/react';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
-import { DropDown } from '../DropDown';
-import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc, deleteDoc } from '@firebase/firestore';
-import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
 import * as admin from 'firebase-admin';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
+import { ContentContainer } from 'components/Container/ContentContainer';
+import { Pagination } from 'components/Pagination';
+import { db, auth } from 'src/firebase';
 import { InternalLink } from 'components/links/InternalLink';
 
 dayjs.extend(utc);
@@ -78,19 +76,6 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
     setCurrentPage(newPage);
   };
 
-  const [titles, setTitles] = useState<{ [url: string]: string }>({});
-  const [times, setTimes] = useState<{ [url: string]: string }>({});
-
-  const timesArray = Object.entries(times);
-
-  // timesArray.sort((a, b) => {
-  //   return dayjs(b[1]).valueOf() - dayjs(a[1]).valueOf();
-  // });
-
-  // const sortedData = [...data].sort((a, b) => {
-  //   return dayjs(times[b.url]).valueOf() - dayjs(times[a.url]).valueOf();
-  // });
-
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -129,9 +114,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               isChecked={data?.is_renewal || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>
@@ -150,9 +135,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>

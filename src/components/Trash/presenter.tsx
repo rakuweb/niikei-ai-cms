@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { DraftsTable } from 'components/organisms/DraftsTable';
 import { InternalLink } from 'components/links/InternalLink';
-import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { TrashTable } from 'components/organisms/TrashTable';
 
 export type PresenterProps = {

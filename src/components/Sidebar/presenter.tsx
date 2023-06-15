@@ -59,7 +59,6 @@ export const Presenter: FC = () => {
       ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
-
   ];
 
   const isOpen = useStore((state) => state.open);
@@ -80,23 +79,18 @@ export const Presenter: FC = () => {
                 title=""
                 logo={<RobotSvg />}
                 links={siteSubPages}
-
                 href={undefined}
               />
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
-
                 links={articleSubPages}
-
                 href={undefined}
-              /> */}
+              />
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
-
                 links={autoPostSubPages}
-
                 href={undefined}
               />
               <Popup
@@ -127,20 +121,17 @@ export const Presenter: FC = () => {
                 title="サイト管理"
                 logo={<RobotSvg />}
                 links={siteSubPages}
-
                 href={undefined}
               />
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
-
                 links={articleSubPages}
                 href={undefined}
-              /> */}
+              />
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
-
                 links={autoPostSubPages}
                 href={undefined}
               />

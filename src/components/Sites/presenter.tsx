@@ -24,6 +24,7 @@ export type PresenterProps = {
   }[];
   titles?: string;
 };
+
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
   return (
     <>

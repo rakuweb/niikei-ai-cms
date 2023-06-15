@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   Box,
   Input,
@@ -10,13 +10,14 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import * as admin from 'firebase-admin';
+import router from 'next/router';
+
 import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { NameLabel2 } from './NameLabel2';
-import * as admin from 'firebase-admin';
-import router, { useRouter } from 'next/router';
 
 export type PresenterProps = {
   data?: {
@@ -44,6 +45,7 @@ type FormData = {
   is_notified: boolean;
   is_renewal: boolean;
 };
+
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const {
     register,
