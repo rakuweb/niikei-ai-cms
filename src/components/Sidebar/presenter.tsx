@@ -45,6 +45,7 @@ export const Presenter: FC = () => {
     { text: '登録サイト一覧', url: routes.autoPostsSites },
     { text: '記事一覧', url: routes.autoPostsArticles },
   ];
+
   const fortuneSubPages = [
     { text: 'アップロードする', url: routes.fortunesUpload },
     { text: '占い記事一覧', url: routes.fortunes },
@@ -73,6 +74,7 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
+
               <Popup
                 title=""
                 logo={<RobotSvg />}
@@ -114,6 +116,7 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
+
               <Popup
                 title="サイト管理"
                 logo={<RobotSvg />}
