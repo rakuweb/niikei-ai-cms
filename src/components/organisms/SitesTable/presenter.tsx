@@ -27,6 +27,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
 import * as admin from 'firebase-admin';
+import { InternalLink } from 'components/links/InternalLink';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -48,10 +49,10 @@ export type PresenterProps = {
   titles?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
-
+  const url = '/crawlers/site';
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
       return;
@@ -82,13 +83,13 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const timesArray = Object.entries(times);
 
-  timesArray.sort((a, b) => {
-    return dayjs(b[1]).valueOf() - dayjs(a[1]).valueOf();
-  });
+  // timesArray.sort((a, b) => {
+  //   return dayjs(b[1]).valueOf() - dayjs(a[1]).valueOf();
+  // });
 
-  const sortedData = [...data].sort((a, b) => {
-    return dayjs(times[b.url]).valueOf() - dayjs(times[a.url]).valueOf();
-  });
+  // const sortedData = [...data].sort((a, b) => {
+  //   return dayjs(times[b.url]).valueOf() - dayjs(times[a.url]).valueOf();
+  // });
 
   return (
     <>
@@ -111,7 +112,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                   </Thead>
 
                   <Tbody>
-                    {sortedData
+                    {(data || [])
                       .slice(
                         (currentPage - 1) * itemsPerPage,
                         currentPage * itemsPerPage
@@ -125,7 +126,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_notified || false}
+                              isChecked={data?.is_renewal || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                   {
@@ -145,7 +146,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                           <Td>
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_renewal || false}
+                              isChecked={data?.is_notified || false}
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
@@ -160,15 +161,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.url || ''}`}>
+                              <InternalLink href={`${url}/${data?.id}`}>
                                 <WideButton
                                   text={`編集する`}
-                                  w={`${140 / 19.2}vw`}
+                                  w={`${110 / 19.2}vw`}
                                 />
-                              </ExternalLink>
+                              </InternalLink>
                               <GrayButton
                                 text={`削除する`}
-                                w={`${140 / 19.2}vw`}
+                                w={`${110 / 19.2}vw`}
                                 onClick={() =>
                                   handleDeleteSingle(data?.id || '')
                                 }

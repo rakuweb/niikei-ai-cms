@@ -48,7 +48,6 @@ const Draftslist: NextPage = () => {
           }
 
           setData(fetchedData);
-          console.log(fetchedData);
         } else {
           router.push('/');
         }

@@ -45,11 +45,51 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
     mode: 'onChange',
+    defaultValues: {
+      name: data?.name || '',
+      url: data?.url || '',
+      xpath: data?.xpath || '',
+      category: data?.category || '',
+      interval1: data?.interval1 || '',
+      interval2: data?.interval2 || '',
+      is_notified: data?.is_notified || false,
+    },
   });
-  // console.log(data?.name);
-  const [category, setCategory] = useState<string>('');
+
+  useEffect(() => {
+    if (data?.name) {
+      setValue('name', data.name);
+    }
+    if (data?.url) {
+      setValue('url', data.url);
+    }
+    if (data?.xpath) {
+      setValue('xpath', data.xpath);
+    }
+    if (data?.category) {
+      setValue('category', data.category);
+    }
+    if (data?.interval1) {
+      setValue('interval1', data.interval1);
+    }
+    if (data?.interval2) {
+      setValue('interval2', data.interval2);
+    }
+    setValue('is_notified', data?.is_notified || false);
+  }, [
+    data?.name,
+    data?.url,
+    data?.xpath,
+    data?.category,
+    data?.interval1,
+    data?.interval2,
+    data?.is_notified,
+    setValue,
+  ]);
+
   const onSubmit = async (data: FormData) => {
     if (!window.confirm('この内容で新規作成しますか？')) {
       return;
@@ -67,7 +107,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         'sites'
       );
 
-      await addDoc(companyEmployeeDocRef, data);
+      const updatedData = {
+        ...data,
+        url: `https://${data.url}`,
+      };
+
+      await addDoc(companyEmployeeDocRef, updatedData);
     } catch (error) {
       console.error('Error creating user: ', error);
       alert(error);
@@ -79,7 +124,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Box
         as="form"
         onSubmit={handleSubmit(onSubmit)}
-        w={'30vw'}
+        w={'40vw'}
         color={'#222526'}
       >
         <FormControl isInvalid={!!errors.name} mb={'1vw'}>
@@ -91,7 +136,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               placeholder={'登録名を入力'}
               {...register('name', { required: true })}
               borderRadius={'none'}
-              // value={data.name}
             />
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
@@ -103,7 +147,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           <FormLabel>
             <NameLabel name="URL" />
             <Flex alignItems={'center'}>
-              https://
+              <Box fontSize={'0.8vw'} mr={'1vw'}>
+                https://
+              </Box>
               <Input
                 mt={'0.5vw'}
                 // type="url"
@@ -138,7 +184,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.category} mb={'1vw'}>
+        <FormControl isInvalid={!!errors.category} mb={'1vw'} w={'30vw'}>
           <FormLabel>
             <NameLabel name="カテゴリ" />
             <Select
@@ -160,7 +206,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.interval1} mb={'1vw'}>
+        <FormControl isInvalid={!!errors.interval1} mb={'1vw'} w={'30vw'}>
           <FormLabel>
             <NameLabel name="巡回頻度" />
             <Flex mt={'0.5vw'} alignItems={'center'}>
@@ -169,6 +215,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                 placeholder="頻度を選択"
                 {...register('interval1', { required: true })}
                 borderRadius={'none'}
+                mr={'0.5vw'}
               >
                 <option value="毎月">毎月</option>
                 <option value="毎週">毎週</option>
@@ -177,6 +224,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               <Input
                 className="interval2"
                 borderRadius={'none'}
+                ml={'0.5vw'}
                 type="time"
                 {...register('interval2', { required: true })}
               />
@@ -197,12 +245,19 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         <FormControl mb={'1vw'}>
           <FormLabel>
             <NameLabel2 name="通知の有無" />
-            <Switch className="is_notified" {...register('is_notified')} />
+            <Switch
+              {...register('is_notified')}
+              sx={{
+                '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
+                  backgroundColor: '#49BAC0',
+                },
+              }}
+            />
           </FormLabel>
         </FormControl>
 
         <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
-          <WideButton text={`送信する`} w={`${140 / 19.2}vw`} />
+          <WideButton text={`登録する`} w={`${140 / 19.2}vw`} />
         </Box>
       </Box>
     </>
