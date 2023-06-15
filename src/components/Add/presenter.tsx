@@ -29,14 +29,14 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   // console.log(id);
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`100vh`}>
+      <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} pb={'2vw'}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>
-            <ContentContainer h={`100%`}>
+            <ContentContainer h={`auto`}>
               <AddForm data={data} id={id} />
             </ContentContainer>
           </Text>

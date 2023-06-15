@@ -88,7 +88,7 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
-              <Popup title="" logo={<HomeSvg />} links={home} href={'/'} />
+              {/* <Popup title="" logo={<HomeSvg />} links={home} href={'/'} /> */}
               <Popup
                 title=""
                 logo={<RobotSvg />}
@@ -101,12 +101,12 @@ export const Presenter: FC = () => {
                 links={articlePage}
                 href={undefined}
               />
-              <Popup
+              {/* <Popup
                 title=""
                 logo={<EditnoteSvg />}
                 links={links}
                 href={undefined}
-              />
+              /> */}
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
@@ -135,12 +135,12 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
-              <Popup
+              {/* <Popup
                 title="ホーム"
                 logo={<HomeSvg />}
                 links={home}
                 href={'/'}
-              />
+              /> */}
               <Popup
                 title="サイト管理"
                 logo={<RobotSvg />}
@@ -154,12 +154,12 @@ export const Presenter: FC = () => {
                 href={undefined}
               />
 
-              <Popup
+              {/* <Popup
                 title="テンプレート管理"
                 logo={<EditnoteSvg />}
                 links={links}
                 href={undefined}
-              />
+              /> */}
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
