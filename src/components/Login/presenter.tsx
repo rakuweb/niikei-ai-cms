@@ -15,11 +15,9 @@ import { selectSetAccount, useAccountStore } from 'features/account';
 import { selectSetCompany, useCompanyStore } from 'features/company';
 import { fetchCompanyByPath } from '@/firebase/firestore/companies';
 
-// type layer
 export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
 
-// presenter
 export const Presenter: FC<PresenterProps> = () => {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPass, setErrorPass] = useState('');

@@ -114,9 +114,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               isChecked={data?.is_renewal || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                               }}
                             />
                           </Td>
@@ -135,9 +135,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                               }}
                             />
                           </Td>
