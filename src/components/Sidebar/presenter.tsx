@@ -17,18 +17,18 @@ import SSvg from 'public/svg/S.svg';
 import AntennaSvg from 'public/svg/antenna.svg';
 import RobotSvg from 'public/svg/robot.svg';
 import GearSvg from 'public/svg/gear.svg';
-import { useAccountStore, Role } from 'features/account';
+import { useAccountStore, Role, selectAccountItem } from 'features/account';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
-  const account = useAccountStore();
+  const account = useAccountStore(selectAccountItem);
 
   const siteSubPages = [
-    { text: 'サイトを登録', url: '/' },
-    { text: '登録サイト一覧', url: '/' },
-    { text: '新着情報一覧', url: '/' },
-    { text: 'ゴミ箱', url: '/' },
+    { text: 'サイトを登録', url: routes.crawlersAdd },
+    { text: '登録サイト一覧', url: routes.crawlers },
+    { text: '新着情報一覧', url: routes.crawlersCollections },
+    { text: 'ゴミ箱', url: routes.crawlersTrash },
   ];
   const articleSubPages = [
     { text: '新規作成する', url: routes.articlesNew },

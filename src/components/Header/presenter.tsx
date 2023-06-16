@@ -6,19 +6,19 @@ import router from 'next/router';
 import { useStore } from 'lib/store';
 import { auth } from 'src/firebase';
 import { selectSignout, useAccountStore } from 'features/account';
+import { useCompanyStore, selectCompanyItem } from 'features/company';
 
 import LogoutSvg from 'public/svg/logout.svg';
 import OpenSvg from 'public/svg/open_in_new.svg';
 import { ExternalLink } from '../links/ExternalLink';
 import { niikeiURL } from 'constants/routes';
-import { InternalLink } from '../links/InternalLink';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
-  const userName = useAccountStore((state) => state.name);
   const signout = useAccountStore(selectSignout);
+  const company = useCompanyStore(selectCompanyItem);
 
   return (
     <Box css={styles}>
@@ -34,7 +34,9 @@ export const Presenter: FC = () => {
         alignItems={'center'}
         className="flex"
       >
-        <Text fontSize={`${24 / 19.2}vw`}>{userName ? userName : ''}</Text>
+        <Text fontSize={`${24 / 19.2}vw`}>
+          {company?.name ? company.name : ''}
+        </Text>
 
         <ExternalLink
           href={niikeiURL}

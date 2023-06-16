@@ -1,96 +1,35 @@
 import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import * as admin from 'firebase-admin';
 import { Sidebar } from 'components/Sidebar';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
-import { db, auth } from '../../../src/firebase';
+import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Drafts } from 'components/Drafts';
-type UserData = {
-  title: string;
-  url: string;
-  document_id: string;
-  status: string;
-  category: string;
-  wp_url: string;
-  created_at: Date;
-  updated_at: admin.firestore.Timestamp;
-  due_date: Date;
-  created_by?: admin.firestore.DocumentReference;
-  name?: string;
-};
-type UserDataType = {
-  name?: string;
-  titles: string;
-};
+import { selectCompanyItem, useCompanyStore } from '@/features/company';
+import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
+
 const Draftslist: NextPage = () => {
-  const [data, setData] = useState<UserData[] | null>(null);
-  const router = useRouter();
+  const [data, setData] = useState<DocumentData[] | null>(null);
+  const company = useCompanyStore(selectCompanyItem);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
+    const fetchArticlesData = async () => {
+      if (!company?.uid) return;
 
       try {
-        if (user) {
-          const employeeDocRef = doc(db, 'users', user.uid);
-          const employeeDocSnap = await getDoc(employeeDocRef);
-          const ref = employeeDocSnap.data()?.company_ref;
-          const allowedEmailsRef = collection(db, 'companies', ref, 'articles');
-          const q = query(allowedEmailsRef, where('status', '==', 'published'));
-          const querySnapshot = await getDocs(q);
-
-          const fetchedData: UserData[] = [];
-          for (const doc of querySnapshot.docs) {
-            const data = doc.data();
-            const createdByRef = data.created_by;
-            const createdByDocSnap = await getDoc(createdByRef);
-            const createdByDocSnapData =
-              createdByDocSnap.data() as UserDataType;
-            fetchedData.push({
-              ...(data as {
-                title: string;
-                url: string;
-                document_id: string;
-                status: string;
-                category: string;
-                wp_url: string;
-                created_at: Date;
-                updated_at: admin.firestore.Timestamp;
-                due_date: Date;
-              }),
-              created_by: data.created_by,
-              name: createdByDocSnapData.name,
-            });
-          }
-
-          setData(fetchedData);
-          console.log(fetchedData);
-        } else {
-          router.push('/');
-        }
+        const fetchedData = await fetchArticlesWhere(
+          company.uid,
+          Status.Published
+        );
+        setData(fetchedData);
       } catch (error) {
         window.alert(error);
         console.log(error);
       }
     };
 
-    const unsubscribe = onAuthStateChanged(auth, () => {
-      fetchUserData();
-    });
-
-    return () => unsubscribe();
+    fetchArticlesData();
   }, []);
+
   if (!data) {
     return <div>Loading...</div>;
   }

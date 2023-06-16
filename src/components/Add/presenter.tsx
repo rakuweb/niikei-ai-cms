@@ -26,7 +26,7 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const title = `サイトを登録`;
-  // console.log(id);
+
   return (
     <>
       <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} pb={'2vw'}>

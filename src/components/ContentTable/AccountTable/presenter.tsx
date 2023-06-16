@@ -4,43 +4,41 @@ import { Text } from 'components/texts/Text';
 
 import Subtitle from './Subtitle';
 import { WideButton } from 'components/Button/WideButton';
-import AccountInput from './AccountInput';
-import Password from './Password';
+import { NameForm } from './NameForm';
+import { PasswordForm } from './PasswordForm';
+
+import { useCompanyStore, selectCompanyItem } from 'features/company';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
+  const company = useCompanyStore(selectCompanyItem);
+
   return (
     <>
       <Text letterSpacing={`0`} fontSize={`${16 / 19.2}vw`}>
         <Subtitle title={`会社名`} />
         <Box lineHeight={`1.5em`} mb={`${50 / 19.2}vw`} fontWeight={`400`}>
-          株式会社XXXXX
+          {company.name}
         </Box>
 
-        <Box mb={`${50 / 19.2}vw`}>
-          <Subtitle title={`登録名`} />
-          <HStack mb={`${20 / 19.2}vw`} spacing={`${40 / 19.2}vw`}>
-            <Box
-              w={{ lg: `${110 / 10.2}vw`, xl: `${180 / 19.2}vw` }}
-            >{`現在のメールアドレス`}</Box>
-            <Box fontWeight={`400`}>{`test@sample.jp`}</Box>
-          </HStack>
+        <NameForm />
 
+        <Box mb={`${50 / 19.2}vw`}>
+          <Subtitle title={`権限`} />
           <HStack mb={`${30 / 19.2}vw`} spacing={`${40 / 19.2}vw`}>
             <Box
               w={{ lg: `${110 / 10.2}vw`, xl: `${180 / 19.2}vw` }}
-            >{`変更後のメールアドレス`}</Box>
+            >{`ユーザ権限`}</Box>
+            {/*
+            セレクトボックス追加
             <AccountInput />
+            */}
           </HStack>
           <WideButton text={`変更する`} w={`${200 / 19.2}vw`} />
         </Box>
 
-        <Subtitle title={`パスワード`} />
-        <Password text={`現在のパスワード`} />
-        <Password text={`変更後のパスワード`} />
-        <Password text={`パスワードの確認`} mb={`${30 / 19.2}vw`} />
-        <WideButton text={`変更する`} w={`${200 / 19.2}vw`} />
+        <PasswordForm />
       </Text>
     </>
   );

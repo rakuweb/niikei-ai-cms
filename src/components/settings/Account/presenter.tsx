@@ -14,14 +14,14 @@ export const Presenter: FC = () => {
 
   return (
     <>
-      <Box bg={`#EAEAEA`} h={`100vh`}>
+      <Box bg={`#EAEAEA`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>
-            <ContentContainer h={`${781 / 19.2}vw`}>
+            <ContentContainer minH={`${781 / 19.2}vw`}>
               <AccountTable />
             </ContentContainer>
           </Text>

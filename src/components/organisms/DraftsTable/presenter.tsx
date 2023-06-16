@@ -31,7 +31,7 @@ dayjs.extend(timezone);
 dayjs.locale('ja');
 
 export type PresenterProps = {
-  data?: {
+  data?: Partial<{
     title: string;
     url: string;
     document_id: string;
@@ -41,7 +41,7 @@ export type PresenterProps = {
     created_at: Date;
     due_date: Date;
     name?: string;
-  }[];
+  }>[];
   currentPage: number;
 };
 
@@ -268,10 +268,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                    {
-                                      backgroundColor: '#49BAC0',
-                                      borderColor: `#49BAC0`,
-                                    },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>

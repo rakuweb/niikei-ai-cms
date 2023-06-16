@@ -3,6 +3,8 @@ export const Role = {
   Writer: 'writer',
 } as const;
 
+export type Role = (typeof Role)[keyof typeof Role];
+
 export type AccountSliceData = {
   uid: string;
   name: string;
