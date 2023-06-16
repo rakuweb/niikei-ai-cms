@@ -54,9 +54,9 @@ export const Presenter: FC = () => {
     { text: 'アカウント情報', url: routes.settingsAccount },
     ...(account.role === Role.Editor
       ? [
-        { text: 'ユーザ一覧', url: routes.settingsUsers },
-        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
-      ]
+          { text: 'ユーザ一覧', url: routes.settingsUsers },
+          { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+        ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
   ];
