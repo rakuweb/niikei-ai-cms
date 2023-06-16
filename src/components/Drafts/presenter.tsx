@@ -9,7 +9,7 @@ import { DraftsTable } from 'components/organisms/DraftsTable';
 import { InternalLink } from 'components/links/InternalLink';
 
 export type PresenterProps = {
-  data?: {
+  data?: Partial<{
     title: string;
     url: string;
     document_id: string;
@@ -19,7 +19,7 @@ export type PresenterProps = {
     created_at: Date;
     due_date: Date;
     name?: string;
-  }[];
+  }>[];
   titles?: string;
 };
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {

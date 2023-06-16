@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '../../../src/firebase';
+import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';

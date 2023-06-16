@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { FC } from 'react';
-import { Text } from 'components/texts/Text';
-import { BoxProps, Flex } from '@chakra-ui/react';
-import { Image } from 'components/images/Image';
+import { FC } from 'react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
-export type PresenterProps = BoxProps & { text: string };
+import { Image } from 'components/images/Image';
+import { Text } from 'components/texts/Text';
+
+export type PresenterProps = FlexProps & { text: string };
 
 export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
   return (
     <Flex
+      type={`submit`}
       color={`white`}
       bg={`#49BAC0`}
       h={`${37 / 19.2}vw`}
@@ -22,6 +24,7 @@ export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
         transition: `0.3s`,
         filter: `opacity(80%)`,
       }}
+      as={`button`}
       {...props}
     >
       <Text fontSize={`${14 / 19.2}vw`}>{text}</Text>
