@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Box,
   Table,
@@ -11,6 +11,11 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
@@ -18,13 +23,6 @@ import { css } from '@emotion/react';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
-import { ExternalLink } from 'components/links/ExternalLink';
-import { doc, getDoc, deleteDoc } from '@firebase/firestore';
-import { db, auth } from 'src/firebase';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/ja';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -46,8 +44,6 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const user = auth.currentUser;
-  const id = user?.uid;
   const itemsPerPage = 10;
 
   const [selectedItems, setSelectedItems] = useState<{

@@ -52,7 +52,6 @@ const UserPage: NextPage = () => {
         router.push('/signin');
       }
     };
-    console.log(data);
     fetchData();
   }, [id]);
 

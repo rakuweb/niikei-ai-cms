@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { Sidebar } from 'components/Sidebar';
 import { Trash } from 'components/Trash';
 
-const Home: NextPage = () => {
+const TrashPage: NextPage = () => {
   return (
     <>
       <Sidebar />
@@ -14,4 +14,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default TrashPage;

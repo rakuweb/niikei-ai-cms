@@ -1,9 +1,15 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Link } from '@chakra-ui/react';
-import HomeSvg from 'public/svg/home.svg';
+
+import { Header } from 'components/Header';
+import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
+import Popup from './Popup';
+
+import { useStore } from 'lib/store';
+import { routes } from 'constants/routes';
+
 import AutorenewSvg from 'public/svg/autorenew.svg';
 import DescriptionSvg from 'public/svg/description.svg';
-import EditnoteSvg from 'public/svg/edit_note.svg';
 import RightmarkSvg from 'public/svg/rightmark.svg';
 import LeftmarkSvg from 'public/svg/leftmark.svg';
 import SpecialeditorSvg from 'public/svg/Specialeditor.svg';
@@ -11,68 +17,48 @@ import SSvg from 'public/svg/S.svg';
 import AntennaSvg from 'public/svg/antenna.svg';
 import RobotSvg from 'public/svg/robot.svg';
 import GearSvg from 'public/svg/gear.svg';
-import { SidebarContainer, SidebarToggle, SidebarContent } from './styles';
-import Popup from './Popup';
-import { Header } from 'components/Header';
-import { useStore, useUserStore } from 'lib/store';
-import { getDoc, doc } from 'firebase/firestore';
-import { db } from 'src/firebase';
+import { useAccountStore, Role } from 'features/account';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
-  const currentUser = useUserStore((state) => state.currentUser);
-  const user = currentUser;
-  const url = '/settings/account/';
-  const links = [
-    { text: 'リンク1', url: '/' },
-    { text: 'リンク2', url: '/' },
-    { text: 'リンク3', url: '/' },
+  const account = useAccountStore();
+
+  const siteSubPages = [
+    { text: 'サイトを登録', url: '/' },
+    { text: '登録サイト一覧', url: '/' },
+    { text: '新着情報一覧', url: '/' },
+    { text: 'ゴミ箱', url: '/' },
+  ];
+  const articleSubPages = [
+    { text: '新規作成する', url: routes.articlesNew },
+    { text: '記事化リスト', url: routes.crawlersCollections },
+    { text: '下書き記事一覧', url: routes.articlesDrafts },
+    ...(account.role === Role.Editor
+      ? [{ text: '確認記事一覧', url: routes.articlesReviews }]
+      : []),
+    { text: '修正記事一覧', url: routes.articlesCorrections },
+    { text: '公開記事一覧', url: routes.articlesPublished },
+    { text: 'ゴミ箱', url: routes.articlesTrash },
+  ];
+  const autoPostSubPages = [
+    { text: '登録サイト一覧', url: routes.autoPostsSites },
+    { text: '記事一覧', url: routes.autoPostsArticles },
   ];
 
-  const [isCompany, setIsCompany] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    if (user) {
-      const fetchUserDoc = async () => {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          setIsCompany(userDoc.data()?.is_company);
-        }
-      };
-      fetchUserDoc();
-    }
-  }, [user]);
-  const home = [];
-  const articlePage = [
-    { text: '下書き記事一覧', url: '/articles/drafts' },
-    { text: '新規作成する', url: '/articles/new' },
-    { text: '記事化リスト', url: '/articles/collections' },
-    { text: '確認記事一覧', url: '/articles/reviews' },
-    { text: '修正記事一覧', url: '/articles/corrections' },
-    { text: '公開記事一覧', url: '/articles/published' },
-    { text: 'ゴミ箱', url: '/articles/trash' },
+  const fortuneSubPages = [
+    { text: 'アップロードする', url: routes.fortunesUpload },
+    { text: '占い記事一覧', url: routes.fortunes },
   ];
-
-  const crawlersPage = [
-    { text: '登録情報一覧', url: '/crawlers' },
-    { text: 'サイトを登録', url: '/crawlers/add' },
-    { text: '新着情報一覧', url: '/crawlers/collections' },
-    { text: 'ゴミ箱', url: '/crawlers/trash' },
-  ];
-  const autoPostsPage = [
-    { text: 'サイト一覧', url: '/auto-posts/sites' },
-    // { text: 'サイト情報詳細', url: '/crawlers/add' },
-    { text: '記事一覧', url: '/auto-posts/articles' },
-  ];
-  const settingPage = [
-    ...(!isCompany
-      ? []
-      : [
-          { text: 'ユーザ一覧', url: '/settings/users' },
-          { text: 'ユーザ新規作成', url: '/settings/users/new' },
-        ]),
-    { text: 'ユーザ詳細', url: user ? `${url}/${user.uid}` : '' },
+  const settingSubPages = [
+    { text: 'アカウント情報', url: routes.settingsAccount },
+    ...(account.role === Role.Editor
+      ? [
+        { text: 'ユーザ一覧', url: routes.settingsUsers },
+        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+      ]
+      : []),
+    { text: 'メール通知設定', url: routes.settingsNotifications },
   ];
 
   const isOpen = useStore((state) => state.open);
@@ -88,41 +74,35 @@ export const Presenter: FC = () => {
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw`}>
                 <SSvg />
               </Box>
-              {/* <Popup title="" logo={<HomeSvg />} links={home} href={'/'} /> */}
+
               <Popup
                 title=""
                 logo={<RobotSvg />}
-                links={crawlersPage}
+                links={siteSubPages}
                 href={undefined}
               />
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
-                links={articlePage}
-                href={undefined}
-              />
-              {/* <Popup
-                title=""
-                logo={<EditnoteSvg />}
-                links={links}
+                links={articleSubPages}
                 href={undefined}
               /> */}
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
-                links={autoPostsPage}
+                links={autoPostSubPages}
                 href={undefined}
               />
               <Popup
                 title=""
                 logo={<AntennaSvg />}
-                links={links}
+                links={fortuneSubPages}
                 href={undefined}
               />
               <Popup
                 title=""
                 logo={<GearSvg />}
-                links={settingPage}
+                links={settingSubPages}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>
@@ -131,51 +111,40 @@ export const Presenter: FC = () => {
                 </Link>
               </SidebarToggle>
             </Box>
+
             <Box className="box2">
               <Box p={`${48 / 19.2}vw 0 ${67 / 19.2}vw ${29 / 19.2}vw`}>
                 <SpecialeditorSvg className="se" />
               </Box>
-              {/* <Popup
-                title="ホーム"
-                logo={<HomeSvg />}
-                links={home}
-                href={'/'}
-              /> */}
+
               <Popup
                 title="サイト管理"
                 logo={<RobotSvg />}
-                links={crawlersPage}
+                links={siteSubPages}
                 href={undefined}
               />
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
-                links={articlePage}
-                href={undefined}
-              />
-
-              {/* <Popup
-                title="テンプレート管理"
-                logo={<EditnoteSvg />}
-                links={links}
+                links={articleSubPages}
                 href={undefined}
               /> */}
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
-                links={autoPostsPage}
+                links={autoPostSubPages}
                 href={undefined}
               />
               <Popup
                 title="オリジナル配信管理"
                 logo={<AntennaSvg />}
-                links={links}
+                links={fortuneSubPages}
                 href={undefined}
               />
               <Popup
                 title="設定"
                 logo={<GearSvg />}
-                links={settingPage}
+                links={settingSubPages}
                 href={undefined}
               />
               <SidebarToggle onClick={toggleSidebar}>

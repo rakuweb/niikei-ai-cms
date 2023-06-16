@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-import { Crawlers } from 'components/Crawlers';
+import { Add } from 'components/Add';
 import { Sidebar } from 'components/Sidebar';
 
 const Home: NextPage = () => {
@@ -8,7 +8,7 @@ const Home: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Crawlers />
+        <Add />
       </Box>
     </>
   );
