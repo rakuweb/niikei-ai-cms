@@ -54,9 +54,9 @@ export const Presenter: FC = () => {
     { text: 'アカウント情報', url: routes.settingsAccount },
     ...(account.role === Role.Editor
       ? [
-        { text: 'ユーザ一覧', url: routes.settingsUsers },
-        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
-      ]
+          { text: 'ユーザ一覧', url: routes.settingsUsers },
+          { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+        ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
   ];
@@ -86,7 +86,7 @@ export const Presenter: FC = () => {
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
                 href={undefined}
-              /> */}
+              />
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
@@ -128,7 +128,7 @@ export const Presenter: FC = () => {
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
                 href={undefined}
-              /> */}
+              />
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
