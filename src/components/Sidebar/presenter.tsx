@@ -32,7 +32,7 @@ export const Presenter: FC = () => {
   ];
   const articleSubPages = [
     { text: '新規作成する', url: routes.articlesNew },
-    { text: '記事化リスト', url: routes.crawlersCollections },
+    { text: '記事化リスト', url: routes.articlesCollections },
     { text: '下書き記事一覧', url: routes.articlesDrafts },
     ...(account.role === Role.Editor
       ? [{ text: '確認記事一覧', url: routes.articlesReviews }]

@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
-import { Box } from '@chakra-ui/react';
-import { Sidebar } from 'components/Sidebar';
-import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Sites } from 'components/Sites';
+import { Box } from '@chakra-ui/react';
+import { DocumentData } from 'firebase/firestore';
 
+import { Sidebar } from 'components/Sidebar';
 import { fetchSites } from '@/firebase/firestore/sites';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
+import { Sites } from 'components/Sites';
 
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<DocumentData[]>([]);
@@ -25,6 +25,7 @@ const Draftslist: NextPage = () => {
     };
 
     fetchSitesData();
+    // eslint-disable-next-line
   }, []);
 
   if (!data) {
@@ -35,7 +36,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Sites data={data} titles={'登録サイト一覧'} titles2={`サイト管理`} />
+        <Sites data={data} titles={'登録サイト一覧'} titles2={'自動投稿管理'} />
       </Box>
     </>
   );

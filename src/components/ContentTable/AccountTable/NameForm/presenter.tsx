@@ -1,13 +1,12 @@
 // import layer
 import { FC } from 'react';
-import { HStack, Box, FormErrorMessage, FlexProps } from '@chakra-ui/react';
+import { HStack, Box, FlexProps } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import { InputForm } from '../InputForm';
 import AccountInput from '../AccountInput';
-import Password from '../Password';
 
 import { useAccountStore, selectAccountItem } from 'features/account';
 

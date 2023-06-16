@@ -15,7 +15,6 @@ export const Presenter: FC<PresenterProps> = ({ children }) => {
   const uid = useAccountStore(selectUid);
 
   useEffect(() => {
-    console.log(uid);
     if (pathsAnonymous.includes(router.asPath)) {
       if (uid) {
         router.push(routes.articlesNew);
@@ -29,6 +28,7 @@ export const Presenter: FC<PresenterProps> = ({ children }) => {
     }
 
     setIsVisible(true);
+    // eslint-disable-next-line
   }, [uid, router?.asPath]);
 
   return isVisible ? <>{children}</> : <></>;

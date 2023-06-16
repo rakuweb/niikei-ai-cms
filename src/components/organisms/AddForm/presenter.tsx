@@ -10,14 +10,23 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
-import * as admin from 'firebase-admin';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+  Timestamp,
+} from 'firebase/firestore';
 import router from 'next/router';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
 import { db, auth } from 'src/firebase';
 import { NameLabel2 } from './NameLabel2';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -27,24 +36,25 @@ export type PresenterProps = {
     xpath?: string;
     interval1?: string;
     interval2?: string;
-    created_at?: admin.firestore.Timestamp;
+    created_at?: Timestamp;
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
   };
   id?: string;
 };
-type FormData = {
-  id: string;
-  name: string;
-  url: string;
-  xpath: string;
-  category: string;
-  interval1: string;
-  interval2: string;
-  is_notified: boolean;
-  is_renewal: boolean;
-};
+export const schema = z.object({
+  id: z.string(),
+  name: z.string(),
+  url: z.string(),
+  xpath: z.string(),
+  category: z.string(),
+  interval1: z.string(),
+  interval2: z.string(),
+  is_notified: z.boolean(),
+  is_renewal: z.boolean(),
+});
+type Schema = z.infer<typeof schema>;
 
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const {
@@ -52,19 +62,20 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormData>({
-    mode: 'onChange',
+  } = useForm<Schema>({
+    resolver: zodResolver(schema),
     defaultValues: {
-      name: data?.name || '',
-      url: data?.url || '',
-      xpath: data?.xpath || '',
-      category: data?.category || '',
-      interval1: data?.interval1 || '',
-      interval2: data?.interval2 || '',
-      is_notified: data?.is_notified || false,
-      is_renewal: data?.is_renewal || false,
+      name: '',
+      url: '',
+      xpath: '',
+      category: '',
+      interval1: '',
+      interval2: '',
+      is_notified: false,
+      is_renewal: false,
     },
   });
+  const categories = ['社会', '政治', '経済', '文化', '生活', 'ビジネス'];
 
   useEffect(() => {
     if (data?.name) {
@@ -118,7 +129,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
 
       const updatedData = {
         ...data,
-        url: `https://${data.url}`,
+        url: `https://`,
       };
 
       if (id) {
@@ -129,7 +140,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       }
 
       window.alert('登録しました。');
-      router.push('/crawlers');
+      router.push(routes.crawlers);
     } catch (error) {
       console.error('Error creating user: ', error);
       alert(error);
@@ -210,12 +221,11 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               {...register('category', { required: true })}
               borderRadius={'none'}
             >
-              <option value="社会">社会</option>
-              <option value="政治">政治</option>
-              <option value="経済">経済</option>
-              <option value="文化">文化</option>
-              <option value="生活">生活</option>
-              <option value="ビジネス">ビジネス</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </Select>
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
@@ -287,7 +297,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormLabel>
         </FormControl>
 
-        <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
+        <Box w={`${140 / 19.2}vw`}>
           <WideButton text={`登録する`} w={`${140 / 19.2}vw`} />
         </Box>
       </Box>
