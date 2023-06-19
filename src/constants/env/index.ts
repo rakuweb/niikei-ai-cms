@@ -5,3 +5,8 @@ export const STRAGE_BUCKET = process.env.NEXT_PUBLIC_STRAGE_BUCKET ?? undefined;
 export const MESSAGING_SENDER_ID =
   process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID ?? undefined;
 export const APP_ID = process.env.NEXT_PUBLIC_APP_ID ?? undefined;
+
+export const TWITTER_APP_USER_TOKEN =
+  process.env.TWITTER_APP_USER_TOKEN ?? undefined;
+export const FACEBOOK_ACCESS_TOKEN =
+  process.env.FACEBOOK_ACCESS_TOKEN ?? undefined;
