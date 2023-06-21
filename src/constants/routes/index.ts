@@ -25,6 +25,10 @@ export const routes = {
   settingsNotifications: `/settings/notifications`,
 };
 
+export const apiRoutes = {
+  wpCategories: `/api/wp/categories`,
+};
+
 export const niikeiURL = `https://www.niikei.jp/`;
 
 export const pathsAnonymous = [routes.signin, routes.passwordReset];
