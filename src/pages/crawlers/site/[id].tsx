@@ -52,13 +52,7 @@ const SitePage: NextPage = () => {
           const ref = employeeDocSnap.data()?.company_ref;
 
           if (ref) {
-            const companyDocRef = doc(
-              db,
-              'companies',
-              ref,
-              'sites',
-              iid as string
-            );
+            const companyDocRef = doc(ref, 'sites', iid as string);
             const companyDocSnap = await getDoc(companyDocRef);
 
             if (companyDocSnap.exists()) {
@@ -68,13 +62,13 @@ const SitePage: NextPage = () => {
         }
       }
     } catch (error) {
-      router.push('/signin');
+      // router.push('/signin');
     }
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>

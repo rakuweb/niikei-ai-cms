@@ -4,6 +4,7 @@ import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
 
 export type SiteType = {
+  id: string;
   name: string;
   url: string;
   xpath: string;
@@ -26,7 +27,11 @@ export const fetchSites = async (companyID: string) => {
     SITE_COLLECTION
   );
   const snapshots = await getDocs(docsRef);
-  const documents = snapshots.docs.map((document) => document.data());
+  // const documents = snapshots.docs.map((document) => document.data());
+  const documents = snapshots.docs.map((document) => ({
+    id: document.id, // Here is the document ID
+    ...document.data(),
+  }));
 
   return documents;
 };
