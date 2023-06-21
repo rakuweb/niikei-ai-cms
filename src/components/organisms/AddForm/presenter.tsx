@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Input,
@@ -10,23 +10,18 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  updateDoc,
-  Timestamp,
-} from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 import router from 'next/router';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 
 import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
-import { db, auth } from 'src/firebase';
 import { NameLabel2 } from './NameLabel2';
-import { routes } from '@/constants/routes';
+import { apiRoutes, routes } from 'constants/routes';
+import { SiteType, addSites } from '@/firebase/firestore/sites';
+import { useCompanyStore, selectUid } from 'features/company';
 
 export type PresenterProps = {
   data?: {
@@ -44,12 +39,11 @@ export type PresenterProps = {
   id?: string;
 };
 export const schema = z.object({
-  id: z.string(),
-  name: z.string(),
-  url: z.string(),
-  xpath: z.string(),
-  category: z.string(),
-  interval1: z.string(),
+  name: z.string().min(1, '入力してください'),
+  url: z.string().min(1, '入力してください'),
+  xpath: z.string().min(1, '入力してください'),
+  category: z.string().min(1, '入力してください'),
+  interval1: z.string().min(1, '入力してください'),
   interval2: z.string(),
   is_notified: z.boolean(),
   is_renewal: z.boolean(),
@@ -75,7 +69,28 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       is_renewal: false,
     },
   });
-  const categories = ['社会', '政治', '経済', '文化', '生活', 'ビジネス'];
+  const [categories, setCategories] = useState<string[]>([
+    '社会',
+    '政治',
+    '経済',
+  ]);
+  const companyID = useCompanyStore(selectUid);
+
+  useEffect(() => {
+    const handler = async () => {
+      const url = apiRoutes.wpCategories;
+      const res = await axios.get(url).catch((err) => {
+        console.error(err);
+        return null;
+      });
+
+      if (res === null) return;
+
+      setCategories((prev) => res?.data?.categories ?? prev);
+    };
+
+    handler();
+  }, []);
 
   useEffect(() => {
     if (data?.name) {
@@ -110,34 +125,16 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     setValue,
   ]);
 
-  const onSubmit = async (data: FormData) => {
+  const submitHandler = async (formData: Schema) => {
     if (!window.confirm('この内容で登録しますか？')) {
       return;
     }
-    const user = auth.currentUser;
-
     try {
-      const userDocRef = doc(db, 'users', user?.uid);
-      const userDoc = await getDoc(userDocRef);
-      const refFieldString = userDoc.data().company_ref;
-      const companyEmployeeDocRef = collection(
-        db,
-        'companies',
-        refFieldString,
-        'sites'
-      );
-
-      const updatedData = {
-        ...data,
-        url: `https://`,
+      const data: Partial<SiteType> = {
+        ...formData,
+        url: `https://${formData.url}`,
       };
-
-      if (id) {
-        const docRef = doc(companyEmployeeDocRef, id);
-        await updateDoc(docRef, updatedData);
-      } else {
-        await addDoc(companyEmployeeDocRef, updatedData);
-      }
+      addSites(companyID, data);
 
       window.alert('登録しました。');
       router.push(routes.crawlers);
@@ -151,7 +148,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     <>
       <Box
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submitHandler)}
         w={'40vw'}
         color={'#222526'}
       >

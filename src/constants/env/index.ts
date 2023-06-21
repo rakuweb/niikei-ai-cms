@@ -10,3 +10,4 @@ export const TWITTER_APP_USER_TOKEN =
   process.env.TWITTER_APP_USER_TOKEN ?? undefined;
 export const FACEBOOK_ACCESS_TOKEN =
   process.env.FACEBOOK_ACCESS_TOKEN ?? undefined;
+export const WORDPRESS_URL = process.env.WORDPRESS_URL ?? undefined;

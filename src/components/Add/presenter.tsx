@@ -5,7 +5,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import * as admin from 'firebase-admin';
+import { Timestamp } from 'firebase/firestore';
 import { AddForm } from 'components/organisms/AddForm';
 
 export type PresenterProps = {
@@ -16,7 +16,7 @@ export type PresenterProps = {
     xpath?: string;
     interval1?: string;
     interval2?: string;
-    created_at?: admin.firestore.Timestamp;
+    created_at?: Timestamp;
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;

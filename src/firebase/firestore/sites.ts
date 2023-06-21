@@ -1,4 +1,4 @@
-import { Timestamp, collection, getDocs } from 'firebase/firestore';
+import { Timestamp, collection, getDocs, addDoc } from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -29,4 +29,25 @@ export const fetchSites = async (companyID: string) => {
   const documents = snapshots.docs.map((document) => document.data());
 
   return documents;
+};
+
+export const addSites = async (companyID: string, data: Partial<SiteType>) => {
+  const collectionRef = getSiteCollectionRef(companyID);
+
+  const storeData: Partial<SiteType> = { ...data, created_at: Timestamp.now() };
+  const res = await addDoc(collectionRef, { ...storeData }).catch((err) => {
+    console.error(err);
+    throw err;
+  });
+};
+
+export const getSiteCollectionRef = (companyID: string) => {
+  const collectionRef = collection(
+    db,
+    COMPANY_COLLECTION,
+    companyID,
+    SITE_COLLECTION
+  );
+
+  return collectionRef;
 };

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
-import * as admin from 'firebase-admin';
+import { Timestamp } from 'firebase/firestore';
 import { Box } from '@chakra-ui/react';
 import { Add } from 'components/Add';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -17,7 +17,7 @@ type UserData = {
   xpath?: string;
   interval1?: string;
   interval2?: string;
-  created_at?: admin.firestore.Timestamp;
+  created_at?: Timestamp;
   category?: string;
   is_notified?: boolean;
   is_renewal?: boolean;
