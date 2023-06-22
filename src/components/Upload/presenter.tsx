@@ -5,7 +5,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import Fileselect from '../Articles/Scan/Fileselect';
+import Fileselect from './Fileselect';
 
 export type PresenterProps = Record<string, unknown>;
 
