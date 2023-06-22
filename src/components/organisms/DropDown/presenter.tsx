@@ -6,6 +6,7 @@ export type PresenterProps = {
   handleSelect: (value: string) => void;
   handleExecute: () => void;
   handleDeleteSelectedItems?: () => Promise<void>;
+  handleSetAllStandBy?: () => Promise<void>;
 };
 
 export const Presenter: FC<PresenterProps> = ({
@@ -13,7 +14,11 @@ export const Presenter: FC<PresenterProps> = ({
   handleSelect,
   handleExecute,
 }) => {
-  const options = ['まとめて削除する', '変更する'];
+  const options = [
+    'まとめて削除する',
+    'まとめて記事化する',
+    'まとめて元に戻す',
+  ];
 
   const handleChange = (e) => {
     handleSelect(e.target.value);

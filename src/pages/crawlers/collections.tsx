@@ -12,6 +12,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -42,7 +44,9 @@ const Home: NextPage = () => {
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
           const allowedEmailsRef = collection(ref, 'infomation');
-          const querySnapshot = await getDocs(allowedEmailsRef);
+
+          const q = query(allowedEmailsRef, where('status', '==', 'in_review'));
+          const querySnapshot = await getDocs(q);
 
           const fetchedData: UserData[] = [];
           await Promise.all(

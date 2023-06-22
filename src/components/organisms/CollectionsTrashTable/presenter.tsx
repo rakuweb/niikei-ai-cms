@@ -73,7 +73,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('ゴミ箱に移動しますか？')) {
+    if (!window.confirm('本当に削除しますか？')) {
       return;
     }
     const auth = getAuth();
@@ -82,65 +82,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
     const docRef = doc(ref, 'infomation', id);
-
-    await updateDoc(docRef, {
-      status: 'is_deleted',
-    });
-
-    window.alert('ゴミ箱に移動しました');
+    await deleteDoc(docRef);
+    window.alert('選択項目を削除しました');
     location.reload();
   };
 
   const handleDeleteSelectedItems = async () => {
-    if (!window.confirm('ゴミ箱に移動しますか？')) {
+    if (!window.confirm('本当に削除しますか？')) {
       return;
     }
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const employeeDocRef = doc(db, 'users', user.uid as string);
-    const employeeDocSnap = await getDoc(employeeDocRef);
-    const ref = employeeDocSnap.data()?.company_ref;
-
-    for (const id of Object.keys(selectedItems)) {
-      if (selectedItems[id]) {
-        const docRef = doc(ref, 'infomation', id);
-        await updateDoc(docRef, {
-          status: 'is_deleted',
-        });
-      }
-    }
-
-    window.alert('ゴミ箱に移動しました');
-    location.reload();
-  };
-
-  const handleExecute = () => {
-    if (selectedValue === 'まとめて削除する' && handleDeleteSelectedItems) {
-      handleDeleteSelectedItems();
-    }
-    if (selectedValue === 'まとめて記事化する' && handleSetAllStandBy) {
-      handleSetAllStandBy();
-    }
-  };
-  const [selectedValue, setSelectedValue] = useState('');
-
-  // 状態をstand_byへ
-  const handleSetStandBy = async (id: string) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const employeeDocRef = doc(db, 'users', user.uid as string);
-    const employeeDocSnap = await getDoc(employeeDocRef);
-    const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
-
-    await updateDoc(docRef, {
-      status: 'stand_by',
-    });
-
-    window.alert('ステータスを変更しました');
-    location.reload();
-  };
-  const handleSetAllStandBy = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
     const employeeDocRef = doc(db, 'users', user.uid as string);
@@ -151,12 +101,56 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       if (selectedItems[id]) {
         console.log(id);
         const docRef = doc(ref, 'infomation', id);
+        await deleteDoc(docRef);
+      }
+    }
+
+    window.alert('選択項目を削除しました');
+    location.reload();
+  };
+  const handleExecute = () => {
+    if (selectedValue === 'まとめて削除する') {
+      handleDeleteSelectedItems();
+    } else if (selectedValue === 'まとめて元に戻す') {
+      handleUndoSelectedItems();
+    }
+  };
+  const [selectedValue, setSelectedValue] = useState('');
+
+  // in_reviewに戻す
+
+  const handleUndo = async (id: string) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const employeeDocRef = doc(db, 'users', user.uid as string);
+    const employeeDocSnap = await getDoc(employeeDocRef);
+    const ref = employeeDocSnap.data()?.company_ref;
+    const docRef = doc(ref, 'infomation', id);
+
+    await updateDoc(docRef, {
+      status: 'in_review',
+    });
+
+    window.alert('新着情報一覧に戻しました。');
+    location.reload();
+  };
+  const handleUndoSelectedItems = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const employeeDocRef = doc(db, 'users', user.uid as string);
+    const employeeDocSnap = await getDoc(employeeDocRef);
+    const ref = employeeDocSnap.data()?.company_ref;
+
+    for (const id of Object.keys(selectedItems)) {
+      if (selectedItems[id]) {
+        const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
-          status: 'stand_by',
+          status: 'in_review',
         });
       }
     }
-    window.alert('選択項目を記事化しました');
+
+    window.alert('選択項目を新着情報一覧に戻しました。');
     location.reload();
   };
   return (
@@ -223,16 +217,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={data?.url || ''}>
-                                <WideButton
-                                  text={`確認する`}
-                                  w={`${140 / 19.2}vw`}
-                                />
-                              </ExternalLink>
                               <WideButton
-                                text={`記事化する`}
+                                text={`元に戻す`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleSetStandBy(data.id)}
+                                onClick={() => handleUndo(data.id)}
                               />
 
                               <GrayButton
@@ -257,7 +245,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             selectedValue={selectedValue}
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
-            handleSetAllStandBy={handleSetAllStandBy}
           />
         </Box>
         <Pagination
