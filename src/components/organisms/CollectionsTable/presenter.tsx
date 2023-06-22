@@ -49,13 +49,16 @@ export type PresenterProps = {
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const itemsPerPage = 10;
 
-  const [selectedItems, setSelectedItems] = useState<{
-    [url: string]: boolean;
-  }>({});
-  const handleCheckboxClick = (url: string) => {
+  const [selectedItems, setSelectedItems] = useState<{ [id: string]: boolean }>(
+    {}
+  );
+
+  // ...
+
+  const handleCheckboxClick = (id: string) => {
     setSelectedItems((prevState) => ({
       ...prevState,
-      [url]: !prevState[url],
+      [id]: !prevState[id],
     }));
   };
 
@@ -80,6 +83,33 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     location.reload();
   };
 
+  const handleDeleteSelectedItems = async () => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const employeeDocRef = doc(db, 'users', user.uid as string);
+    const employeeDocSnap = await getDoc(employeeDocRef);
+    const ref = employeeDocSnap.data()?.company_ref;
+
+    for (const id of Object.keys(selectedItems)) {
+      if (selectedItems[id]) {
+        console.log(id);
+        const docRef = doc(ref, 'infomation', id);
+        await deleteDoc(docRef);
+      }
+    }
+
+    window.alert('選択項目を削除しました');
+    location.reload();
+  };
+  const handleExecute = () => {
+    if (selectedValue === 'まとめて削除する' && handleDeleteSelectedItems) {
+      handleDeleteSelectedItems();
+    }
+  };
+  const [selectedValue, setSelectedValue] = useState('');
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -123,9 +153,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                       borderColor: `#49BAC0`,
                                     },
                                 }}
-                                checked={selectedItems[data.url || '']}
+                                checked={selectedItems[data.id || '']}
                                 onChange={() =>
-                                  handleCheckboxClick(data.url || '')
+                                  handleCheckboxClick(data.id || '')
                                 }
                               />
                             </Flex>
@@ -174,13 +204,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Flex alignItems={'center'} position={'relative'}>
         <Box position={'absolute'}>
           <DropDown
-            selectedValue={''}
-            handleSelect={function (value: string): void {
-              throw new Error('Function not implemented.');
-            }}
-            handleExecute={function (): void {
-              throw new Error('Function not implemented.');
-            }}
+            selectedValue={selectedValue}
+            handleSelect={setSelectedValue}
+            handleExecute={handleExecute}
           />
         </Box>
         <Pagination

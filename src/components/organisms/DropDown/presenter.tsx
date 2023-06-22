@@ -5,6 +5,7 @@ export type PresenterProps = {
   selectedValue: string;
   handleSelect: (value: string) => void;
   handleExecute: () => void;
+  handleDeleteSelectedItems?: () => Promise<void>;
 };
 
 export const Presenter: FC<PresenterProps> = ({
