@@ -39,7 +39,10 @@ export const fetchArticlesWhere = async (companyID: string, status: Status) => {
 
   const articleQuery = query(docsRef, where('status', '==', status));
   const snapshots = await getDocs(articleQuery);
-  const documents = snapshots.docs.map((document) => document.data());
+  const documents = snapshots.docs.map((document) => ({
+    ...document.data(),
+    id: document.id,
+  }));
 
   return documents;
 };

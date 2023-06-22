@@ -6,8 +6,22 @@ import {
   PopoverBody,
   Link,
 } from '@chakra-ui/react';
+import {
+  useNotificationsStore,
+  selectNotificationsAll,
+} from 'features/notifications';
+import { Notification } from 'components/Notification';
 
 const Popup = ({ title, logo, links, href }) => {
+  const {
+    siteManamgement,
+    articleManagement,
+    autoPostManagement,
+    originalContentManamgement,
+  } = useNotificationsStore(selectNotificationsAll);
+
+  const target = 
+
   return (
     <Popover trigger="hover" placement="right-start">
       <PopoverTrigger>
@@ -19,6 +33,9 @@ const Popup = ({ title, logo, links, href }) => {
         >
           {logo}
           {title}
+          {siteManamgement && (
+            <Notification>{siteManamgement.length}</Notification>
+          )}
         </Link>
       </PopoverTrigger>
       {links.length > 0 && (
