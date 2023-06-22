@@ -16,13 +16,17 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
-
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
+import { ExternalLink } from '@/components/links/ExternalLink';
+import { Timestamp, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
+import { user } from 'firebase-functions/v1/auth';
+import { getAuth } from 'firebase/auth';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,16 +34,15 @@ dayjs.locale('ja');
 
 export type PresenterProps = {
   data?: {
+    created_at: Timestamp;
+    message: string;
     title: string;
-    url: string;
-    document_id: string;
     status: string;
     category: string;
-    wp_url: string;
-    created_at: Date;
-    due_date: Date;
-    name?: string;
+    id: string;
+    url: string;
   }[];
+
   currentPage: number;
 };
 
@@ -60,6 +63,21 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const employeeDocRef = doc(db, 'users', user.uid as string);
+    const employeeDocSnap = await getDoc(employeeDocRef);
+    const ref = employeeDocSnap.data()?.company_ref;
+    const docRef = doc(ref, 'infomation', id);
+    await deleteDoc(docRef);
+    window.alert('選択項目を削除しました');
+    location.reload();
   };
 
   return (
@@ -112,20 +130,26 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>test</Td>
-                          <Td>{data?.category || ''}</Td>
-                          <Td>test</Td>
-                          <Td>{data?.name || ''}</Td>
+                          <Td>
+                            {dayjs(data.created_at.toDate()).format(
+                              'YYYY/MM/DD'
+                            )}
+                          </Td>
+                          <Td>{data.category || ''}</Td>
+                          <Td>{data?.title || ''}</Td>
+                          <Td>{data?.url || ''}</Td>
 
                           <Td>
                             <Box
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <WideButton
-                                text={`確認する`}
-                                w={`${140 / 19.2}vw`}
-                              />
+                              <ExternalLink href={data?.url || ''}>
+                                <WideButton
+                                  text={`確認する`}
+                                  w={`${140 / 19.2}vw`}
+                                />
+                              </ExternalLink>
                               <WideButton
                                 text={`記事化する`}
                                 w={`${140 / 19.2}vw`}
@@ -134,6 +158,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
+                                onClick={() => handleDelete(data.id)}
                               />
                             </Box>
                           </Td>

@@ -85,8 +85,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       const document_id = data[index]?.document_id;
 
       const companyEmployeeDocRef = doc(
-        db,
-        'companies',
         refFieldString,
         'articles',
         document_id
@@ -128,13 +126,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const index = data.findIndex((item) => item.url === url);
     const document_id = data[index]?.document_id;
 
-    const companyEmployeeDocRef = doc(
-      db,
-      'companies',
-      refFieldString,
-      'articles',
-      document_id
-    );
+    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
     const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
@@ -268,10 +260,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>

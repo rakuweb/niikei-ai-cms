@@ -40,10 +40,17 @@ export type PresenterProps = {
     due_date: Date;
     name?: string;
   }[];
+
+  list: {
+    date: string;
+    category: string;
+    title: string;
+    url: string;
+  }[];
   currentPage: number;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, list }) => {
   const itemsPerPage = 10;
 
   const [selectedItems, setSelectedItems] = useState<{

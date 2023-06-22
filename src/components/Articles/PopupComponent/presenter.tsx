@@ -54,7 +54,7 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const allowedEmailsRef = collection(db, 'companies', ref, 'articles');
+        const allowedEmailsRef = collection(ref, 'articles');
         const documentRef = doc(allowedEmailsRef, documentId);
         await setDoc(documentRef, {
           document_id: documentId || '',
@@ -63,7 +63,7 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
           status: 'editing',
           due_date: '',
           wp_url: '',
-          created_by: doc(db, 'companies', ref, 'employees', user.uid),
+          created_by: doc(ref, 'employees', user.uid),
         });
 
         onClose();
