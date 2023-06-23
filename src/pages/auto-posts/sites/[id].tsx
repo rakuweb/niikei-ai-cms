@@ -21,6 +21,7 @@ type UserData = {
   category?: string;
   is_notified?: boolean;
   is_renewal?: boolean;
+  is_auto_posts: boolean;
 };
 
 const SitePage: NextPage = () => {
@@ -52,13 +53,7 @@ const SitePage: NextPage = () => {
           const ref = employeeDocSnap.data()?.company_ref;
 
           if (ref) {
-            const companyDocRef = doc(
-              db,
-              'companies',
-              ref,
-              'sites',
-              iid as string
-            );
+            const companyDocRef = doc(ref, 'registered_sites', iid as string);
             const companyDocSnap = await getDoc(companyDocRef);
 
             if (companyDocSnap.exists()) {

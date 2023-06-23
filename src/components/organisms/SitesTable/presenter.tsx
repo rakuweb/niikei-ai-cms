@@ -43,14 +43,17 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
+    is_auto_posts: boolean;
   }[];
   titles?: string;
+  urls?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
+export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
-  const url = '/crawlers/site';
+
+  console.log(urls);
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
       return;
@@ -146,7 +149,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <InternalLink href={`${url}/${data?.id}`}>
+                              <InternalLink href={`${urls}/${data?.id}`}>
                                 <WideButton
                                   text={`編集する`}
                                   w={`${110 / 19.2}vw`}

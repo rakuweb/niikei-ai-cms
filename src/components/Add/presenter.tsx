@@ -20,6 +20,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
+    is_auto_posts: boolean;
   };
   id?: string;
 };
