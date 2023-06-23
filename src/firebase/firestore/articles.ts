@@ -1,6 +1,7 @@
 import {
   Timestamp,
   collection,
+  getDoc,
   getDocs,
   query,
   where,
@@ -30,19 +31,27 @@ export type ArticleType = {
   due_date: Timestamp;
   category: string;
   wp_url: string;
+  name: string;
 };
-
+export type User = {
+  name: string;
+};
 export const ARTICLE_COLLECTION = 'articles';
 
 export const fetchArticlesWhere = async (companyID: string, status: Status) => {
   const docsRef = getArticleDocsRef(companyID);
-
   const articleQuery = query(docsRef, where('status', '==', status));
   const snapshots = await getDocs(articleQuery);
-  const documents = snapshots.docs.map((document) => ({
-    ...document.data(),
-    id: document.id,
-  }));
+  const documentsPromises = snapshots.docs.map(async (document) => {
+    const data = document.data();
+    const createdByRef = data.created_by;
+    const createdBySnap = await getDoc(createdByRef);
+    const createdByData = createdBySnap.data() as User;
+    const name = createdByData ? createdByData.name : '';
+    return { ...data, name };
+  });
+
+  const documents = await Promise.all(documentsPromises);
 
   return documents;
 };

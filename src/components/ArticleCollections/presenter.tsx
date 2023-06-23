@@ -6,6 +6,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
+import { ArticleCollectionsTable } from '../organisms/ArticleCollectionsTable';
 
 export type PresenterProps = {
   data?: {
@@ -27,12 +28,12 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={titles} />
+            <Breadcrumbs pagename1={`記事管理`} pagename2={titles} />
             <Flex justify={`space-between`}>
               <Title title={titles} />
             </Flex>
 
-            <CollectionsTable data={data} currentPage={0} />
+            <ArticleCollectionsTable data={data} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>

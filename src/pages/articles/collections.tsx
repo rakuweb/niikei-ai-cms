@@ -17,6 +17,7 @@ import {
 } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { ArticleCollections } from '@/components/ArticleCollections';
 
 type UserData = {
   created_at: Timestamp;
@@ -44,8 +45,7 @@ const Home: NextPage = () => {
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
           const allowedEmailsRef = collection(ref, 'infomation');
-
-          const q = query(allowedEmailsRef, where('status', '==', 'in_review'));
+          const q = query(allowedEmailsRef, where('status', '==', 'stand_by'));
           const querySnapshot = await getDocs(q);
 
           const fetchedData: UserData[] = [];
@@ -87,7 +87,7 @@ const Home: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Collections titles="新着情報一覧" data={data} />
+        <ArticleCollections titles="記事化リスト" data={data} />
       </Box>
     </>
   );

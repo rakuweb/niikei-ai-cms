@@ -73,7 +73,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('ゴミ箱に移動しますか？')) {
+    if (!window.confirm('新着情報一覧に移動しますか？')) {
       return;
     }
     const auth = getAuth();
@@ -84,15 +84,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const docRef = doc(ref, 'infomation', id);
 
     await updateDoc(docRef, {
-      status: 'is_deleted',
+      status: 'in_review',
     });
 
-    window.alert('ゴミ箱に移動しました');
+    window.alert('新着情報一覧に移動しました');
     location.reload();
   };
 
   const handleDeleteSelectedItems = async () => {
-    if (!window.confirm('ゴミ箱に移動しますか？')) {
+    if (!window.confirm('新着情報一覧に移動しますか？')) {
       return;
     }
     const auth = getAuth();
@@ -105,12 +105,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       if (selectedItems[id]) {
         const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
-          status: 'is_deleted',
+          status: 'in_review',
         });
       }
     }
 
-    window.alert('ゴミ箱に移動しました');
+    window.alert('新着情報一覧に移動しました');
     location.reload();
   };
 
@@ -223,20 +223,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={data?.url || ''}>
-                                <WideButton
-                                  text={`確認する`}
-                                  w={`${140 / 19.2}vw`}
-                                />
-                              </ExternalLink>
                               <WideButton
-                                text={`記事化する`}
+                                text={`記事にする`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() => handleSetStandBy(data.id)}
                               />
 
                               <GrayButton
-                                text={`削除する`}
+                                text={`元に戻す`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() => handleDelete(data.id)}
                               />
