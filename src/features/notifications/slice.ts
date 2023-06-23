@@ -13,7 +13,7 @@ export const createNotificationsSlice: StateCreator<
   autoPostManagement: [],
   originalContentManagement: [],
 
-  setSiteMamagementNotifications: (notifications) => {
+  setSiteManagementNotifications: (notifications) => {
     set(() => ({ siteManagement: notifications }));
   },
   setArticleManagementNotifications: (notifications) => {

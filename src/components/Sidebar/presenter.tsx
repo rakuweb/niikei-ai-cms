@@ -7,6 +7,10 @@ import Popup from './Popup';
 
 import { useStore } from 'lib/store';
 import { routes } from 'constants/routes';
+import {
+  useNotificationsStore,
+  selectNotificationsAll,
+} from 'features/notifications';
 
 import AutorenewSvg from 'public/svg/autorenew.svg';
 import DescriptionSvg from 'public/svg/description.svg';
@@ -23,6 +27,12 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const account = useAccountStore(selectAccountItem);
+  const {
+    siteManamgement,
+    articleManagement,
+    autoPostManagement,
+    originalContentManamgement,
+  } = useNotificationsStore(selectNotificationsAll);
 
   const siteSubPages = [
     { text: 'サイトを登録', url: routes.crawlersAdd },
@@ -80,24 +90,28 @@ export const Presenter: FC = () => {
                 logo={<RobotSvg />}
                 links={siteSubPages}
                 href={undefined}
+                notifications={siteManamgement}
               />
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
                 href={undefined}
+                notifications={articleManagement}
               />
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
                 links={autoPostSubPages}
                 href={undefined}
+                notifications={autoPostManagement}
               />
               <Popup
                 title=""
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
                 href={undefined}
+                notifications={originalContentManamgement}
               />
               <Popup
                 title=""
@@ -122,24 +136,28 @@ export const Presenter: FC = () => {
                 logo={<RobotSvg />}
                 links={siteSubPages}
                 href={undefined}
+                notifications={[1, 1]}
               />
               <Popup
                 title="記事管理"
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
                 href={undefined}
+                notifications={articleManagement}
               />
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
                 links={autoPostSubPages}
                 href={undefined}
+                notifications={autoPostManagement}
               />
               <Popup
                 title="オリジナル配信管理"
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
                 href={undefined}
+                notifications={originalContentManamgement}
               />
               <Popup
                 title="設定"
