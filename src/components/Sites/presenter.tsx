@@ -34,7 +34,6 @@ export const Presenter: FC<PresenterProps> = ({
   titles2,
   urls,
 }) => {
-  console.log(data[0]?.id);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>

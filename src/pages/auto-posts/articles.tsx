@@ -1,18 +1,45 @@
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
-
 import { Sidebar } from 'components/Sidebar';
-import { Collections } from 'components/Collections';
+import { useEffect, useState } from 'react';
+import { Drafts } from 'components/Drafts';
+import { selectCompanyItem, useCompanyStore } from '@/features/company';
+import { fetchArticles, Status } from '@/firebase/firestore/autoPostArticles';
+import { DocumentData } from 'firebase/firestore';
+import { AutoPostArticles } from '@/components/AutoPostArticles';
 
-const Home: NextPage = () => {
+const Draftslist: NextPage = () => {
+  const [data, setData] = useState<DocumentData[]>([]);
+  const company = useCompanyStore(selectCompanyItem);
+
+  useEffect(() => {
+    const fetchArticlesData = async () => {
+      if (!company?.uid) return;
+
+      try {
+        const fetchedData = await fetchArticles(company.uid);
+        setData(fetchedData);
+      } catch (error) {
+        window.alert(error);
+        console.log(error);
+      }
+    };
+
+    fetchArticlesData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Sidebar />
       <Box>
-        <Collections titles="公開記事一覧" />
+        <AutoPostArticles data={data} titles={'公開記事一覧'} />
       </Box>
     </>
   );
 };
 
-export default Home;
+export default Draftslist;

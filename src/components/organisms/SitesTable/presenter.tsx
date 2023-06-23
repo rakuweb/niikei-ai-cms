@@ -53,7 +53,6 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
 
-  console.log(urls);
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
       return;

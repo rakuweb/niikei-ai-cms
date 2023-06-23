@@ -20,7 +20,11 @@ import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
 import { NameLabel2 } from './NameLabel2';
 import { apiRoutes, routes } from 'constants/routes';
-import { SiteType, addSites, updateSites } from '@/firebase/firestore/sites';
+import {
+  SiteType,
+  addSites,
+  updateSites,
+} from '@/firebase/firestore/registeredSites';
 import { useCompanyStore, selectUid } from 'features/company';
 
 export type PresenterProps = {
@@ -52,7 +56,6 @@ export const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
-  console.log(id);
   const {
     register,
     handleSubmit,
@@ -143,7 +146,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         addSites(companyID, data);
         window.alert('登録しました。');
       }
-      router.push(routes.crawlers);
+
+      router.push(routes.autoPostsSites);
     } catch (error) {
       console.error('Error creating user: ', error);
       alert(error);

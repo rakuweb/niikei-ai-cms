@@ -25,7 +25,7 @@ export type SiteType = {
   previous_structure: Map<string, string>;
 };
 
-export const SITE_COLLECTION = 'sites';
+export const SITE_COLLECTION = 'registered_sites';
 
 export const fetchSites = async (companyID: string) => {
   const docsRef = collection(

@@ -9,6 +9,7 @@ import { Add } from 'components/Add';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';
+import { AddAutoPost } from '@/components/AddAutoPost';
 
 type UserData = {
   id?: string;
@@ -75,7 +76,7 @@ const SitePage: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Add data={data} id={id as string} />
+        <AddAutoPost data={data} id={id as string} />
       </Box>
     </>
   );
