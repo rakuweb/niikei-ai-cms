@@ -21,7 +21,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_posts: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
   titles2?: string;

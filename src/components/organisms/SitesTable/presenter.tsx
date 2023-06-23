@@ -43,7 +43,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_posts: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
   urls?: string;
@@ -63,7 +63,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const docRef = doc(db, 'companies', ref, 'sites', id);
+        const docRef = doc(ref, 'registered_sites', id);
         await deleteDoc(docRef);
       }
       window.alert('選択項目を削除しました');
