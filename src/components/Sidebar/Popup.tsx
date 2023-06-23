@@ -6,8 +6,9 @@ import {
   PopoverBody,
   Link,
 } from '@chakra-ui/react';
+import { Notification } from 'components/Notification';
 
-const Popup = ({ title, logo, links, href }) => {
+const Popup = ({ title, logo, links, href, notifications = [] }) => {
   return (
     <Popover trigger="hover" placement="right-start">
       <PopoverTrigger>
@@ -19,6 +20,9 @@ const Popup = ({ title, logo, links, href }) => {
         >
           {logo}
           {title}
+          {notifications.length > 0 && (
+            <Notification>{notifications.length}</Notification>
+          )}
         </Link>
       </PopoverTrigger>
       {links.length > 0 && (

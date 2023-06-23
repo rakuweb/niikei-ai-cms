@@ -14,6 +14,10 @@ import { routes } from 'constants/routes';
 import { selectSetAccount, useAccountStore } from 'features/account';
 import { selectSetCompany, useCompanyStore } from 'features/company';
 import { fetchCompanyByPath } from '@/firebase/firestore/companies';
+import {
+  useNotificationsStore,
+  selectSetNotificationsAll,
+} from '@/features/notifications';
 
 export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
@@ -27,6 +31,12 @@ export const Presenter: FC<PresenterProps> = () => {
   const router = useRouter();
   const setAccount = useAccountStore(selectSetAccount);
   const setCompany = useCompanyStore(selectSetCompany);
+  const {
+    setSiteManamgementNotifications,
+    setArticleManagementNotifications,
+    setAutoPostManagementNotifications,
+    setOriginalContentManamgementNotifications,
+  } = useNotificationsStore(selectSetNotificationsAll);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(event.target.value);
@@ -72,8 +82,19 @@ export const Presenter: FC<PresenterProps> = () => {
         role: employee.role,
         newInfoNotification: employee.new_info_notification,
         autoPublishNotification: employee.auto_publish_notification,
+        notifications: employee.notifications,
       };
       setAccount(accountInfo);
+
+      const { notifications } = employee;
+      notifications?.length > 0 &&
+        setSiteManamgementNotifications(notifications[0]);
+      notifications?.length > 1 &&
+        setArticleManagementNotifications(notifications[1]);
+      notifications?.length > 2 &&
+        setAutoPostManagementNotifications(notifications[2]);
+      notifications?.length > 3 &&
+        setOriginalContentManamgementNotifications(notifications[3]);
 
       router.push(routes.articlesNew);
     } catch (error) {
