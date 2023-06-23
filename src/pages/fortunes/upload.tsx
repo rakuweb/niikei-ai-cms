@@ -8,7 +8,7 @@ const Home: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Upload currentPage={undefined} />
+        <Upload />
       </Box>
     </>
   );
