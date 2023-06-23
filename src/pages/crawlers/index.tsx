@@ -35,7 +35,12 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Sites data={data} titles={'登録サイト一覧'} titles2={`サイト管理`} />
+        <Sites
+          data={data}
+          titles={'登録サイト一覧'}
+          titles2={`サイト管理`}
+          urls={'/crawlers/site'}
+        />
       </Box>
     </>
   );

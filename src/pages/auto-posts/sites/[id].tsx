@@ -9,6 +9,7 @@ import { Add } from 'components/Add';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';
+import { AddAutoPost } from '@/components/AddAutoPost';
 
 type UserData = {
   id?: string;
@@ -21,6 +22,7 @@ type UserData = {
   category?: string;
   is_notified?: boolean;
   is_renewal?: boolean;
+  is_auto_posts: boolean;
 };
 
 const SitePage: NextPage = () => {
@@ -52,13 +54,7 @@ const SitePage: NextPage = () => {
           const ref = employeeDocSnap.data()?.company_ref;
 
           if (ref) {
-            const companyDocRef = doc(
-              db,
-              'companies',
-              ref,
-              'sites',
-              iid as string
-            );
+            const companyDocRef = doc(ref, 'registered_sites', iid as string);
             const companyDocSnap = await getDoc(companyDocRef);
 
             if (companyDocSnap.exists()) {
@@ -80,7 +76,7 @@ const SitePage: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Add data={data} id={id as string} />
+        <AddAutoPost data={data} id={id as string} />
       </Box>
     </>
   );

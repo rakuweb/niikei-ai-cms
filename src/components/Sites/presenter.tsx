@@ -21,13 +21,19 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
   titles2?: string;
+  urls?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data, titles, titles2 }) => {
-  console.log(data[0]?.id);
+export const Presenter: FC<PresenterProps> = ({
+  data,
+  titles,
+  titles2,
+  urls,
+}) => {
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
@@ -46,7 +52,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles, titles2 }) => {
               </InternalLink>
             </Flex>
 
-            <SitesTable data={data} />
+            <SitesTable data={data} urls={urls} />
           </Text>
         </OutsideContainer>
       </Box>

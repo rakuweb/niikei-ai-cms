@@ -43,14 +43,16 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
+  urls?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
+export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
-  const url = '/crawlers/site';
+
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
       return;
@@ -60,7 +62,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const docRef = doc(db, 'companies', ref, 'sites', id);
+        const docRef = doc(ref, 'registered_sites', id);
         await deleteDoc(docRef);
       }
       window.alert('選択項目を削除しました');
@@ -146,7 +148,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <InternalLink href={`${url}/${data?.id}`}>
+                              <InternalLink href={`${urls}/${data?.id}`}>
                                 <WideButton
                                   text={`編集する`}
                                   w={`${110 / 19.2}vw`}

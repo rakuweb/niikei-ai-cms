@@ -7,6 +7,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Timestamp } from 'firebase/firestore';
 import { AddForm } from 'components/organisms/AddForm';
+import { AddAutoPostForm } from '../organisms/AddAutoPostForm';
 
 export type PresenterProps = {
   data?: {
@@ -20,7 +21,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_posts?: boolean;
+    is_auto_posts: boolean;
   };
   id?: string;
 };
@@ -38,7 +39,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               <Title title={title} />
             </Flex>
             <ContentContainer h={`auto`}>
-              <AddForm data={data} id={id} />
+              <AddAutoPostForm data={data} id={id} />
             </ContentContainer>
           </Text>
         </OutsideContainer>
