@@ -6,6 +6,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
+import { CollectionsTrashTable } from '../organisms/CollectionsTrashTable';
 
 export type PresenterProps = {
   data?: {
@@ -32,7 +33,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               <Title title={titles} />
             </Flex>
 
-            <CollectionsTable data={data} currentPage={0} />
+            <CollectionsTrashTable data={data} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>

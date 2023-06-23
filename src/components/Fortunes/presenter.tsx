@@ -9,38 +9,29 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { FortunesTable } from '../organisms/FortunesTable';
+import { Timestamp } from 'firebase/firestore';
 
 export type PresenterProps = {
   data?: {
-    role: string;
-    email: string;
-    name: string;
+    created_at: Timestamp;
+    content: string;
+    title: string;
+    status: string;
+    image: string;
+    url: string;
     id: string;
   }[];
   currentPage: any;
 };
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `コンテンツ一覧`;
-
+  // console.log(data);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-  const list = [
-    {
-      status: true,
-      created_at: '2023/05/24',
-      title: `記事の公開`,
-      content: `占い記事を公開しました`,
-    },
-    {
-      status: true,
-      created_at: '2023/05/24',
-      title: `記事の公開`,
-      content: `占い記事を公開しました`,
-    },
-  ];
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -61,7 +52,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
             <ContentContainer h={`${702 / 19.2}vw`}>
               <TableContainer>
-                <FortunesTable list={list} />
+                <FortunesTable data={data} currentPage={undefined} />
               </TableContainer>
             </ContentContainer>
 

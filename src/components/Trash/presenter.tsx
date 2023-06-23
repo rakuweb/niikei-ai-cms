@@ -24,6 +24,20 @@ export type PresenterProps = {
   titles?: string;
 };
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
+  const list = [
+    {
+      date: '2023/05/24',
+      category: '経済',
+      title: `記事の公開`,
+      url: `https://rakuweb.jp/`,
+    },
+    {
+      date: '2023/05/24',
+      category: '経済',
+      title: `記事の公開`,
+      url: `https://rakuweb.jp/`,
+    },
+  ];
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
@@ -42,7 +56,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               </InternalLink>
             </Flex>
 
-            <TrashTable data={data} currentPage={0} />
+            <TrashTable list={list} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>

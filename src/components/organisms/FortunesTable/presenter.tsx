@@ -17,17 +17,22 @@ import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
 import { InternalLink } from 'components/links/InternalLink';
 import { css } from '@emotion/react';
+import { Timestamp } from 'firebase/firestore';
+import dayjs from 'dayjs';
 
 export type PresenterProps = {
-  list: {
-    status: boolean;
-    created_at: string;
-    title: string;
+  data?: {
+    created_at: Timestamp;
     content: string;
+    title: string;
+    status: string;
+    image: string;
+    url: string;
+    id: string;
   }[];
+  currentPage: any;
 };
-
-export const Presenter: FC<PresenterProps> = ({ list }) => {
+export const Presenter: FC<PresenterProps> = ({ data }) => {
   const url = '/settings/users';
   const itemsPerPage = 10;
 
@@ -51,7 +56,7 @@ export const Presenter: FC<PresenterProps> = ({ list }) => {
               </Thead>
 
               <Tbody>
-                {list.map((user, index) => (
+                {data.map((user, index) => (
                   <Tr key={index} css={tdstyles}>
                     <Td
                       w={`${52 / 19.2}vw`}
@@ -60,7 +65,7 @@ export const Presenter: FC<PresenterProps> = ({ list }) => {
                     >
                       <Switch
                         size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                        isChecked={user.status || false}
+                        // isChecked={user.status || false}
                         sx={{
                           '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                             {
@@ -69,7 +74,9 @@ export const Presenter: FC<PresenterProps> = ({ list }) => {
                         }}
                       />
                     </Td>
-                    <Td>{user.created_at}</Td>
+                    <Td>
+                      {dayjs(user.created_at.toDate()).format('YYYY/MM/DD')}
+                    </Td>
                     <Td>{user.title}</Td>
                     <Td>{user.content}</Td>
 
