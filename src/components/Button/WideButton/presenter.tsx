@@ -5,12 +5,12 @@ import { Flex, FlexProps } from '@chakra-ui/react';
 import { Image } from 'components/images/Image';
 import { Text } from 'components/texts/Text';
 
-export type PresenterProps = FlexProps & { text: string };
+export type PresenterProps = FlexProps & { text: string; type?: string };
 
-export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
+export const Presenter: FC<PresenterProps> = ({ text, type, ...props }) => {
   return (
     <Flex
-      type={`submit`}
+      type={type ?? `submit`}
       color={`white`}
       bg={`#49BAC0`}
       h={`${37 / 19.2}vw`}

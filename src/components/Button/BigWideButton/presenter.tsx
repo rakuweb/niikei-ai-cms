@@ -4,7 +4,11 @@ import { Text } from 'components/texts/Text';
 import { BoxProps, Flex } from '@chakra-ui/react';
 import { Image } from 'components/images/Image';
 
-export type PresenterProps = BoxProps & { text: string; src: string };
+export type PresenterProps = BoxProps & {
+  text: string;
+  src: string;
+  type?: string;
+};
 
 export const Presenter: FC<PresenterProps> = ({ text, src, ...props }) => {
   return (
