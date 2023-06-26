@@ -21,6 +21,7 @@ type UserData = {
   category?: string;
   is_notified?: boolean;
   is_renewal?: boolean;
+  is_auto_patrol?: boolean;
 };
 
 const SitePage: NextPage = () => {
@@ -62,13 +63,13 @@ const SitePage: NextPage = () => {
         }
       }
     } catch (error) {
-      // router.push('/signin');
+      router.push('/signin');
     }
   };
 
-  // if (!data) {
-  //   return <div>Loading...</div>;
-  // }
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
