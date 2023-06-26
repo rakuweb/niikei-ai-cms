@@ -1,4 +1,4 @@
-import { Timestamp, addDoc, collection } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
 
@@ -14,11 +14,11 @@ export type FortuneLogType = {
 
 export const FORTUNES_LOGS_COLLECTION = `fortunes_logs`;
 
-export const addFortuneLog = async (
+export const addFortunesLog = async (
   companyID: string,
   data: Partial<FortuneLogType>
 ) => {
-  const collectionRef = getFortuneLogCollectionRef(companyID);
+  const collectionRef = getFortunesLogCollectionRef(companyID);
 
   const storeData: Partial<FortuneLogType> = { ...data };
   const res = await addDoc(collectionRef, { ...storeData }).catch((err) => {
@@ -27,7 +27,7 @@ export const addFortuneLog = async (
   });
 };
 
-export const getFortuneLogCollectionRef = (companyID: string) => {
+export const getFortunesLogCollectionRef = (companyID: string) => {
   const collectionRef = collection(
     db,
     COMPANY_COLLECTION,
@@ -36,4 +36,18 @@ export const getFortuneLogCollectionRef = (companyID: string) => {
   );
 
   return collectionRef;
+};
+
+export const fetchFortuneLogs = async (companyID: string) => {
+  const collectionRef = getFortunesLogCollectionRef(companyID);
+  const snapshots = await getDocs(collectionRef);
+  if (snapshots === null) return [];
+  const documents = snapshots.docs.map((document) => {
+    const data = document.data();
+    const id = document.id;
+
+    return { ...data, id };
+  });
+
+  return documents;
 };
