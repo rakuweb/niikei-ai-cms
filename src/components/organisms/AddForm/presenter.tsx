@@ -35,7 +35,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_posts?: boolean;
+    is_auto_patrol?: boolean;
   };
   id?: string;
 };
@@ -47,7 +47,7 @@ export const schema = z.object({
   interval1: z.string().min(1, '入力してください'),
   interval2: z.string(),
   is_notified: z.boolean(),
-  is_renewal: z.boolean(),
+  is_auto_patrol: z.boolean(),
 });
 type Schema = z.infer<typeof schema>;
 
@@ -68,7 +68,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       interval1: '',
       interval2: '',
       is_notified: false,
-      is_renewal: false,
+      is_auto_patrol: false,
     },
   });
   const [categories, setCategories] = useState<string[]>([
@@ -114,7 +114,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setValue('interval2', data.interval2);
     }
     setValue('is_notified', data?.is_notified || false);
-    setValue('is_renewal', data?.is_renewal || false);
+    setValue('is_auto_patrol', data?.is_auto_patrol || false);
   }, [
     data?.name,
     data?.url,
@@ -123,7 +123,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     data?.interval1,
     data?.interval2,
     data?.is_notified,
-    data?.is_renewal,
+    data?.is_auto_patrol,
     setValue,
   ]);
 
@@ -276,7 +276,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           <FormLabel>
             <NameLabel2 name="自動処理" />
             <Switch
-              {...register('is_renewal')}
+              {...register('is_auto_patrol')}
               sx={{
                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
                   backgroundColor: '#49BAC0',

@@ -8,6 +8,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { InternalLink } from 'components/links/InternalLink';
 import * as admin from 'firebase-admin';
 import { SitesTable } from 'components/organisms/SitesTable';
+import { AutoPostSitesTable } from '../organisms/AutoPostSitesTable';
 
 export type PresenterProps = {
   data?: {
@@ -21,7 +22,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_patrol?: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
   titles2?: string;
@@ -42,17 +43,9 @@ export const Presenter: FC<PresenterProps> = ({
             <Breadcrumbs pagename1={titles2} pagename2={titles} />
             <Flex justify={`space-between`}>
               <Title title={titles} />
-
-              <InternalLink href={'/crawlers/add'}>
-                <WideButton
-                  w={`${200 / 19.2}vw`}
-                  mt={`${13 / 19.2}vw`}
-                  text={`新規作成する`}
-                />
-              </InternalLink>
             </Flex>
 
-            <SitesTable data={data} urls={urls} />
+            <AutoPostSitesTable data={data} urls={urls} />
           </Text>
         </OutsideContainer>
       </Box>
