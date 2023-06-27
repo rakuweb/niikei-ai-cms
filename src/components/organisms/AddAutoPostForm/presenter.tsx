@@ -138,7 +138,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     try {
       const data: Partial<SiteType> = {
         ...formData,
-        url: id ? formData.url : `https://${formData.url}`,
+        url: id ? formData.url : `${formData.url}`,
       };
       if (id) {
         updateSites(companyID, id, data);
