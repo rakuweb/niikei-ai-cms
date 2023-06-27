@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { FC } from 'react';
 import { Text } from 'components/texts/Text';
-import { BoxProps, Flex } from '@chakra-ui/react';
+import { BoxProps, Flex, Img } from '@chakra-ui/react';
 import { Image } from 'components/images/Image';
 
 export type PresenterProps = BoxProps & {
@@ -25,21 +25,13 @@ export const Presenter: FC<PresenterProps> = ({ text, src, ...props }) => {
         transition: `0.3s`,
         filter: `opacity(80%)`,
       }}
+      as={'button'}
       {...props}
     >
       <Text letterSpacing={`0`} fontWeight={`400`} fontSize={`${20 / 19.2}vw`}>
         {text}
       </Text>
-      <Image
-        w={`${14 / 19.2}vw`}
-        h={`${14 / 19.2}vw`}
-        image={{
-          src: src,
-          width: 14,
-          height: 14,
-          alt: `右矢印`,
-        }}
-      />
+      <Img w={`0.8vw`} src="/svg/arrowRight.svg" />
     </Flex>
   );
 };
