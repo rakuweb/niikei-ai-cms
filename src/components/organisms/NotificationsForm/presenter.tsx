@@ -47,6 +47,7 @@ export const Presenter: FC<PresenterProps> = () => {
       fortuneNotification: data.fortune_notification,
     };
     setNotification(props);
+    alert('メール設定を更新しました。');
   };
 
   return (
@@ -56,6 +57,7 @@ export const Presenter: FC<PresenterProps> = () => {
         <Switch
           size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
           // isChecked={user.status || false}
+          {...methods.register('new_info_notification')}
           sx={{
             '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
               backgroundColor: '#49BAC0',
@@ -68,6 +70,7 @@ export const Presenter: FC<PresenterProps> = () => {
         <Switch
           size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
           // isChecked={user.status || false}
+          {...methods.register('auto_publish_notification')}
           sx={{
             '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
               backgroundColor: '#49BAC0',
@@ -80,6 +83,7 @@ export const Presenter: FC<PresenterProps> = () => {
         <Switch
           size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
           // isChecked={user.status || false}
+          {...methods.register('fortune_notification')}
           sx={{
             '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
               backgroundColor: '#49BAC0',
