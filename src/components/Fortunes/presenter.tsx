@@ -7,9 +7,10 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
-import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { FortunesTable } from '../organisms/FortunesTable';
 import { Timestamp } from 'firebase/firestore';
+import { InternalLink } from '../links/InternalLink';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -25,7 +26,6 @@ export type PresenterProps = {
 };
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `コンテンツ一覧`;
-  // console.log(data);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (newPage: number) => {
@@ -42,12 +42,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             <Flex justify={`space-between`}>
               <Title title={title} />
 
-              <WideButton
-                onClick={onOpen}
-                w={`${200 / 19.2}vw`}
-                mt={`${13 / 19.2}vw`}
-                text={`新規作成する`}
-              />
+              <InternalLink href={routes.fortunesUpload}>
+                <WideButton
+                  onClick={onOpen}
+                  w={`${200 / 19.2}vw`}
+                  mt={`${13 / 19.2}vw`}
+                  text={`アップロードする`}
+                />
+              </InternalLink>
             </Flex>
 
             <ContentContainer h={`${702 / 19.2}vw`}>

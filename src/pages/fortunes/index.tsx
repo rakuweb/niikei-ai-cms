@@ -7,7 +7,6 @@ import { auth, db } from '@/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   Timestamp,
-  DocumentReference,
   doc,
   getDoc,
   collection,
