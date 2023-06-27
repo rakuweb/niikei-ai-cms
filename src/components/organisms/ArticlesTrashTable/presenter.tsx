@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+import { updateDoc } from 'firebase/firestore';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -132,7 +133,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
       await deleteDoc(companyEmployeeDocRef);
     } else {
-      console.log('指定したユーザー情報が存在しません');
+      console.log('指定した情報が存在しません');
     }
 
     window.alert('選択項目を削除しました');
@@ -143,12 +144,76 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   // DropDown
   const [selectedValue, setSelectedValue] = useState('');
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     if (selectedValue === 'まとめて削除する') {
       handleDeleteSelected();
     }
+    if (selectedValue === 'まとめて元に戻す') {
+      const selectedUrls = Object.keys(selectedItems).filter(
+        (url) => selectedItems[url]
+      );
+      if (!window.confirm('本当に元に戻しますか？')) {
+        return;
+      }
+
+      const userDocRef = doc(db, 'users', id);
+      const userDoc = await getDoc(userDocRef);
+      const refFieldString = userDoc.data().company_ref;
+
+      for (const url of selectedUrls) {
+        const index = data.findIndex((item) => item.url === url);
+        const document_id = data[index]?.document_id;
+
+        const companyEmployeeDocRef = doc(
+          refFieldString,
+          'articles',
+          document_id
+        );
+        const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+        if (userDoc.exists() && companyEmployeeDoc.exists()) {
+          await updateDoc(companyEmployeeDocRef, {
+            status: 'editing',
+          });
+        } else {
+          console.log('指定した情報が存在しません');
+        }
+      }
+
+      window.alert('選択項目を元に戻しました');
+      location.reload();
+    }
   };
   // DropDown
+
+  // 元に戻す
+  const handleRevertToEditing = async (url: string) => {
+    if (!window.confirm('下書きに戻しますか？')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
+    console.log(refFieldString);
+    const index = data.findIndex((item) => item.url === url);
+    const document_id = data[index]?.document_id;
+
+    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
+    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+    if (userDoc.exists() && companyEmployeeDoc.exists()) {
+      await updateDoc(companyEmployeeDocRef, {
+        status: 'editing',
+      });
+    } else {
+      console.log('指定したユーザー情報が存在しません');
+    }
+
+    window.alert('下書きに戻しました');
+    location.reload();
+  };
+  // 元に戻す
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -286,12 +351,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.url || ''}`}>
-                                <WideButton
-                                  text={`編集する`}
-                                  w={`${140 / 19.2}vw`}
-                                />
-                              </ExternalLink>
+                              <WideButton
+                                text={`元に戻す`}
+                                w={`${140 / 19.2}vw`}
+                                onClick={() =>
+                                  handleRevertToEditing(data?.url || '')
+                                }
+                              />
+
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}

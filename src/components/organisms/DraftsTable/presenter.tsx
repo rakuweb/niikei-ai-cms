@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+import { updateDoc } from 'firebase/firestore';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -64,7 +65,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const selectedUrls = Object.keys(selectedItems).filter(
       (url) => selectedItems[url]
     );
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
@@ -73,14 +74,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const refFieldString = userDoc.data().company_ref;
 
     for (const url of selectedUrls) {
-      await fetch('/api/delete-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ urls: [url] }),
-      });
-
       const index = data.findIndex((item) => item.url === url);
       const document_id = data[index]?.document_id;
 
@@ -92,36 +85,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
       if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(companyEmployeeDocRef);
+        await updateDoc(companyEmployeeDocRef, {
+          status: 'is_deleted',
+        });
       } else {
-        console.log('指定したユーザー情報が存在しません');
+        console.log('指定した情報が存在しません');
       }
     }
 
-    window.alert('選択項目を削除しました');
+    window.alert('ゴミ箱へ移動しました');
     location.reload();
 
     setSelectedItems({});
   };
+
   // DeleteSelected
 
   // single
   const handleDeleteSingle = async (url: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
     const userDocRef = doc(db, 'users', id);
     const userDoc = await getDoc(userDocRef);
     const refFieldString = userDoc.data().company_ref;
-
-    await fetch('/api/delete-document', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ urls: [url] }),
-    });
 
     const index = data.findIndex((item) => item.url === url);
     const document_id = data[index]?.document_id;
@@ -130,14 +118,17 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
-      await deleteDoc(companyEmployeeDocRef);
+      await updateDoc(companyEmployeeDocRef, {
+        status: 'is_deleted',
+      });
     } else {
-      console.log('指定したユーザー情報が存在しません');
+      console.log('指定した情報が存在しません');
     }
 
-    window.alert('選択項目を削除しました');
+    window.alert('ゴミ箱へ移動しました');
     location.reload();
   };
+
   // single
 
   // DropDown
