@@ -8,6 +8,7 @@ import { WideButton } from '@/components/Button/WideButton';
 import { useAccountStore } from '@/features/account';
 import { updateEmployee } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
+import { BigWideButton } from '@/components/Button/BigWideButton';
 
 export type StyleProps = Record<string, unknown>;
 export type PresenterProps = StyleProps;
@@ -52,10 +53,11 @@ export const Presenter: FC<PresenterProps> = () => {
 
   return (
     <Box as={`form`} onSubmit={methods.handleSubmit(submitHandler)}>
-      <Box mb={'1vw'}>
+      <Box mb={'1.5vw'}>
         <Text fontSize={'1vw'}>自動巡回機能の記事更新通知</Text>
+        <Box mb={'0.5vw'} />
         <Switch
-          size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
+          size={{ lg: `md`, xl: `lg`, '2xl': `lg` }}
           // isChecked={user.status || false}
           {...methods.register('new_info_notification')}
           sx={{
@@ -65,10 +67,11 @@ export const Presenter: FC<PresenterProps> = () => {
           }}
         />
       </Box>
-      <Box mb={'1vw'}>
+      <Box mb={'1.5vw'}>
         <Text fontSize={'1vw'}>自動投稿機能の公開通知</Text>
+        <Box mb={'0.5vw'} />
         <Switch
-          size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
+          size={{ lg: `md`, xl: `lg`, '2xl': `lg` }}
           // isChecked={user.status || false}
           {...methods.register('auto_publish_notification')}
           sx={{
@@ -78,10 +81,11 @@ export const Presenter: FC<PresenterProps> = () => {
           }}
         />
       </Box>
-      <Box mb={'1vw'}>
+      <Box mb={'1.5vw'}>
         <Text fontSize={'1vw'}>オリジナルコンテンツ配信機能の公開通知</Text>
+        <Box mb={'0.5vw'} />
         <Switch
-          size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
+          size={{ lg: `md`, xl: `lg`, '2xl': `lg` }}
           // isChecked={user.status || false}
           {...methods.register('fortune_notification')}
           sx={{
@@ -92,7 +96,7 @@ export const Presenter: FC<PresenterProps> = () => {
         />
       </Box>
 
-      <WideButton text={`保存する`} w={`${140 / 19.2}vw`} />
+      <BigWideButton text={`保存する`} w={`14vw`} src={''} />
     </Box>
   );
 };
