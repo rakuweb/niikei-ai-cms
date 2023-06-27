@@ -19,7 +19,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
-import { doc, getDoc, deleteDoc } from '@firebase/firestore';
+import { doc, getDoc } from '@firebase/firestore';
 import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -89,7 +89,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           status: 'is_deleted',
         });
       } else {
-        console.log('指定した情報が存在しません');
+        alert(
+          'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+        );
+        return;
       }
     }
 
@@ -122,7 +125,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         status: 'is_deleted',
       });
     } else {
-      console.log('指定した情報が存在しません');
+      alert(
+        'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+      );
+      return;
     }
 
     window.alert('ゴミ箱へ移動しました');
@@ -251,10 +257,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                    {
-                                      backgroundColor: '#49BAC0',
-                                      borderColor: `#49BAC0`,
-                                    },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>

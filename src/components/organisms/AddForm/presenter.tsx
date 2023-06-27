@@ -52,7 +52,6 @@ export const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const Presenter: FC<PresenterProps> = ({ data, id }) => {
-  console.log(id);
   const {
     register,
     handleSubmit,
@@ -79,6 +78,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const companyID = useCompanyStore(selectUid);
 
   useEffect(() => {
+    // TODO
     const handler = async () => {
       const url = apiRoutes.wpCategories;
       const res = await axios.get(url).catch((err) => {
@@ -134,6 +134,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     try {
       const data: Partial<SiteType> = {
         ...formData,
+        // NOTE
         url: id ? formData.url : `${formData.url}`,
       };
       if (id) {
