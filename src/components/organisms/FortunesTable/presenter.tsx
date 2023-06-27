@@ -133,14 +133,14 @@ export const Presenter: FC<PresenterProps> = () => {
                           // isChecked={user.status || false}
                           sx={{
                             '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                            {
-                              backgroundColor: '#49BAC0',
-                            },
+                              {
+                                backgroundColor: '#49BAC0',
+                              },
                           }}
                           onChange={(e) =>
                             handleSwitchChange(log.id, e.target.checked)
                           }
-                          defaultChecked={log.used}
+                          isChecked={log.used}
                         />
                       )}
                     </Td>
