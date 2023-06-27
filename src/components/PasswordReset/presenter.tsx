@@ -78,7 +78,7 @@ export const Presenter: FC<PresenterProps> = () => {
           パスワードリセットメールを送信
         </Box>
         <InternalLink
-          href={''}
+          href={'/signin'}
           fontSize={'1vw'}
           fontWeight={'bold'}
           mt={'1vw'}
