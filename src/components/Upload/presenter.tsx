@@ -13,7 +13,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { uploadImages } from '@/lib/wordpress';
-import { addFortuneLog } from '@/firebase/firestore/fortuneLogs';
+import { addFortunesLog } from '@/firebase/firestore/fortuneLogs';
 import { Timestamp } from 'firebase/firestore';
 import { useCompanyStore, selectUid } from 'features/company';
 
@@ -80,7 +80,7 @@ export const Presenter: FC = () => {
       date: Timestamp.now(),
       wp_id: resWpData?.id ?? ``,
     };
-    const resFirestore = await addFortuneLog(companyID, reqData);
+    const resFirestore = await addFortunesLog(companyID, reqData);
 
     reset();
     setSelectedFile(null);
