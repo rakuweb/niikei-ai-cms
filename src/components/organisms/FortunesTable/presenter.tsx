@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Box,
   Table,
@@ -8,8 +8,6 @@ import {
   Th,
   Td,
   TableContainer,
-  Checkbox,
-  Flex,
   Switch,
 } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
@@ -19,6 +17,13 @@ import { InternalLink } from 'components/links/InternalLink';
 import { css } from '@emotion/react';
 import { Timestamp } from 'firebase/firestore';
 import dayjs from 'dayjs';
+import { selectUid, useCompanyStore } from '@/features/company';
+import {
+  FortunesLogType,
+  deleteFortunesLogs,
+  fetchFortunesLogs,
+  updateFortunesLog,
+} from '@/firebase/firestore/fortuneLogs';
 
 export type PresenterProps = {
   data?: {
@@ -32,13 +37,70 @@ export type PresenterProps = {
   }[];
   currentPage: any;
 };
-export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const url = '/settings/users';
+export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;
+  const [list, setList] = useState<FortunesLogType[]>([]);
+  const companyID = useCompanyStore(selectUid);
 
   const handleDelete = async (id: string) => {
     console.log('Handle delete for id:', id);
+    await deleteFortunesLogs(companyID, id).catch((err) => {
+      console.error(err);
+      alert('削除に失敗しました。時間経ってからもう一度お試しください。');
+    });
   };
+  const handleSwitchChange = async (id: string, used: boolean) => {
+    const checkOnly = (id: string) => {
+      const group = document.querySelectorAll('.used_checkbox');
+      group.forEach((elem: HTMLInputElement) => {
+        if (elem.id === `switch-${id}`) {
+          elem.checked = true;
+        } else {
+          elem.checked = false;
+        }
+      });
+    };
+    const usedList = list.filter((log) => !!log.used);
+    if (usedList.length === 1 && usedList[0].id === id) {
+      alert('現在使用されている画像です。');
+      checkOnly(id);
+      return;
+    }
+    await updateFortunesLog({ companyID, fortunesLogID: id }, { used });
+    await updateFortunesLog(
+      { companyID, fortunesLogID: usedList[0].id },
+      { used: !usedList[0].used }
+    );
+    setList((prev) => {
+      const next = prev.map((log) => {
+        if (log.id === id) {
+          return { ...log, used: used };
+        } else if (log.id === usedList[0].id) {
+          return { ...log, used: false };
+        } else {
+          return log;
+        }
+      });
+
+      return next;
+    });
+    checkOnly(id);
+  };
+
+  useEffect(() => {
+    const handler = async () => {
+      const res = await fetchFortunesLogs(companyID).catch((err) => {
+        console.error(err);
+        return null;
+      });
+      if (res === null) return;
+
+      setList(res);
+    };
+
+    handler();
+  }, []);
+
   return (
     <>
       <Box>
@@ -47,7 +109,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             <Table>
               <Thead>
                 <Tr css={thstyles}>
-                  <Th w={`${70 / 19.2}vw`}>自動処理</Th>
+                  <Th w={`${70 / 19.2}vw`}>画像選択</Th>
                   <Th w={`${100 / 19.2}vw`}>日時</Th>
                   <Th w={`${400 / 19.2}vw`}>タイトル</Th>
                   <Th w={`${400 / 19.2}vw`}>お知らせ</Th>
@@ -56,36 +118,46 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               </Thead>
 
               <Tbody>
-                {data.map((user, index) => (
+                {list.map((log, index) => (
                   <Tr key={index} css={tdstyles}>
                     <Td
                       w={`${52 / 19.2}vw`}
                       h={`${59 / 19.2}vw`}
                       borderLeft={`1px`}
                     >
-                      <Switch
-                        size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                        // isChecked={user.status || false}
-                        sx={{
-                          '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                            {
-                              backgroundColor: '#49BAC0',
-                            },
-                        }}
-                      />
+                      {log.filename && (
+                        <Switch
+                          className={`used_checkbox`}
+                          id={`switch-${log.id}`}
+                          size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
+                          // isChecked={user.status || false}
+                          sx={{
+                            '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
+                              {
+                                backgroundColor: '#49BAC0',
+                              },
+                          }}
+                          onChange={(e) =>
+                            handleSwitchChange(log.id, e.target.checked)
+                          }
+                          isChecked={log.used}
+                        />
+                      )}
                     </Td>
-                    <Td>
-                      {dayjs(user.created_at.toDate()).format('YYYY/MM/DD')}
-                    </Td>
-                    <Td>{user.title}</Td>
-                    <Td>{user.content}</Td>
+                    <Td>{dayjs(log.date.toDate()).format('YYYY/MM/DD')}</Td>
+                    <Td>{log.title}</Td>
+                    <Td>{log.message}</Td>
 
                     <Td>
                       <Box display={'flex'} justifyContent={'space-around'}>
                         <InternalLink href={``}>
                           <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
                         </InternalLink>
-                        <GrayButton text={`削除する`} w={`${140 / 19.2}vw`} />
+                        <GrayButton
+                          onClick={() => handleDelete(log.id)}
+                          text={`削除する`}
+                          w={`${140 / 19.2}vw`}
+                        />
                       </Box>
                     </Td>
                   </Tr>
