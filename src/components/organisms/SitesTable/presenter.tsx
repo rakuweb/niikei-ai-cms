@@ -117,9 +117,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isChecked={data?.is_auto_patrol || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>
@@ -137,7 +137,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               {data?.name || ''}
                             </Box>
                           </Td>
-                          <Td>{data?.url || ''}</Td>
+                          {/* NOTE */}
+                          <Td>{data?.url ? `https://${data.url}` : ''}</Td>
+
                           <Td>
                             {data?.interval1 || ''}
                             {data?.interval2 || ''}
@@ -150,9 +152,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>

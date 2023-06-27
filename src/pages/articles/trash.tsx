@@ -2,10 +2,10 @@ import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
 import { Sidebar } from 'components/Sidebar';
 import { useEffect, useState } from 'react';
-import { Drafts } from 'components/Drafts';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
 import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
 import { DocumentData } from 'firebase/firestore';
+import { ArticlesTrash } from '@/components/ArticlesTrash';
 
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<DocumentData[]>([]);
@@ -38,7 +38,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Drafts data={data} titles={'ゴミ箱'} />
+        <ArticlesTrash data={data} titles={'ゴミ箱'} />
       </Box>
     </>
   );

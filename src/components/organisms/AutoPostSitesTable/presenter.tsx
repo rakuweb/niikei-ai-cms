@@ -137,7 +137,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               {data?.name || ''}
                             </Box>
                           </Td>
-                          <Td>{data?.url || ''}</Td>
+                          {/* NOTE */}
+                          <Td>{data?.url ? `https://${data.url}` : ''}</Td>
+
                           <Td>
                             {data?.interval1 || ''}
                             {data?.interval2 || ''}
