@@ -21,7 +21,7 @@ export type SiteType = {
   category: string;
   is_notified: boolean;
   is_renewal: boolean;
-  is_auto_posts: boolean;
+  is_auto_patrol: boolean;
   previous_structure: Map<string, string>;
 };
 

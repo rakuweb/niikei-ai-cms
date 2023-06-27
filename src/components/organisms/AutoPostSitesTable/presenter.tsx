@@ -44,7 +44,7 @@ export type PresenterProps = {
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;
-    is_auto_patrol?: boolean;
+    is_auto_posts?: boolean;
   }[];
   titles?: string;
   urls?: string;
@@ -114,7 +114,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_auto_patrol || false}
+                              isChecked={data?.is_auto_posts || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                   {

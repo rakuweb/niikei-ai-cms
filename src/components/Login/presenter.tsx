@@ -82,6 +82,7 @@ export const Presenter: FC<PresenterProps> = () => {
         role: employee.role,
         newInfoNotification: employee.new_info_notification,
         autoPublishNotification: employee.auto_publish_notification,
+        fortuneNotification: employee.fortune_notification,
         notifications: employee.notifications,
       };
       setAccount(accountInfo);

@@ -2,21 +2,18 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import {
-  DocumentData,
   Timestamp,
   collection,
   doc,
   getDoc,
   getDocs,
-  query,
-  where,
 } from 'firebase/firestore';
 
 import { Sidebar } from 'components/Sidebar';
-import { Sites } from 'components/Sites';
 import { auth, db } from '@/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/router';
+import { AitoPostSites } from '@/components/AitoPostSites';
 
 type UserData = {
   id: string;
@@ -84,7 +81,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Sites
+        <AitoPostSites
           data={data}
           titles={'登録サイト一覧'}
           titles2={'自動投稿管理'}
