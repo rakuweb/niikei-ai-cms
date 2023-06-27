@@ -136,6 +136,7 @@ export const Presenter: FC<PresenterProps> = () => {
             fontWeight={`bold`}
             fontSize={`${36 / 19.2}vw`}
             lineHeight={`${49 / 19.2}vw`}
+            mb={`2.3vw`}
             textAlign={`center`}
           >
             管理者ログイン
@@ -150,13 +151,14 @@ export const Presenter: FC<PresenterProps> = () => {
             h={`${50 / 19.2}vw`}
             fontSize={`${16 / 19.2}vw`}
             borderRadius={`0`}
+            mb={'1.2vw'}
           />
           {errorEmail && <Box color={'red'}>{errorEmail}</Box>}
         </Box>
 
         <Box mb={`${10 / 19.2}vw`}>パスワード</Box>
         <Box mb={`${30 / 19.2}vw`}>
-          <Box position="relative">
+          <Box position="relative" mb={`2.8vw`}>
             <Input
               type={showPassword ? 'text' : 'password'}
               value={password}
@@ -185,6 +187,7 @@ export const Presenter: FC<PresenterProps> = () => {
           w={`100%`}
           h={`${50 / 19.2}vw`}
           bg={`#49BAC0`}
+          color={`white`}
           justifyContent={`center`}
           alignItems={`center`}
           borderRadius={`${50 / 19.2}vw`}
