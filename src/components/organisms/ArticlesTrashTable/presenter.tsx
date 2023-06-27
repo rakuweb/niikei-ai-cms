@@ -18,7 +18,6 @@ import { css } from '@emotion/react';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
-import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc, deleteDoc } from '@firebase/firestore';
 import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';

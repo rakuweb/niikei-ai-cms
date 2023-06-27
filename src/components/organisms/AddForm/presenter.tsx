@@ -16,7 +16,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 
-import { WideButton } from 'components/Button/WideButton';
 import { NameLabel } from './NameLabel';
 import { NameLabel2 } from './NameLabel2';
 import { apiRoutes, routes } from 'constants/routes';
@@ -135,7 +134,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     try {
       const data: Partial<SiteType> = {
         ...formData,
-        url: id ? formData.url : `https://${formData.url}`,
+        url: id ? formData.url : `${formData.url}`,
       };
       if (id) {
         updateSites(companyID, id, data);
