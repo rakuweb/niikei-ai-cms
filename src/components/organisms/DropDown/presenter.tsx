@@ -25,7 +25,7 @@ export const Presenter: FC<PresenterProps> = ({
   };
 
   return (
-    <Flex alignItems={'center'}>
+    <Flex alignItems={'flex-end'}>
       <Select
         onChange={handleChange}
         value={selectedValue}
@@ -33,7 +33,7 @@ export const Presenter: FC<PresenterProps> = ({
         w={'10vw'}
         fontSize={'0.8vw'}
         borderRadius={'0'}
-        h={'2vw'}
+        h={'1.6vw'}
         bg={'white'}
       >
         {options.map((option, index) => (
@@ -45,11 +45,16 @@ export const Presenter: FC<PresenterProps> = ({
       <Button
         onClick={handleExecute}
         fontSize={'0.8vw'}
+        fontWeight={'400'}
         borderRadius={'2px'}
-        h={'2vw'}
+        h={'1.6vw'}
+        w={'2.6vw'}
         ml={'0.5vw'}
+        color={'#707070'}
+        bgColor={'#DEDEDE'}
+        border={'1px solid #707070'}
       >
-        実行
+        適応
       </Button>
     </Flex>
   );

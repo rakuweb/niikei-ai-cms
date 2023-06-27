@@ -26,6 +26,7 @@ import {
   updateSites,
 } from '@/firebase/firestore/registeredSites';
 import { useCompanyStore, selectUid } from 'features/company';
+import { BigWideButton } from '@/components/Button/BigWideButton';
 
 export type PresenterProps = {
   data?: {
@@ -159,10 +160,10 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       <Box
         as="form"
         onSubmit={handleSubmit(submitHandler)}
-        w={'40vw'}
+        w={'32vw'}
         color={'#222526'}
       >
-        <FormControl isInvalid={!!errors.name} mb={'1vw'}>
+        <FormControl isInvalid={!!errors.name} mb={'1.5vw'}>
           <FormLabel>
             <NameLabel name="登録名" />
             <Input
@@ -178,7 +179,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.url} mb={'1vw'}>
+        <FormControl isInvalid={!!errors.url} mb={'1.5vw'}>
           <FormLabel>
             <NameLabel name="URL" />
             <Flex alignItems={'center'}>
@@ -201,7 +202,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl mb={'1vw'}>
+        <FormControl mb={'1.5vw'}>
           <FormLabel>
             <NameLabel2 name="対象範囲(Xpath)" />
             <Input
@@ -219,7 +220,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.category} mb={'1vw'} w={'30vw'}>
+        <FormControl isInvalid={!!errors.category} mb={'1.5vw'} w={'20vw'}>
           <FormLabel>
             <NameLabel name="カテゴリ" />
             <Select
@@ -240,13 +241,13 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.interval1} mb={'1vw'} w={'30vw'}>
+        <FormControl isInvalid={!!errors.interval1} mb={'1.5vw'} w={'20vw'}>
           <FormLabel>
             <NameLabel name="巡回頻度" />
             <Flex mt={'0.5vw'} alignItems={'center'}>
               <Select
                 className="interval1"
-                placeholder="頻度を選択"
+                placeholder="--"
                 {...register('interval1', { required: true })}
                 borderRadius={'none'}
                 mr={'0.5vw'}
@@ -276,10 +277,12 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           )}
         </FormControl>
 
-        <FormControl mb={'1vw'}>
+        <FormControl mb={'1.5vw'}>
           <FormLabel>
             <NameLabel2 name="自動処理" />
+            <Box mb={'0.5vw'} />
             <Switch
+              size={{ lg: `md`, xl: `lg`, '2xl': `lg` }}
               {...register('is_auto_posts')}
               sx={{
                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
@@ -290,10 +293,12 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           </FormLabel>
         </FormControl>
 
-        <FormControl mb={'1vw'}>
+        <FormControl mb={'1.5vw'}>
           <FormLabel>
             <NameLabel2 name="通知の有無" />
+            <Box mb={'0.5vw'} />
             <Switch
+              size={{ lg: `md`, xl: `lg`, '2xl': `lg` }}
               {...register('is_notified')}
               sx={{
                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]': {
@@ -305,7 +310,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         </FormControl>
 
         <Box w={`${140 / 19.2}vw`}>
-          <WideButton text={`登録する`} w={`${140 / 19.2}vw`} />
+          <BigWideButton text={`登録する`} w={`15vw`} src={''} />
         </Box>
       </Box>
     </>

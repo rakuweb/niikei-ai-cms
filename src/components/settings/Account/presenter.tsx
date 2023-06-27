@@ -14,7 +14,7 @@ export const Presenter: FC = () => {
 
   return (
     <>
-      <Box bg={`#EAEAEA`} minH={`100vh`}>
+      <Box bg={`#EAEAEA`} h={'auto'} minH={`100vh`} pb={'2.5vw'}>
         <OutsideContainer>
           <Text>
             <Breadcrumbs pagename1={`設定`} pagename2={title} />

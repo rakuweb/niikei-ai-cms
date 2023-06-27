@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from 'src/firebase';
 import { Box, Input } from '@chakra-ui/react';
+import fs from 'fs';
+import { InternalLink } from 'components/links/InternalLink';
 
 // type layer
 export type StyleProps = Record<string, unknown>;
@@ -39,7 +41,10 @@ export const Presenter: FC<PresenterProps> = () => {
         fontSize={`${16 / 19.2}vw`}
         lineHeight={`${26 / 19.2}vw`}
       >
-        <Box mb={`${30 / 19.2}vw`}>
+        <Box mb={`2.5vw`}>
+          <Box mb={'0.5vw'} fontSize={'1vw'}>
+            メールアドレス
+          </Box>
           <Input
             type="email"
             value={email}
@@ -55,6 +60,7 @@ export const Presenter: FC<PresenterProps> = () => {
         </Box>
         <Box
           as="button"
+          color={'white'}
           type="submit"
           display={`flex`}
           w={`100%`}
@@ -71,6 +77,15 @@ export const Presenter: FC<PresenterProps> = () => {
         >
           パスワードリセットメールを送信
         </Box>
+        <InternalLink
+          href={'/signin'}
+          fontSize={'1vw'}
+          fontWeight={'bold'}
+          mt={'1vw'}
+          color={'#444857'}
+        >
+          ログインページはこちら
+        </InternalLink>
       </Box>
     </>
   );

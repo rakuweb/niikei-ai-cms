@@ -92,10 +92,10 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                       <Th w={`${52 / 19.2}vw`}>自動処理</Th>
                       <Th w={`${52 / 19.2}vw`}>カテゴリ</Th>
                       <Th w={`${261 / 19.2}vw`}>登録名</Th>
-                      <Th w={`${617 / 19.2}vw`}>URL</Th>
+                      <Th w={`${500 / 19.2}vw`}>URL</Th>
                       <Th w={`${73 / 19.2}vw`}>巡回頻度</Th>
                       <Th w={`${61 / 19.2}vw`}>通知</Th>
-                      <Th w={`${140 / 19.2}vw`}>アクション</Th>
+                      <Th w={`${280 / 19.2}vw`}>アクション</Th>
                     </Tr>
                   </Thead>
 
@@ -204,6 +204,8 @@ const thstyles = css`
     letter-spacing: 0;
     border-color: #d6d6d6;
     padding: 0 ${20 / 19.2}vw ${12 / 19.2}vw;
+    color: #525d6b;
+    font-weight: 400;
   }
 `;
 
