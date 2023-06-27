@@ -173,10 +173,10 @@ export const Presenter: FC<PresenterProps> = () => {
 
         <FormControl isInvalid={!!errors.role} mb={'1vw'}>
           <FormLabel>
-            <NameLabel name="ユーザー権限" />
+            <NameLabel name="権限" />
             <Select
               mt={'0.5vw'}
-              placeholder="ユーザー権限を選択"
+              placeholder="権限を選択"
               {...register('role', { required: true })}
               borderRadius={'none'}
             >
@@ -185,7 +185,7 @@ export const Presenter: FC<PresenterProps> = () => {
             </Select>
           </FormLabel>
           <FormErrorMessage fontSize={'0.5vw'}>
-            ユーザー権限を選択してください
+            権限を選択してください
           </FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.password} mb={'1vw'}>
