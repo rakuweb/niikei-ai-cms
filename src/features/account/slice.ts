@@ -14,6 +14,7 @@ export const createAccountSlice: StateCreator<
   role: null,
   newInfoNotification: false,
   autoPublishNotification: false,
+  fortuneNotification: false,
   notifications: [],
 
   setAccount: (props) => {
@@ -28,7 +29,12 @@ export const createAccountSlice: StateCreator<
       role: '',
       newInfoNotification: false,
       autoPublishNotification: false,
+      fortuneNotification: false,
     };
+    set(() => ({ ...result }));
+  },
+  setNotification: (props) => {
+    const result = props;
     set(() => ({ ...result }));
   },
 });
