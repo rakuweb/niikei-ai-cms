@@ -174,7 +174,13 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                         </Td>
                         <Td>{user.name}</Td>
                         <Td>{user.email}</Td>
-                        <Td>{user.role}</Td>
+                        <Td>
+                          {user.role === 'editor'
+                            ? '編集者'
+                            : user.role === 'writer'
+                            ? '記者'
+                            : user.role}
+                        </Td>
 
                         <Td>
                           <Box display={'flex'} justifyContent={'space-around'}>
