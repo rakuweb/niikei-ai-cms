@@ -9,13 +9,13 @@ import { Timestamp } from 'firebase/firestore';
 
 export type PresenterProps = {
   data?: {
-    created_at: Timestamp;
-    message: string;
-    title: string;
-    status: string;
-    category: string;
-    url: string;
-    id: string;
+    created_at?: Timestamp;
+    message?: string;
+    title?: string;
+    status?: string;
+    category?: string;
+    url?: string;
+    id?: string;
   }[];
   titles: string;
 };

@@ -19,14 +19,14 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
 type UserData = {
-  created_at: Timestamp;
-  message: string;
-  title: string;
-  status: string;
-  category: string;
-  url: string;
-  site_ref: DocumentReference;
-  id: string;
+  created_at?: Timestamp;
+  message?: string;
+  title?: string;
+  status?: string;
+  category?: string;
+  url?: string;
+  site_ref?: DocumentReference;
+  id?: string;
 };
 
 const Home: NextPage = () => {
@@ -58,17 +58,17 @@ const Home: NextPage = () => {
               fetchedData.push({
                 ...docData,
                 id: doc.id,
-                category: siteData.category,
+                category: siteData?.category || '',
               });
             })
           );
           setData(fetchedData);
-          console.log(fetchedData);
         } else {
           router.push('/');
         }
       } catch (error) {
         window.alert(error);
+        console.log(error);
       }
     };
 
