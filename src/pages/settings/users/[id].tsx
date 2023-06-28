@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
@@ -55,7 +55,22 @@ const UserPage: NextPage = () => {
   }, [id]);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="#49BAC0"
+          size="xl"
+        />
+      </Box>
+    );
   }
 
   return (

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { Timestamp } from 'firebase/firestore';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';
@@ -68,7 +68,22 @@ const SitePage: NextPage = () => {
   };
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="#49BAC0"
+          size="xl"
+        />
+      </Box>
+    );
   }
 
   return (
