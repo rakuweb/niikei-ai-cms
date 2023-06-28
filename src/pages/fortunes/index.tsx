@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 
 import { Sidebar } from 'components/Sidebar';
 import { Fortunes } from '@/components/Fortunes';
@@ -74,7 +74,22 @@ const Home: NextPage = () => {
   }, []);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="#49BAC0"
+          size="xl"
+        />
+      </Box>
+    );
   }
 
   return (

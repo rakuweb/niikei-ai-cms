@@ -90,7 +90,7 @@ const Home: NextPage = () => {
           thickness="4px"
           speed="0.65s"
           emptyColor="gray.200"
-          color="blue.500"
+          color="#49BAC0"
           size="xl"
         />
       </Box>
