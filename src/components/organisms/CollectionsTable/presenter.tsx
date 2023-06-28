@@ -31,7 +31,6 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { user } from 'firebase-functions/v1/auth';
 import { getAuth } from 'firebase/auth';
 
 dayjs.extend(utc);
@@ -258,6 +257,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
             handleSetAllStandBy={handleSetAllStandBy}
+            options={['まとめて記事化する', 'まとめて削除する']}
           />
         </Box>
         <Pagination

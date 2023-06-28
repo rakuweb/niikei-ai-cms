@@ -245,6 +245,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             selectedValue={selectedValue}
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
+            options={['まとめて元に戻す', 'まとめて削除する']}
           />
         </Box>
         <Pagination

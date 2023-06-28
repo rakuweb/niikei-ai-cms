@@ -115,7 +115,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   const handleExecute = () => {
-    if (selectedValue === 'まとめて削除する' && handleDeleteSelectedItems) {
+    if (selectedValue === 'まとめて元に戻す' && handleDeleteSelectedItems) {
       handleDeleteSelectedItems();
     }
     if (selectedValue === 'まとめて記事化する' && handleSetAllStandBy) {
@@ -252,6 +252,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
             handleSetAllStandBy={handleSetAllStandBy}
+            options={['まとめて元に戻す', 'まとめて記事化する']}
           />
         </Box>
         <Pagination
