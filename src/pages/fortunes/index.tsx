@@ -22,6 +22,10 @@ type UserData = {
   image: string;
   url: string;
   id: string;
+  filename?: string;
+  used?: boolean;
+  date?: Timestamp;
+  message?: string;
 };
 
 const Home: NextPage = () => {

@@ -257,10 +257,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -313,6 +313,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             selectedValue={selectedValue}
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
+            options={['まとめて削除する']}
           />
         </Box>
         <Pagination
