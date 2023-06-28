@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Box, Flex, TableContainer, useDisclosure } from '@chakra-ui/react';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
@@ -17,8 +18,9 @@ export type PresenterProps = {
     name: string;
     id: string;
   }[];
-  currentPage: any;
+  currentPage: number;
 };
+
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `記事一覧`;
 
@@ -49,15 +51,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                 isOpen={isOpen}
                 onClose={onClose}
                 text={''}
-                setText={function (text: string): void {
-                  console.log('Function not implemented.');
+                setText={function(text: string): void {
+                  console.log('Function not implemented.:', text);
                 }}
               />
             </Flex>
 
             <ContentContainer h={`${702 / 19.2}vw`}>
               <TableContainer>
-                <ArticlesTable data={data} currentPage={currentPage as any} />
+                <ArticlesTable data={data} currentPage={currentPage} />
               </TableContainer>
             </ContentContainer>
 

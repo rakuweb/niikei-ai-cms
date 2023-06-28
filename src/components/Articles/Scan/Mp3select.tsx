@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { WideButton } from 'components/Button/WideButton';
-import { BigWideButton } from 'components/Button/BigWideButton';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
+
+import { WideButton } from 'components/Button/WideButton';
+import { BigWideButton } from 'components/Button/BigWideButton';
 import LordingComponent from './LordingComponent';
 
 const Mp3select = ({ setSelectedFileContent }) => {
@@ -52,7 +53,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
         console.log('Uploaded successfully!');
 
         const fixWavRes = await fetch(`/api/fix-wav?file=${fileName}`);
-        const json = await fixWavRes.json();
+        await fixWavRes.json();
 
         if (fixWavRes.ok) {
           console.log('Converted to wav successfully!');
@@ -170,7 +171,6 @@ const Mp3select = ({ setSelectedFileContent }) => {
       </Flex>
       {!isButtonActive ? (
         <BigWideButton
-          src="/images/button/rightarrow_gray.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
           bg={`#D6D6D6`}
@@ -179,7 +179,6 @@ const Mp3select = ({ setSelectedFileContent }) => {
       ) : (
         <BigWideButton
           onClick={handleClick}
-          src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
         />

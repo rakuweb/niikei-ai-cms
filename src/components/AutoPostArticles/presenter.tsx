@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { DraftsTable } from 'components/organisms/DraftsTable';
 import { AutoPostArticlesTable } from '../organisms/AutoPostArticlesTable';
 
 export type PresenterProps = {

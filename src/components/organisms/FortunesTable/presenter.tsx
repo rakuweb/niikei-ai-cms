@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Table,
@@ -35,10 +35,9 @@ export type PresenterProps = {
     url: string;
     id: string;
   }[];
-  currentPage: any;
+  currentPage: number;
 };
 export const Presenter: FC<PresenterProps> = () => {
-  const itemsPerPage = 10;
   const [list, setList] = useState<FortunesLogType[]>([]);
   const companyID = useCompanyStore(selectUid);
 
@@ -133,9 +132,9 @@ export const Presenter: FC<PresenterProps> = () => {
                           // isChecked={user.status || false}
                           sx={{
                             '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                              {
-                                backgroundColor: '#49BAC0',
-                              },
+                            {
+                              backgroundColor: '#49BAC0',
+                            },
                           }}
                           onChange={(e) =>
                             handleSwitchChange(log.id, e.target.checked)

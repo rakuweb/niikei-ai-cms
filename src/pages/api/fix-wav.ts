@@ -1,8 +1,12 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { Storage } from '@google-cloud/storage';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 
-export default async function convertHandler(req: any, res: any) {
+export default async function convertHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method } = req;
   if (method === 'GET') {
     const storage = new Storage({
@@ -11,7 +15,7 @@ export default async function convertHandler(req: any, res: any) {
     });
     const bucketName = 'niikei2';
     const bucket = storage.bucket(bucketName);
-    const file = bucket.file(req.query.file);
+    const file = bucket.file(req.query.file as string);
     const outputFileName = `${req.query.file}-fixed.wav`;
 
     ffmpeg(file.createReadStream())

@@ -29,7 +29,7 @@ export const Presenter: FC = () => {
   const title = `アップロードする`;
   const [selectedFile, setSelectedFile] = useState(null);
   const [file, setFile] = useState<File>();
-  const [selectedFileContent, setSelectedFileContent] = useState(null);
+  // const [selectedFileContent, setSelectedFileContent] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const {
@@ -45,7 +45,8 @@ export const Presenter: FC = () => {
   });
   const companyID = useCompanyStore(selectUid);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  // WARN
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setSelectedFile(acceptedFiles[0]);
     setButtonActive(true);
     setFile(acceptedFiles[0]);
@@ -57,15 +58,15 @@ export const Presenter: FC = () => {
     onDrop,
   });
 
-  const handleFileSelection = (selectedFile) => {
-    setSelectedFileContent(selectedFile);
-  };
+  // const handleFileSelection = (selectedFile) => {
+  //   setSelectedFileContent(selectedFile);
+  // };
   const submitHandler = async (data: Schema) => {
+    if (!file) return;
     setIsSending(true);
     // upload image
-    const contentType = ``;
-    const filename = ``;
-    const file = new Blob();
+    const contentType = file.type;
+    const filename = file.name;
     const res = await uploadImages({ contentType, filename, file });
 
     if (res === null) return;
@@ -80,7 +81,7 @@ export const Presenter: FC = () => {
       date: Timestamp.now(),
       wp_id: resWpData?.id ?? ``,
     };
-    const resFirestore = await addFortunesLog(companyID, reqData);
+    await addFortunesLog(companyID, reqData);
 
     reset();
     setSelectedFile(null);
@@ -166,7 +167,6 @@ export const Presenter: FC = () => {
                   </Flex>
                   {!isButtonActive ? (
                     <BigWideButton
-                      src="/images/button/rightarrow_gray.png"
                       text="アップロードする"
                       w={`${280 / 19.2}vw`}
                       bg={`#D6D6D6`}
@@ -175,7 +175,6 @@ export const Presenter: FC = () => {
                   ) : (
                     <BigWideButton
                       type={`submit`}
-                      src="/images/button/rightarrow.png"
                       text="アップロードする"
                       w={`${280 / 19.2}vw`}
                       as={`button`}

@@ -1,7 +1,11 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { google, drive_v3 } from 'googleapis';
 import { Readable } from 'stream';
 
-export default async function uploadHandler(req: any, res: any) {
+export default async function uploadHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method } = req;
   if (method === 'POST') {
     const base64String = await req.body;
@@ -28,7 +32,7 @@ export default async function uploadHandler(req: any, res: any) {
     try {
       const response = await drive.files.create({
         requestBody: {
-          name: req.query.file,
+          name: req.query.file as string,
           parents: ['1Y7wx5pBYOfliThVdr2wULSlYKYW_EWfX'],
         },
         media: media,

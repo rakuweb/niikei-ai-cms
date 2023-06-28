@@ -23,7 +23,7 @@ export type PresenterProps = {
   }[];
   titles?: string;
 };
-export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
+export const Presenter: FC<PresenterProps> = ({ titles }) => {
   const list = [
     {
       date: '2023/05/24',

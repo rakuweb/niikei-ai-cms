@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { WideButton } from '@/components/Button/WideButton';
 import { useAccountStore } from '@/features/account';
 import { updateEmployee } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
@@ -96,7 +95,7 @@ export const Presenter: FC<PresenterProps> = () => {
         />
       </Box>
 
-      <BigWideButton text={`保存する`} w={`14vw`} src={''} />
+      <BigWideButton text={`保存する`} w={`14vw`} />
     </Box>
   );
 };

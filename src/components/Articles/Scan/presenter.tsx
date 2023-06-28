@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
@@ -23,9 +24,9 @@ export const Presenter: FC = () => {
   const handleMP3ButtonClick = () => {
     setIsPDFSelected(false);
   };
-  const handleFileSelection = (selectedFile) => {
-    setSelectedFileContent(selectedFile);
-  };
+  // const handleFileSelection = (selectedFile) => {
+  //   setSelectedFileContent(selectedFile);
+  // };
 
   return (
     <>

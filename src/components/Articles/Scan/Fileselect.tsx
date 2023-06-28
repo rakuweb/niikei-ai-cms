@@ -167,7 +167,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
       </Flex>
       {!isButtonActive ? (
         <BigWideButton
-          src="/images/button/rightarrow_gray.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
           bg={`#D6D6D6`}
@@ -176,7 +175,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
       ) : (
         <BigWideButton
           onClick={handleClick}
-          src="/images/button/rightarrow.png"
           text="生成する"
           w={`${280 / 19.2}vw`}
         />

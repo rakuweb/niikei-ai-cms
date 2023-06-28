@@ -2,9 +2,8 @@ import { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
 import { Sidebar } from 'components/Sidebar';
 import { useEffect, useState } from 'react';
-import { Drafts } from 'components/Drafts';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
-import { fetchArticles, Status } from '@/firebase/firestore/autoPostArticles';
+import { fetchArticles } from '@/firebase/firestore/autoPostArticles';
 import { DocumentData } from 'firebase/firestore';
 import { AutoPostArticles } from '@/components/AutoPostArticles';
 

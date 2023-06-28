@@ -22,7 +22,7 @@ export type PresenterProps = {
     url: string;
     id: string;
   }[];
-  currentPage: any;
+  currentPage: number;
 };
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `コンテンツ一覧`;
@@ -32,7 +32,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
   return (
     <>
       <Box bg={`#EAEAEA`} h={`100%`} minH={`100vh`}>

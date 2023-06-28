@@ -17,7 +17,6 @@ export const useStore = create<Open>(
     }),
     {
       name: 'sidebar_storage',
-      getStorage: () => localStorage,
     }
   ) as unknown as StateCreator<Open>
 );

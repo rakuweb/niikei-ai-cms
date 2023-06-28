@@ -1,6 +1,6 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import admin from 'firebase-admin';
 import serviceAccount from 'niikei-39d3f-466153f0ce0d.json';
-import { db } from '../../../src/firebase';
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -9,7 +9,7 @@ if (!admin.apps.length) {
   });
 }
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     return res.status(400).send('Invalid request method');
   }

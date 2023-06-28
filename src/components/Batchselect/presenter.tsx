@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { FC } from 'react';
 import { Text } from 'components/texts/Text';
-import { Box, BoxProps, Flex, Select } from '@chakra-ui/react';
-import { Image } from 'components/images/Image';
+import { FlexProps, Flex, Select } from '@chakra-ui/react';
 
-export type PresenterProps = BoxProps;
+export type PresenterProps = FlexProps;
 
 export const Presenter: FC<PresenterProps> = ({ ...props }) => {
   return (

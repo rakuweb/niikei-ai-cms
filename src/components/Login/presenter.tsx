@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Input, IconButton } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { InternalLink } from 'components/links/InternalLink';
 import { Text } from 'components/texts/Text';

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Pagecircle } from './Pagecircle';
 // ページネーションコンポーネント
