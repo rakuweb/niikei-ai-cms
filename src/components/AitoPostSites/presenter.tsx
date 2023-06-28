@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+import { Timestamp } from 'firebase/firestore';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
-import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { InternalLink } from 'components/links/InternalLink';
-import * as admin from 'firebase-admin';
-import { SitesTable } from 'components/organisms/SitesTable';
 import { AutoPostSitesTable } from '../organisms/AutoPostSitesTable';
 
 export type PresenterProps = {
@@ -18,7 +16,7 @@ export type PresenterProps = {
     xpath?: string;
     interval1?: string;
     interval2?: string;
-    created_at?: admin.firestore.Timestamp;
+    created_at?: Timestamp;
     category?: string;
     is_notified?: boolean;
     is_renewal?: boolean;

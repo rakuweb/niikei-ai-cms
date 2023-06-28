@@ -1,9 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, DocumentReference } from 'firebase/firestore';
 import { db } from 'src/firebase';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
     return res.status(405).end(`Method ${req.method} not allowed`);
   }
@@ -12,12 +15,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const auth = getAuth();
     const { name, email, password, role, is_company, currentUserUid } =
       req.body;
-    const currentUser = auth.currentUser;
-    let userToken = '';
-    if (currentUser) {
-      const tokenResult = await currentUser.getIdTokenResult();
-      userToken = tokenResult.token;
-    }
+    // const currentUser = auth.currentUser;
+    // let userToken = '';
+    // if (currentUser) {
+    //   const tokenResult = await currentUser.getIdTokenResult();
+    //   userToken = tokenResult.token;
+    // }
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -26,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { user } = userCredential;
 
     const dataWithoutPassword = { name, email, role };
-    let companyDocRef;
+    let companyDocRef: DocumentReference;
     if (is_company) {
       companyDocRef = doc(db, 'companies', user.uid, 'employees', user.uid);
     } else {
@@ -58,4 +61,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.error('Error adding document: ', error);
     res.status(500).json({ error: 'Error creating user' });
   }
-};
+}

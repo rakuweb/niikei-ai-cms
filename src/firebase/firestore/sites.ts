@@ -48,7 +48,7 @@ export const addSites = async (companyID: string, data: Partial<SiteType>) => {
   const collectionRef = getSiteCollectionRef(companyID);
 
   const storeData: Partial<SiteType> = { ...data, created_at: Timestamp.now() };
-  const res = await addDoc(collectionRef, { ...storeData }).catch((err) => {
+  await addDoc(collectionRef, { ...storeData }).catch((err) => {
     console.error(err);
     throw err;
   });
@@ -61,7 +61,7 @@ export const updateSites = async (
   const docRef = doc(db, COMPANY_COLLECTION, companyID, SITE_COLLECTION, id);
 
   const updateData: Partial<SiteType> = { ...data };
-  const res = await updateDoc(docRef, updateData).catch((err) => {
+  await updateDoc(docRef, updateData).catch((err) => {
     console.error(err);
     throw err;
   });

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
 const IndexPage = () => {
@@ -6,7 +6,7 @@ const IndexPage = () => {
     defaultValues: { name: '', iconUrl: '' },
   });
   const [file, setFile] = useState<File>();
-  const handleChangeFile = (e: any) => {
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files[0]);
   };
   const uploadImg = useCallback(async (file: File) => {

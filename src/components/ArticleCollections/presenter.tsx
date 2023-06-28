@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+import { Timestamp } from 'firebase/firestore';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { CollectionsTable } from 'components/organisms/CollectionsTable';
-import { Timestamp } from 'firebase/firestore';
 import { ArticleCollectionsTable } from '../organisms/ArticleCollectionsTable';
 
 export type PresenterProps = {

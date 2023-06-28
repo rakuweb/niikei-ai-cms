@@ -5,8 +5,6 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
 import { UserTable } from 'components/organisms/UserTable';
 import { InternalLink } from 'components/links/InternalLink';
 
@@ -21,11 +19,12 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `ユーザ情報`;
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
+  // const handlePageChange = (newPage: number) => {
+  //   setCurrentPage(newPage);
+  // };
+
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>

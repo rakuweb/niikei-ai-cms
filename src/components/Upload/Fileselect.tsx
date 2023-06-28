@@ -6,11 +6,11 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 // import LordingComponent from './LordingComponent';
 
-const Fileselect = ({ setSelectedFileContent }) => {
+const Fileselect = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isButtonActive, setButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+  // const [uploadProgress, setUploadProgress] = useState(0); // 'eslint-disable-line
   const { handleSubmit } = useForm({
     defaultValues: { name: '', iconUrl: '' },
   });
@@ -19,7 +19,7 @@ const Fileselect = ({ setSelectedFileContent }) => {
   const handleClick = handleSubmit(async () => {
     if (file) {
       setIsLoading(true);
-      setUploadProgress(0);
+      // setUploadProgress(0);
     }
   });
 
@@ -81,7 +81,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
       </Flex>
       {!isButtonActive ? (
         <BigWideButton
-          src="/images/button/rightarrow_gray.png"
           text="アップロードする"
           w={`${280 / 19.2}vw`}
           bg={`#D6D6D6`}
@@ -90,7 +89,6 @@ const Fileselect = ({ setSelectedFileContent }) => {
       ) : (
         <BigWideButton
           onClick={handleClick}
-          src="/images/button/rightarrow.png"
           text="アップロードする"
           w={`${280 / 19.2}vw`}
         />

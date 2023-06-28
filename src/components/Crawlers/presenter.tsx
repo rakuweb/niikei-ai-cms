@@ -7,7 +7,6 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { CrawlerTable } from 'components/ContentTable/CrawlerTable';
-import { Pagination } from 'components/Pagination';
 
 export type PresenterProps = Record<string, unknown>;
 

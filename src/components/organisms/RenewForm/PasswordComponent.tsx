@@ -14,7 +14,6 @@ import { WideButton } from 'components/Button/WideButton';
 import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { auth } from 'src/firebase';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 import { PasswordPopupComponent } from './PasswordPopupComponent';

@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import { Box } from '@chakra-ui/react';
 
 import { Sidebar } from 'components/Sidebar';
-import { Collections } from 'components/Collections';
 import { auth, db } from '@/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {

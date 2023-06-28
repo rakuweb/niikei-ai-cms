@@ -39,8 +39,8 @@ export type User = {
 export const ARTICLE_COLLECTION = 'articles';
 
 export const fetchArticlesWhere = async (companyID: string, status: Status) => {
-  const docsRef = getArticleDocsRef(companyID);
-  const articleQuery = query(docsRef, where('status', '==', status));
+  const collectionRef = getArticleDocsRef(companyID);
+  const articleQuery = query(collectionRef, where('status', '==', status));
   const snapshots = await getDocs(articleQuery);
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
@@ -57,12 +57,12 @@ export const fetchArticlesWhere = async (companyID: string, status: Status) => {
 };
 
 export const getArticleDocsRef = (companyID: string) => {
-  const docsRef = collection(
+  const collectionRef = collection(
     db,
     COMPANY_COLLECTION,
     companyID,
     ARTICLE_COLLECTION
   );
 
-  return docsRef;
+  return collectionRef;
 };

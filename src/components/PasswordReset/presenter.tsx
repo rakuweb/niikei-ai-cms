@@ -1,8 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from 'src/firebase';
 import { Box, Input } from '@chakra-ui/react';
-import fs from 'fs';
 import { InternalLink } from 'components/links/InternalLink';
 
 // type layer
@@ -15,7 +14,7 @@ export const Presenter: FC<PresenterProps> = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const passwordReset = async (event) => {
+  const passwordReset = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       await sendPasswordResetEmail(auth, email);

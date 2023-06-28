@@ -45,7 +45,6 @@ const Read = ({ text }) => {
       <Flex justify={`space-between`}>
         {!isButtonActive ? (
           <BigWideButton
-            src="/images/button/rightarrow_gray.png"
             text="保存する"
             w={`${280 / 19.2}vw`}
             bg={`#D6D6D6`}
@@ -54,7 +53,6 @@ const Read = ({ text }) => {
         ) : (
           <BigWideButton
             onClick={downloadText}
-            src="/images/button/rightarrow_big.png"
             text="保存する"
             w={`${280 / 19.2}vw`}
             bg={`#8D9696`}
@@ -62,7 +60,6 @@ const Read = ({ text }) => {
           />
         )}
         <BigWideButton
-          src="/images/button/rightarrow_big.png"
           text="記事作成に進む"
           onClick={openPopup}
           w={`${280 / 19.2}vw`}

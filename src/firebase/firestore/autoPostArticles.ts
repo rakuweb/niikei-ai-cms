@@ -1,11 +1,4 @@
-import {
-  Timestamp,
-  collection,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+import { Timestamp, collection, getDoc, getDocs } from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';

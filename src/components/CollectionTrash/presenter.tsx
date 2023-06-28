@@ -4,7 +4,6 @@ import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
 import { CollectionsTrashTable } from '../organisms/CollectionsTrashTable';
 
