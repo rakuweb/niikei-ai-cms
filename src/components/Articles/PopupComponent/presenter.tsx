@@ -22,9 +22,15 @@ export type PresenterProps = {
   onClose: () => void;
   text: string;
   setText: (text: string) => void;
+  list: { id: string; name: string }[];
 };
 
-export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
+export const Presenter: FC<PresenterProps> = ({
+  isOpen,
+  onClose,
+  text,
+  list,
+}) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
 
@@ -104,12 +110,11 @@ export const Presenter: FC<PresenterProps> = ({ isOpen, onClose, text }) => {
                 value={category}
                 onChange={handleCategoryChange}
               >
-                <option value="ビジネス">ビジネス</option>
-                <option value="社会">社会</option>
-                <option value="政治">政治</option>
-                <option value="文化">文化</option>
-                <option value="生活">生活</option>
-                <option value="経済">経済</option>
+                {list.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
               </Select>
             </FormControl>
           </ModalBody>

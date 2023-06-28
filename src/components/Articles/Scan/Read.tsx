@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Textarea } from '@chakra-ui/react';
+import axios from 'axios';
+
 import { Text } from 'components/texts/Text';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { Popup } from '../PopupComponent';
+import { apiRoutes } from '@/constants/routes';
 
 const Read = ({ text }) => {
   const [isButtonActive, setButtonActive] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [popupText, setPopupText] = useState('');
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     setButtonActive(!!text);
     setPopupText(text);
@@ -28,6 +33,23 @@ const Read = ({ text }) => {
   const closePopup = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    const url = apiRoutes.wpCategories;
+    const handler = async () => {
+      const res = await axios.get(url);
+      const data = res.data;
+
+      setCategories(
+        data.categories.map((category) => ({
+          id: category.id,
+          name: category.name,
+        }))
+      );
+    };
+
+    handler();
+  }, []);
 
   return (
     <div>
@@ -69,6 +91,7 @@ const Read = ({ text }) => {
           onClose={closePopup}
           text={popupText}
           setText={setPopupText}
+          list={categories}
         />
       </Flex>
     </div>
