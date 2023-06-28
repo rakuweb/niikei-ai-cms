@@ -1,9 +1,7 @@
 import {
-  User,
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider,
-  EmailAuthCredential,
 } from 'firebase/auth';
 
 import { auth } from '.';

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Table,
@@ -37,7 +37,7 @@ export type PresenterProps = {
     url: string;
     id: string;
   }[];
-  currentPage: any;
+  currentPage: number;
 };
 export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;

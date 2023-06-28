@@ -30,7 +30,7 @@ export const addFortunesLog = async (
   const collectionRef = getFortunesLogCollectionRef(companyID);
 
   const storeData: Partial<FortunesLogType> = { ...data };
-  const res = await addDoc(collectionRef, { ...storeData }).catch((err) => {
+  await addDoc(collectionRef, { ...storeData }).catch((err) => {
     console.error(err);
     throw err;
   });

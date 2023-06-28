@@ -2,15 +2,13 @@
 import React, { FC } from 'react';
 import { Text } from 'components/texts/Text';
 import { BoxProps, Flex, Img } from '@chakra-ui/react';
-import { Image } from 'components/images/Image';
 
 export type PresenterProps = BoxProps & {
   text: string;
-  src: string;
   type?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ text, src, ...props }) => {
+export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
   return (
     <Flex
       color={`white`}

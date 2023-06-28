@@ -31,7 +31,7 @@ export type PresenterProps = {
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `コンテンツ一覧`;
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
   return (
     <>
       <Box bg={`#EAEAEA`} h={`100%`} minH={`100vh`}>

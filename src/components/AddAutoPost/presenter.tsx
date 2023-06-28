@@ -6,7 +6,6 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Timestamp } from 'firebase/firestore';
-import { AddForm } from 'components/organisms/AddForm';
 import { AddAutoPostForm } from '../organisms/AddAutoPostForm';
 
 export type PresenterProps = {

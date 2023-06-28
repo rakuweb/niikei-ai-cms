@@ -23,13 +23,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from '@/components/links/ExternalLink';
-import {
-  Timestamp,
-  deleteDoc,
-  doc,
-  getDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
 
@@ -196,10 +190,10 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                    {
-                                      backgroundColor: '#49BAC0',
-                                      borderColor: `#49BAC0`,
-                                    },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
                                 }}
                                 checked={selectedItems[data.id || '']}
                                 onChange={() =>

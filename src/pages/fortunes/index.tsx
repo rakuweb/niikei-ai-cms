@@ -10,8 +10,6 @@ import {
   doc,
   getDoc,
   collection,
-  query,
-  where,
   getDocs,
 } from 'firebase/firestore';
 import { useRouter } from 'next/router';

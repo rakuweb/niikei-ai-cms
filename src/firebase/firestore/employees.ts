@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import { db } from '..';
-import { COMPANY_COLLECTION, getCompanyDocRef } from './companies';
+import { COMPANY_COLLECTION } from './companies';
 import type { Role } from 'features/account';
 
 export type EmployeeType = {

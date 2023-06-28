@@ -310,7 +310,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         </FormControl>
 
         <Box w={`${140 / 19.2}vw`}>
-          <BigWideButton text={`登録する`} w={`15vw`} src={''} />
+          <BigWideButton text={`登録する`} w={`15vw`} />
         </Box>
       </Box>
     </>

@@ -9,7 +9,10 @@ if (!admin.apps.length) {
   });
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function loginUser(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === 'POST') {
     const { name, email, password, role, is_company, company_ref } = req.body;
     try {
@@ -48,4 +51,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     res.status(400).json({ error: 'Only POST requests are accepted' });
   }
-};
+}

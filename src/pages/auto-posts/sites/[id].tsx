@@ -5,7 +5,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { Timestamp } from 'firebase/firestore';
 import { Box } from '@chakra-ui/react';
-import { Add } from 'components/Add';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';

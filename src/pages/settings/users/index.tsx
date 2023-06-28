@@ -6,7 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 type UserData = {
   role: string;
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
       }
     };
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, () => {
       fetchUserData();
     });
 
