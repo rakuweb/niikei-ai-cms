@@ -39,19 +39,19 @@ dayjs.locale('ja');
 
 export type PresenterProps = {
   data?: {
-    created_at: Timestamp;
-    message: string;
-    title: string;
-    status: string;
-    category: string;
-    id: string;
-    url: string;
+    created_at?: Timestamp;
+    message?: string;
+    title?: string;
+    status?: string;
+    category?: string;
+    url?: string;
+    id?: string;
   }[];
 
   currentPage: number;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   const itemsPerPage = 10;
 
   const [selectedItems, setSelectedItems] = useState<{ [id: string]: boolean }>(
@@ -213,7 +213,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               'YYYY/MM/DD'
                             )}
                           </Td>
-                          <Td>{data.category || ''}</Td>
+                          <Td>{data?.category || ''}</Td>
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
 

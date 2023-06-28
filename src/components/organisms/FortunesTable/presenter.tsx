@@ -24,6 +24,8 @@ import {
   fetchFortunesLogs,
   updateFortunesLog,
 } from '@/firebase/firestore/fortuneLogs';
+import { ContentContainer } from '@/components/Container/ContentContainer';
+import { Pagination } from '@/components/Pagination';
 
 export type PresenterProps = {
   data?: {
@@ -41,6 +43,32 @@ export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;
   const [list, setList] = useState<FortunesLogType[]>([]);
   const companyID = useCompanyStore(selectUid);
+  const [displayList, setDisplayList] = useState<FortunesLogType[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (newPage: number) => {
+    const start = (newPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    setDisplayList(list.slice(start, end));
+
+    setCurrentPage(newPage);
+  };
+
+  useEffect(() => {
+    const handler = async () => {
+      const res = await fetchFortunesLogs(companyID).catch((err) => {
+        console.error(err);
+        return null;
+      });
+      if (res === null) return;
+
+      setList(res);
+
+      setDisplayList(res.slice(0, itemsPerPage));
+    };
+
+    handler();
+  }, []);
 
   const handleDelete = async (id: string) => {
     console.log('Handle delete for id:', id);
@@ -71,19 +99,29 @@ export const Presenter: FC<PresenterProps> = () => {
       { companyID, fortunesLogID: usedList[0].id },
       { used: !usedList[0].used }
     );
-    setList((prev) => {
-      const next = prev.map((log) => {
-        if (log.id === id) {
-          return { ...log, used: used };
-        } else if (log.id === usedList[0].id) {
-          return { ...log, used: false };
-        } else {
-          return log;
-        }
-      });
-
-      return next;
+    const res = await fetchFortunesLogs(companyID).catch((err) => {
+      console.error(err);
+      return null;
     });
+    if (res === null) return;
+
+    const newList = list.map((log) => {
+      if (log.id === id) {
+        const updatedLog = { ...log, used: used };
+        console.log('Updated log:', updatedLog);
+        return updatedLog;
+      } else if (log.id === usedList[0].id) {
+        return { ...log, used: false };
+      } else {
+        return log;
+      }
+    });
+    setList(newList);
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    setDisplayList(newList.slice(start, end));
+
     checkOnly(id);
   };
 
@@ -103,70 +141,85 @@ export const Presenter: FC<PresenterProps> = () => {
 
   return (
     <>
-      <Box>
-        <Text letterSpacing={`0`} fontSize={`${16 / 19.2}vw`}>
-          <TableContainer>
-            <Table>
-              <Thead>
-                <Tr css={thstyles}>
-                  <Th w={`${70 / 19.2}vw`}>画像選択</Th>
-                  <Th w={`${100 / 19.2}vw`}>日時</Th>
-                  <Th w={`${400 / 19.2}vw`}>タイトル</Th>
-                  <Th w={`${400 / 19.2}vw`}>お知らせ</Th>
-                  <Th w={`${140 / 19.2}vw`}>アクション</Th>
-                </Tr>
-              </Thead>
+      <ContentContainer h={`${702 / 19.2}vw`}>
+        <TableContainer>
+          <Box>
+            <Text letterSpacing={`0`} fontSize={`${16 / 19.2}vw`}>
+              <TableContainer>
+                <Table>
+                  <Thead>
+                    <Tr css={thstyles}>
+                      <Th w={`${70 / 19.2}vw`}>画像選択</Th>
+                      <Th w={`${100 / 19.2}vw`}>日時</Th>
+                      <Th w={`${400 / 19.2}vw`}>タイトル</Th>
+                      <Th w={`${400 / 19.2}vw`}>お知らせ</Th>
+                      <Th w={`${140 / 19.2}vw`}>アクション</Th>
+                    </Tr>
+                  </Thead>
 
-              <Tbody>
-                {list.map((log, index) => (
-                  <Tr key={index} css={tdstyles}>
-                    <Td
-                      w={`${52 / 19.2}vw`}
-                      h={`${59 / 19.2}vw`}
-                      borderLeft={`1px`}
-                    >
-                      {log.filename && (
-                        <Switch
-                          className={`used_checkbox`}
-                          id={`switch-${log.id}`}
-                          size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                          // isChecked={user.status || false}
-                          sx={{
-                            '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                              {
-                                backgroundColor: '#49BAC0',
-                              },
-                          }}
-                          onChange={(e) =>
-                            handleSwitchChange(log.id, e.target.checked)
-                          }
-                          isChecked={log.used}
-                        />
-                      )}
-                    </Td>
-                    <Td>{dayjs(log.date.toDate()).format('YYYY/MM/DD')}</Td>
-                    <Td>{log.title}</Td>
-                    <Td>{log.message}</Td>
+                  <Tbody>
+                    {displayList.map((log, index) => (
+                      <Tr key={index} css={tdstyles}>
+                        <Td
+                          w={`${52 / 19.2}vw`}
+                          h={`${59 / 19.2}vw`}
+                          borderLeft={`1px`}
+                        >
+                          {log.filename && (
+                            <Switch
+                              className={`used_checkbox`}
+                              id={`switch-${log.id}`}
+                              size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
+                              sx={{
+                                '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
+                              }}
+                              onChange={(e) =>
+                                handleSwitchChange(log.id, e.target.checked)
+                              }
+                              isChecked={log.used}
+                            />
+                          )}
+                        </Td>
+                        <Td>
+                          {log.date &&
+                            dayjs(log.date.toDate()).format('YYYY/MM/DD')}
+                        </Td>
+                        <Td>{log.title}</Td>
+                        <Td>{log.message}</Td>
 
-                    <Td>
-                      <Box display={'flex'} justifyContent={'space-around'}>
-                        <InternalLink href={``}>
-                          <WideButton text={`編集する`} w={`${140 / 19.2}vw`} />
-                        </InternalLink>
-                        <GrayButton
-                          onClick={() => handleDelete(log.id)}
-                          text={`削除する`}
-                          w={`${140 / 19.2}vw`}
-                        />
-                      </Box>
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </Text>
-      </Box>
+                        <Td>
+                          <Box display={'flex'} justifyContent={'space-around'}>
+                            <InternalLink href={``}>
+                              <WideButton
+                                text={`編集する`}
+                                w={`${140 / 19.2}vw`}
+                              />
+                            </InternalLink>
+                            <GrayButton
+                              onClick={() => handleDelete(log.id)}
+                              text={`削除する`}
+                              w={`${140 / 19.2}vw`}
+                            />
+                          </Box>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Text>
+          </Box>
+        </TableContainer>
+      </ContentContainer>
+      <Pagination
+        currentPage={currentPage}
+        totalData={list ? list.length : 0}
+        itemsPerPage={10}
+        handlePageChange={handlePageChange}
+      />
     </>
   );
 };

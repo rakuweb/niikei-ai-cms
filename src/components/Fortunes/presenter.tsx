@@ -21,16 +21,15 @@ export type PresenterProps = {
     image: string;
     url: string;
     id: string;
+    filename?: string;
+    used?: boolean;
+    date?: Timestamp;
+    message?: string;
   }[];
-  currentPage: any;
+  currentPage: number;
 };
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `コンテンツ一覧`;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -52,18 +51,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
               </InternalLink>
             </Flex>
 
-            <ContentContainer h={`${702 / 19.2}vw`}>
-              <TableContainer>
-                <FortunesTable data={data} currentPage={undefined} />
-              </TableContainer>
-            </ContentContainer>
-
-            <Pagination
-              currentPage={currentPage}
-              totalData={data ? data.length : 0}
-              itemsPerPage={10}
-              handlePageChange={handlePageChange}
-            />
+            <FortunesTable data={data} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>
