@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 import { WORDPRESS_URL } from 'constants/env';
-import { apiRoutes } from 'constants/routes';
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +13,7 @@ export default async function handler(
   }
 
   const url = WORDPRESS_URL
-    ? `${WORDPRESS_URL}${apiRoutes.wpCategories}`
+    ? `${WORDPRESS_URL}/wp-json/wp/v2/categories?per_page=100`
     : undefined;
   if (!url) {
     const categories = ['社会', '政治', '経済', '文化', '生活', 'ビジネス'];
@@ -27,10 +26,8 @@ export default async function handler(
 
   if (response === null) {
     const categories = ['社会', '政治', '経済', '文化', '生活', 'ビジネス'];
-    return res
-      .status(400)
-      .json({ error: `Invalid request data`, data: { categories } });
+    return res.status(400).json({ error: `Invalid request data`, categories });
   }
 
-  res.status(201).json({ data: { categories: response.data } });
+  res.status(201).json({ categories: response.data });
 }
