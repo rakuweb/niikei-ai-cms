@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, TableContainer, useDisclosure } from '@chakra-ui/react';
 
 import { Text } from 'components/texts/Text';
@@ -10,6 +10,8 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { Popup } from './PopupComponent';
+import { apiRoutes } from '@/constants/routes';
+import axios from 'axios';
 
 export type PresenterProps = {
   data?: {
@@ -23,14 +25,32 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `記事一覧`;
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [categories, setCategories] = useState([]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    const url = apiRoutes.wpCategories;
+    const handler = async () => {
+      const res = await axios.get(url);
+      const data = res.data;
+
+      setCategories(
+        data.categories.map((category) => ({
+          id: category.id,
+          name: category.name,
+        }))
+      );
+    };
+
+    handler();
+  }, []);
+
   return (
     <>
       <Box bg={`#EAEAEA`} h={`100vh`}>
@@ -54,6 +74,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                 setText={function(text: string): void {
                   console.log('Function not implemented.:', text);
                 }}
+                list={categories}
               />
             </Flex>
 
