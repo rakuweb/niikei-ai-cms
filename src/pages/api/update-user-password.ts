@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import serviceAccount from 'niikei-39d3f-466153f0ce0d.json';
+import serviceAccount from 'niikei-391305-335457312a7a.json';
 
 if (!admin.apps.length) {
   admin.initializeApp({
