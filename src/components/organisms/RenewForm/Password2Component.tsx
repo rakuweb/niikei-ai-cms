@@ -20,9 +20,7 @@ import { PasswordPopupComponent } from './PasswordPopupComponent';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 
 type FormData = {
-  currentPassword: string;
   password: string;
-  confirmPassword: string;
 };
 
 type PasswordComponentProps = PresenterProps & {
@@ -39,17 +37,11 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm<FormData>({
     mode: 'onChange',
   });
   const API_URL = '/api/update-user-password';
   const onSubmit = async (data: FormData) => {
-    if (data.password !== data.confirmPassword) {
-      window.alert('新しいパスワードと確認のパスワードが一致しません');
-      return;
-    }
-
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -58,7 +50,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         },
         body: JSON.stringify({
           uid: id,
-          currentPassword: data.currentPassword,
           newPassword: data.password,
         }),
       });
@@ -89,42 +80,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
       mb={'1.5vw'}
       className="password"
     >
-      <FormControl isInvalid={!!errors.currentPassword} mb={'1vw'}>
-        <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在のパスワード</Text>
-            <Box w={'65%'}>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="現在のパスワードを入力"
-                  {...register('currentPassword', {
-                    required: '現在のパスワードを入力してください',
-                  })}
-                  borderRadius={'none'}
-                />
-                <InputRightElement width="2.4vw">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
-                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                    onClick={() => setShowPassword(!showPassword)}
-                    h="1.4vw"
-                    variant="ghost"
-                    size="sm"
-                  />
-                </InputRightElement>
-              </InputGroup>
-              {errors.currentPassword && (
-                <FormErrorMessage fontSize={'0.5vw'}>
-                  {errors.currentPassword.message}
-                </FormErrorMessage>
-              )}
-            </Box>
-          </Flex>
-        </FormLabel>
-      </FormControl>
       <FormControl isInvalid={!!errors.password} mb={'1vw'}>
         <FormLabel>
           <Flex alignItems={'center'}>
@@ -165,51 +120,6 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
           </Flex>
         </FormLabel>
       </FormControl>
-      <FormControl isInvalid={!!errors.confirmPassword} mb={'1vw'}>
-        <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>パスワードの確認</Text>
-            <Box w={'65%'}>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="新しいパスワードを再度入力"
-                  {...register('confirmPassword', {
-                    required: 'パスワードを再度入力してください',
-                    validate: {
-                      matchesPreviousPassword: (value) => {
-                        const { password } = getValues();
-                        return (
-                          password === value || '新しいパスワードと一致しません'
-                        );
-                      },
-                    },
-                  })}
-                  borderRadius={'none'}
-                />
-                <InputRightElement width="2.4vw">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
-                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                    onClick={() => setShowPassword(!showPassword)}
-                    h="1.4vw"
-                    variant="ghost"
-                    size="sm"
-                  />
-                </InputRightElement>
-              </InputGroup>
-              {errors.confirmPassword && (
-                <FormErrorMessage fontSize={'0.5vw'}>
-                  {errors.confirmPassword.message}
-                </FormErrorMessage>
-              )}
-            </Box>
-          </Flex>
-        </FormLabel>
-      </FormControl>
-
       <Box
         as={'button'}
         w={`${140 / 19.2}vw`}

@@ -44,15 +44,16 @@ export default async function handler(
     const employeeDocRef = doc(db, 'users', user.uid);
 
     await setDoc(companyDocRef, dataWithoutPassword);
+    const companyRef = doc(db, 'companies', currentUserUid);
     await setDoc(employeeDocRef, {
       is_company: is_company,
-      company_ref: currentUserUid,
+      company_ref: companyRef,
     });
 
     if (!is_company) {
       await setDoc(employeeDocRef, {
         is_company: is_company,
-        company_ref: currentUserUid,
+        company_ref: companyRef,
       });
     }
 

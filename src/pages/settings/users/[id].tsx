@@ -31,13 +31,7 @@ const UserPage: NextPage = () => {
             const ref = employeeDocSnap.data()?.company_ref;
 
             if (ref) {
-              const companyDocRef = doc(
-                db,
-                'companies',
-                ref,
-                'employees',
-                id as string
-              );
+              const companyDocRef = doc(ref, 'employees', id as string);
               const companyDocSnap = await getDoc(companyDocRef);
 
               if (companyDocSnap.exists()) {
