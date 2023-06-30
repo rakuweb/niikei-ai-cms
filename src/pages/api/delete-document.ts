@@ -1,12 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { drive_v3, google } from 'googleapis';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 const deleteDocuments = async (req: NextApiRequest, res: NextApiResponse) => {
   const { urls } = req.body;
 
   try {
     const auth = new google.auth.GoogleAuth({
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: credentials,
+      // WARN:
+      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: ['https://www.googleapis.com/auth/drive'],
     });
 

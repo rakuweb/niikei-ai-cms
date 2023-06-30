@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
 
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -16,6 +17,7 @@ import { uploadImages } from '@/lib/wordpress';
 import { addFortunesLog } from '@/firebase/firestore/fortuneLogs';
 import { Timestamp } from 'firebase/firestore';
 import { useCompanyStore, selectUid } from 'features/company';
+import { apiRoutes } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -67,21 +69,25 @@ export const Presenter: FC = () => {
     // upload image
     const contentType = file.type;
     const filename = file.name;
-    const res = await uploadImages({ contentType, filename, file });
+    const formData = new FormData();
+    formData.append('contentType', contentType);
+    formData.append('filename', filename);
+    formData.append('file', file);
+    const res = await axios.post(apiRoutes.wpMedia, { ...formData, filename });
 
     if (res === null) return;
 
     // firestore
-    const resWpData = res.data();
-    const reqData = {
-      title: data.name,
-      url: resWpData?.url ?? ``,
-      file_name: filename,
-      message: `画像「${data.name}」をアップロードしました。`,
-      date: Timestamp.now(),
-      wp_id: resWpData?.id ?? ``,
-    };
-    await addFortunesLog(companyID, reqData);
+    // const resWpData = res.data();
+    // const reqData = {
+    //   title: data.name,
+    //   url: resWpData?.url ?? ``,
+    //   file_name: filename,
+    //   message: `画像「${data.name}」をアップロードしました。`,
+    //   date: Timestamp.now(),
+    //   wp_id: resWpData?.id ?? ``,
+    // };
+    // await addFortunesLog(companyID, reqData);
 
     reset();
     setSelectedFile(null);

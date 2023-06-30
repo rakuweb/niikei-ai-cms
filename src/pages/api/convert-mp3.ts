@@ -1,6 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as speech from '@google-cloud/speech';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -8,7 +14,7 @@ export default async function handler(
   if (req.query.file && req.method === 'POST') {
     const bucketName = 'niikei2';
     const fileName = 'mp3text';
-    const client = new speech.SpeechClient();
+    const client = new speech.SpeechClient({ credentials: credentials });
 
     // const storage = new Storage({
     //   projectId: process.env.GCP_PROJECT_ID,
