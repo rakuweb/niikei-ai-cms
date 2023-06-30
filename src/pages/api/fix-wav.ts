@@ -3,6 +3,12 @@ import { Storage } from '@google-cloud/storage';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 export default async function convertHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,7 +17,9 @@ export default async function convertHandler(
   if (method === 'GET') {
     const storage = new Storage({
       projectId: process.env.GCP_PROJECT_ID,
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: credentials,
+      // WARN:
+      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
     });
     const bucketName = 'niikei2';
     const bucket = storage.bucket(bucketName);

@@ -1,6 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Storage } from '@google-cloud/storage';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 export default async function uploadHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -8,8 +14,7 @@ export default async function uploadHandler(
   const { method } = req;
   if (method === 'POST') {
     const storage = new Storage({
-      projectId: process.env.GCP_PROJECT_ID,
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: credentials,
     });
     const bucketName = 'niikei2';
     const bucket = storage.bucket(bucketName);

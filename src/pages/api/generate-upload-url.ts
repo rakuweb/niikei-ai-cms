@@ -2,6 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { google, drive_v3 } from 'googleapis';
 import { Readable } from 'stream';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 export default async function uploadHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -15,7 +21,9 @@ export default async function uploadHandler(
     const drive: drive_v3.Drive = google.drive({
       version: 'v3',
       auth: new google.auth.GoogleAuth({
-        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+        credentials: credentials,
+        // WARN:
+        // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
         scopes: ['https://www.googleapis.com/auth/drive'],
       }),
     });
