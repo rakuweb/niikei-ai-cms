@@ -60,28 +60,28 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'45vw'}
+      w={'35vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="role"
     >
+      <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>
+        権限
+      </Box>
       <FormControl isInvalid={!!errors.role} mb={'1vw'}>
         <FormLabel>
-          {/* <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在の権限</Text>
-            <Text textAlign={'left'} w={'65%'}>
-              {role}
-            </Text>
-          </Flex> */}
           <Box>
-            <Flex alignItems={'center'}>
-              <Text w={'35%'}>変更後の権限</Text>
-              <Box w={'65%'}>
+            <Flex alignItems={'center'} mb={'1vw'}>
+              <Text w={'35%'} fontSize={'0.8vw'}>
+                ユーザー権限
+              </Text>
+              <Box w={'50%'}>
                 <Select
                   placeholder="権限を選択"
                   {...register('role', { required: true })}
                   borderRadius={'none'}
                   defaultValue={role}
+                  fontSize={'0.8vw'}
                 >
                   <option value="writer">記者</option>
                   <option value="editor">編集者</option>
@@ -94,8 +94,8 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
           </Box>
         </FormLabel>
       </FormControl>
-      <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
-        <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
+      <Box as={'button'} w={`10vw`} type="submit" mt={'1vw'}>
+        <WideButton text={`変更する`} w={`10vw`} />
       </Box>
     </Box>
   );

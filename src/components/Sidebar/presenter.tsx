@@ -27,6 +27,7 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const account = useAccountStore(selectAccountItem);
+
   const {
     siteManamgement,
     articleManagement,
@@ -61,7 +62,7 @@ export const Presenter: FC = () => {
     { text: '占い記事一覧', url: routes.fortunes },
   ];
   const settingSubPages = [
-    { text: 'アカウント情報', url: routes.settingsAccount },
+    { text: 'アカウント情報', url: '/settings/account/' + account.uid },
     ...(account.role === Role.Editor
       ? [
           { text: 'ユーザ一覧', url: routes.settingsUsers },
@@ -73,7 +74,7 @@ export const Presenter: FC = () => {
 
   const isOpen = useStore((state) => state.open);
   const toggleSidebar = useStore((state) => state.toggleOpen);
-  console.log(account.role);
+
   return (
     <>
       <Box position={'relative'} zIndex={'10'}>

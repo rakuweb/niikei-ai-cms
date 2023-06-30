@@ -16,6 +16,7 @@ import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
+import fs from 'fs';
 
 type FormData = {
   name: string;
@@ -65,27 +66,35 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'45vw'}
+      w={'35vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="name"
     >
+      <Box fontSize={'1vw'} mb={'0.5vw'}>
+        名前
+      </Box>
       <FormControl isInvalid={!!errors.name}>
         <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在の名前</Text>
-            <Text textAlign={'left'} w={'65%'}>
+          <Flex alignItems={'center'} mb={'1vw'}>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              現在の名前
+            </Text>
+            <Text textAlign={'left'} w={'65%'} fontSize={'0.8vw'}>
               {name}
             </Text>
           </Flex>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>変更後の名前</Text>
+          <Flex alignItems={'center'} mb={'1vw'}>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              変更後の名前
+            </Text>
             <Box w={'65%'}>
               <Input
                 type="text"
                 placeholder="名前を入力"
                 {...register('name', { required: true })}
                 borderRadius={'none'}
+                fontSize={'0.8vw'}
               />
               <FormErrorMessage fontSize={'0.5vw'}>
                 ユーザ名を入力してください
@@ -94,8 +103,8 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
           </Flex>
         </FormLabel>
       </FormControl>
-      <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
-        <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
+      <Box as={'button'} w={`10vw`} type="submit" mt={'1vw'}>
+        <WideButton text={`変更する`} w={`10vw`} />
       </Box>
     </Box>
   );

@@ -19,6 +19,7 @@ export const routes = {
   fortunes: `/fortunes`,
   fortunesUpload: `/fortunes/upload`,
   settingsAccount: `/settings/account`,
+  settingsAccountId: (id: string) => `/settings/account/${id}`,
   settingsUsers: `/settings/users`,
   settingsUsersNew: `/settings/users/new`,
   settingsUsersId: (id: string) => `/settings/users/${id}`,

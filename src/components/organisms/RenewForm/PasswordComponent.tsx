@@ -84,54 +84,24 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'45vw'}
+      w={'35vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="password"
     >
-      <FormControl isInvalid={!!errors.currentPassword} mb={'1vw'}>
-        <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在のパスワード</Text>
-            <Box w={'65%'}>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="現在のパスワードを入力"
-                  {...register('currentPassword', {
-                    required: '現在のパスワードを入力してください',
-                  })}
-                  borderRadius={'none'}
-                />
-                <InputRightElement width="2.4vw">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
-                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                    onClick={() => setShowPassword(!showPassword)}
-                    h="1.4vw"
-                    variant="ghost"
-                    size="sm"
-                  />
-                </InputRightElement>
-              </InputGroup>
-              {errors.currentPassword && (
-                <FormErrorMessage fontSize={'0.5vw'}>
-                  {errors.currentPassword.message}
-                </FormErrorMessage>
-              )}
-            </Box>
-          </Flex>
-        </FormLabel>
-      </FormControl>
+      <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>
+        パスワード
+      </Box>
       <FormControl isInvalid={!!errors.password} mb={'1vw'}>
         <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>変更後のパスワード</Text>
+          <Flex alignItems={'center'} mb={'1vw'}>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              変更後のパスワード
+            </Text>
             <Box w={'65%'}>
               <InputGroup>
                 <Input
+                  fontSize={'0.8vw'}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="パスワードを入力"
                   {...register('password', {
@@ -165,13 +135,17 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
           </Flex>
         </FormLabel>
       </FormControl>
+
       <FormControl isInvalid={!!errors.confirmPassword} mb={'1vw'}>
         <FormLabel>
           <Flex alignItems={'center'}>
-            <Text w={'35%'}>パスワードの確認</Text>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              パスワードの確認
+            </Text>
             <Box w={'65%'}>
               <InputGroup>
                 <Input
+                  fontSize={'0.8vw'}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="新しいパスワードを再度入力"
                   {...register('confirmPassword', {
@@ -215,8 +189,9 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         w={`${140 / 19.2}vw`}
         type="submit"
         onClick={handlePasswordSubmit}
+        mt={'1vw'}
       >
-        <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
+        <WideButton text={`変更する`} w={`10vw`} />
       </Box>
       {showPopup && <PasswordPopupComponent isOpen={true} />}
     </Box>
