@@ -45,13 +45,7 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
+        const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { role: data.role }, { merge: true });
         window.alert('Roleが更新されました');
         setRole(data.role);
@@ -73,12 +67,12 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     >
       <FormControl isInvalid={!!errors.role} mb={'1vw'}>
         <FormLabel>
-          <Flex alignItems={'center'}>
+          {/* <Flex alignItems={'center'}>
             <Text w={'35%'}>現在の権限</Text>
             <Text textAlign={'left'} w={'65%'}>
               {role}
             </Text>
-          </Flex>
+          </Flex> */}
           <Box>
             <Flex alignItems={'center'}>
               <Text w={'35%'}>変更後の権限</Text>
@@ -87,9 +81,10 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
                   placeholder="権限を選択"
                   {...register('role', { required: true })}
                   borderRadius={'none'}
+                  defaultValue={role}
                 >
-                  <option value="確認者">確認者</option>
-                  <option value="編集者">編集者</option>
+                  <option value="writer">記者</option>
+                  <option value="editor">編集者</option>
                 </Select>
                 <FormErrorMessage fontSize={'0.5vw'}>
                   権限を選択してください

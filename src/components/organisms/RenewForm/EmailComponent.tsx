@@ -58,13 +58,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
+        const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { email: data.email }, { merge: true });
         window.alert('メールアドレスが更新されました');
         setEmail(data.email);

@@ -50,13 +50,7 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         console.log({ ref });
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
+        const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { name: data.name }, { merge: true });
         window.alert('名前が更新されました');
         setName(data.name);
@@ -79,17 +73,17 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
       <FormControl isInvalid={!!errors.name}>
         <FormLabel>
           <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在のユーザー名</Text>
+            <Text w={'35%'}>現在の名前</Text>
             <Text textAlign={'left'} w={'65%'}>
               {name}
             </Text>
           </Flex>
           <Flex alignItems={'center'}>
-            <Text w={'35%'}>変更後のユーザー名</Text>
+            <Text w={'35%'}>変更後の名前</Text>
             <Box w={'65%'}>
               <Input
                 type="text"
-                placeholder="ユーザ名を入力"
+                placeholder="名前を入力"
                 {...register('name', { required: true })}
                 borderRadius={'none'}
               />
