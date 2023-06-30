@@ -1,6 +1,12 @@
 import { google, drive_v3 } from 'googleapis';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,7 +17,8 @@ export default async function handler(
     const fileId = req.body.fileId;
 
     const auth = new google.auth.GoogleAuth({
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: credentials,
+      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: ['https://www.googleapis.com/auth/drive'],
     });
 

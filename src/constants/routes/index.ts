@@ -28,6 +28,7 @@ export const routes = {
 
 export const apiRoutes = {
   wpCategories: `/api/wp/categories`,
+  wpMedia: `/api/wp/media`,
 };
 
 export const niikeiURL = `https://www.niikei.jp/`;

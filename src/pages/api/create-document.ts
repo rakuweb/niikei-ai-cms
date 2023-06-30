@@ -1,12 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { docs_v1, drive_v3, google } from 'googleapis';
 
+import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+);
+
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title, text } = req.body;
 
   try {
     const auth = new google.auth.GoogleAuth({
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      credentials: credentials,
+      // WARN:
+      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: [
         'https://www.googleapis.com/auth/drive',
         'https://www.googleapis.com/auth/documents',
@@ -35,15 +43,15 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
     const requests = text
       ? [
-          {
-            insertText: {
-              location: {
-                index: 1,
-              },
-              text,
+        {
+          insertText: {
+            location: {
+              index: 1,
             },
+            text,
           },
-        ]
+        },
+      ]
       : [];
 
     if (requests.length > 0) {

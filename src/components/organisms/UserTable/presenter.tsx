@@ -159,10 +159,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               size={{ lg: `sm`, '2xl': `md` }}
                               sx={{
                                 '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                  borderColor: `#49BAC0`,
+                                },
                               }}
                             />
                           </Flex>
@@ -173,8 +173,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                           {user.role === 'editor'
                             ? '編集者'
                             : user.role === 'writer'
-                            ? '記者'
-                            : user.role}
+                              ? '記者'
+                              : user.role}
                         </Td>
 
                         <Td>
