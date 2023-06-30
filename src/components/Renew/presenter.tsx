@@ -15,7 +15,6 @@ export type PresenterProps = {
     email: string;
     name: string;
     password: string;
-    companyName: string;
   };
 };
 
