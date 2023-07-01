@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Box, Spinner } from '@chakra-ui/react';
+
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
-import { NextPage } from 'next';
 
 type DataType = {
   role: string;

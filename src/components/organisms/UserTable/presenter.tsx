@@ -36,8 +36,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const url = '/settings/users';
   const itemsPerPage = 10;
-  console.log(data);
   const handleDelete = async (id: string) => {
+    // INFO:
     // if (!window.confirm('本当に削除しますか？')) {
     //   return;
     // }

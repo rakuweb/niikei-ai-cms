@@ -64,7 +64,6 @@ export const Presenter: FC<PresenterProps> = () => {
       const own = await getUser(user.uid);
 
       const companyPath = own.company_ref.path;
-      console.log(companyPath);
       const company = await fetchCompanyByPath(companyPath);
       const companyData = company.data();
       const companyInfo = {

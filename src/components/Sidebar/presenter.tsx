@@ -62,12 +62,12 @@ export const Presenter: FC = () => {
     { text: '占い記事一覧', url: routes.fortunes },
   ];
   const settingSubPages = [
-    { text: 'アカウント情報', url: '/settings/account/' + account.uid },
+    { text: 'アカウント情報', url: routes.settingsAccount },
     ...(account.role === Role.Editor
       ? [
-          { text: 'ユーザ一覧', url: routes.settingsUsers },
-          { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
-        ]
+        { text: 'ユーザ一覧', url: routes.settingsUsers },
+        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+      ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
   ];

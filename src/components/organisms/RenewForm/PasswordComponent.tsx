@@ -64,7 +64,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
       });
       if (response.ok) {
         setPassword(data.password);
-        window.alert('パスワードが更新されました');
+        alert('パスワードを更新しました。');
       }
     } catch (error) {
       console.error('Error updating password: ', error);
@@ -185,6 +185,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
       </FormControl>
 
       <Box
+        // WARN:
         as={'button'}
         w={`${140 / 19.2}vw`}
         type="submit"

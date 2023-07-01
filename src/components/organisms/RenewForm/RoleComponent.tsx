@@ -1,3 +1,4 @@
+import { FC, useEffect, useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -7,14 +8,13 @@ import {
   Box,
   Select,
 } from '@chakra-ui/react';
-import { WideButton } from 'components/Button/WideButton';
-import { useEffect, useState } from 'react';
-import { FC } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+
+import { WideButton } from 'components/Button/WideButton';
 import { auth, db } from 'src/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
-import { useRouter } from 'next/router';
 
 type FormData = {
   role: string;
@@ -39,6 +39,7 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
   });
 
   const onSubmit = async (data: FormData) => {
+    // HACK:
     try {
       const user = auth.currentUser;
       if (user) {

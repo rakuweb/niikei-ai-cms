@@ -23,10 +23,10 @@ export const getEmployee = async (companyID: string, employeeID: string) => {
 };
 
 export const updateEmployee = async (
-  IDs: { companyID: string; eomployeeID: string },
+  IDs: { companyID: string; employeeID: string },
   data: Partial<EmployeeType>
 ) => {
-  const docRef = getEmployeeDocRef(IDs.companyID, IDs.eomployeeID);
+  const docRef = getEmployeeDocRef(IDs.companyID, IDs.employeeID);
 
   await updateDoc(docRef, data);
 };

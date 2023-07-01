@@ -9,7 +9,7 @@ export type AccountSliceData = {
   uid: string;
   name: string;
   email: string;
-  role: string;
+  role: Role | null;
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
@@ -20,7 +20,7 @@ type SetAccountInfoProps = {
   uid: string;
   name: string;
   email: string;
-  role: string;
+  role: Role;
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
@@ -28,7 +28,7 @@ type SetAccountInfoProps = {
 };
 
 export type AccountSlice = AccountSliceData & {
-  setAccount: (props: SetAccountInfoProps) => void;
+  setAccount: (props: Partial<SetAccountInfoProps>) => void;
   signout: () => void;
   setNotification: (props: {
     newInfoNotification: boolean;

@@ -16,7 +16,6 @@ import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
-import fs from 'fs';
 
 type FormData = {
   name: string;
@@ -50,7 +49,6 @@ export const NameComponent: FC<NameComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        console.log({ ref });
         const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { name: data.name }, { merge: true });
         window.alert('名前が更新されました');

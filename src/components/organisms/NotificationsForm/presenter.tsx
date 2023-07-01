@@ -38,7 +38,7 @@ export const Presenter: FC<PresenterProps> = () => {
   });
 
   const submitHandler = async (data: Schema) => {
-    const res = await updateEmployee({ companyID, eomployeeID: uid }, data);
+    const res = await updateEmployee({ companyID, employeeID: uid }, data);
     if (res === null) return;
 
     const props = {

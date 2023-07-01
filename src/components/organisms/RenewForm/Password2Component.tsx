@@ -121,6 +121,7 @@ export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
         </FormLabel>
       </FormControl>
       <Box
+        // WARN:
         as={'button'}
         w={`${140 / 19.2}vw`}
         type="submit"

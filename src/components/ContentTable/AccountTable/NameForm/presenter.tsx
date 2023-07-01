@@ -4,11 +4,19 @@ import { HStack, Box, FlexProps } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { updateProfile } from 'firebase/auth';
 
 import { InputForm } from '../InputForm';
 import AccountInput from '../AccountInput';
+import { auth } from '@/firebase';
 
-import { useAccountStore, selectAccountItem } from 'features/account';
+import {
+  useAccountStore,
+  selectAccountItem,
+  selectSetAccount,
+} from 'features/account';
+import { updateEmployee } from '@/firebase/firestore/employees';
+import { useCompanyStore, selectUid } from '@/features/company';
 
 // type layer
 export type StyleProps = FlexProps;
@@ -27,15 +35,47 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: { name: '' },
   });
   const account = useAccountStore(selectAccountItem);
+  const currentUser = auth.currentUser;
+  const companyID = useCompanyStore(selectUid);
+  const setAccount = useAccountStore(selectSetAccount);
 
-  const submitHandler = (data: Schema) => {
-    console.log(data);
+  const submitHandler = async (data: Schema) => {
+    const { name } = data;
+    if (!currentUser) return;
+    const resAuth = await updateProfile(currentUser, {
+      displayName: name,
+    }).catch((err) => {
+      console.error(err);
+      return null;
+    });
+    if (resAuth === null) {
+      alert('更新できませんでした。しばらく経ってからもう一度お試しください。');
+      return;
+    }
+    const resEmployee = await updateEmployee(
+      {
+        companyID,
+        employeeID: account.uid,
+      },
+      { name }
+    ).catch((err) => {
+      console.error(err);
+      return null;
+    });
+    if (resEmployee === null) {
+      alert('更新に失敗しました。しばらく経ってからもう一度お試しください。');
+      return;
+    }
+    setAccount({ name });
+    alert('名前を更新しました。');
+    reset();
   };
 
   return (
@@ -53,7 +93,7 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
         >{`変更後の名前`}</Box>
         <Box>
           <AccountInput
-            id={`name`}
+            // id={`name`}
             type={`text`}
             registers={register('name')}
           />

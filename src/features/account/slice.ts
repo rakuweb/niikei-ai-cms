@@ -26,7 +26,7 @@ export const createAccountSlice: StateCreator<
       uid: '',
       name: '',
       email: '',
-      role: '',
+      role: null,
       newInfoNotification: false,
       autoPublishNotification: false,
       fortuneNotification: false,
