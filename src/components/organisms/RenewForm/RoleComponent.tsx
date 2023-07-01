@@ -1,3 +1,4 @@
+import { FC, useEffect, useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -7,14 +8,13 @@ import {
   Box,
   Select,
 } from '@chakra-ui/react';
-import { WideButton } from 'components/Button/WideButton';
-import { useEffect, useState } from 'react';
-import { FC } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+
+import { WideButton } from 'components/Button/WideButton';
 import { auth, db } from 'src/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
-import { useRouter } from 'next/router';
 
 type FormData = {
   role: string;
@@ -39,19 +39,14 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
   });
 
   const onSubmit = async (data: FormData) => {
+    // HACK:
     try {
       const user = auth.currentUser;
       if (user) {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
+        const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { role: data.role }, { merge: true });
         window.alert('Roleが更新されました');
         setRole(data.role);
@@ -66,30 +61,31 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'45vw'}
+      w={'35vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="role"
     >
+      <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>
+        権限
+      </Box>
       <FormControl isInvalid={!!errors.role} mb={'1vw'}>
         <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在の権限</Text>
-            <Text textAlign={'left'} w={'65%'}>
-              {role}
-            </Text>
-          </Flex>
           <Box>
-            <Flex alignItems={'center'}>
-              <Text w={'35%'}>変更後の権限</Text>
-              <Box w={'65%'}>
+            <Flex alignItems={'center'} mb={'1vw'}>
+              <Text w={'35%'} fontSize={'0.8vw'}>
+                ユーザー権限
+              </Text>
+              <Box w={'50%'}>
                 <Select
                   placeholder="権限を選択"
                   {...register('role', { required: true })}
                   borderRadius={'none'}
+                  defaultValue={role}
+                  fontSize={'0.8vw'}
                 >
-                  <option value="確認者">確認者</option>
-                  <option value="編集者">編集者</option>
+                  <option value="writer">記者</option>
+                  <option value="editor">編集者</option>
                 </Select>
                 <FormErrorMessage fontSize={'0.5vw'}>
                   権限を選択してください
@@ -99,8 +95,8 @@ export const RoleComponent: FC<NameComponentProps> = ({ data }) => {
           </Box>
         </FormLabel>
       </FormControl>
-      <Box as={'button'} w={`${140 / 19.2}vw`} type="submit">
-        <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
+      <Box as={'button'} w={`10vw`} type="submit" mt={'1vw'}>
+        <WideButton text={`変更する`} w={`10vw`} />
       </Box>
     </Box>
   );

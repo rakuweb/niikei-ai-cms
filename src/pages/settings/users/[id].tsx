@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Box, Spinner } from '@chakra-ui/react';
+
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { Sidebar } from 'components/Sidebar';
 import { Renew } from 'components/Renew';
-import { NextPage } from 'next';
 
 type DataType = {
   role: string;
@@ -31,13 +32,7 @@ const UserPage: NextPage = () => {
             const ref = employeeDocSnap.data()?.company_ref;
 
             if (ref) {
-              const companyDocRef = doc(
-                db,
-                'companies',
-                ref,
-                'employees',
-                id as string
-              );
+              const companyDocRef = doc(ref, 'employees', id as string);
               const companyDocSnap = await getDoc(companyDocRef);
 
               if (companyDocSnap.exists()) {

@@ -8,7 +8,7 @@ export const selectSetNotification = (state: AccountSlice) =>
   state.setNotification;
 export const selectAccountItem = (state: AccountSlice) => {
   // eslint-disable-next-line
-  const { setAccount, signout, ...remain } = state;
+  const { setAccount, signout, setNotification, ...remain } = state;
 
   return remain;
 };

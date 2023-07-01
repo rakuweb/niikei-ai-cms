@@ -13,6 +13,7 @@ type DataType = {
   email: string;
   name: string;
   password: string;
+  companyName: string;
 };
 
 const UserPage: NextPage = () => {

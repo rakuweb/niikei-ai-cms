@@ -58,13 +58,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
         const employeeDocRef = doc(db, 'users', id as string);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const companyDocRef = doc(
-          db,
-          'companies',
-          ref,
-          'employees',
-          id as string
-        );
+        const companyDocRef = doc(ref, 'employees', id as string);
         await setDoc(companyDocRef, { email: data.email }, { merge: true });
         window.alert('メールアドレスが更新されました');
         setEmail(data.email);
@@ -87,27 +81,35 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'45vw'}
+      w={'35vw'}
       color={'#222526'}
       mb={'1.5vw'}
       className="email"
     >
-      <FormControl isInvalid={!!errors.email}>
+      <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>
+        メールアドレス
+      </Box>
+      <FormControl isInvalid={!!errors.email} mb={'1vw'}>
         <FormLabel>
-          <Flex alignItems={'center'}>
-            <Text w={'35%'}>現在のメールアドレス</Text>
-            <Text textAlign={'left'} w={'65%'}>
+          <Flex alignItems={'center'} mb={'1vw'}>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              現在のメールアドレス
+            </Text>
+            <Text textAlign={'left'} w={'65%'} fontSize={'0.8vw'}>
               {email}
             </Text>
           </Flex>
           <Flex alignItems={'center'}>
-            <Text w={'35%'}>変更後のメールアドレス</Text>
+            <Text w={'35%'} fontSize={'0.8vw'}>
+              変更後のメールアドレス
+            </Text>
             <Box w={'65%'}>
               <Input
                 type="email"
                 placeholder="メールアドレスを入力"
                 {...register('email', { required: true })}
                 borderRadius={'none'}
+                fontSize={'0.8vw'}
               />
               <FormErrorMessage fontSize={'0.5vw'}>
                 メールアドレスを入力してください
@@ -118,11 +120,12 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       </FormControl>
       <Box
         as={'button'}
-        w={`${140 / 19.2}vw`}
+        w={`10vw`}
         type="button"
         onClick={handleEmailSubmit}
+        mt={'1vw'}
       >
-        <WideButton text={`変更する`} w={`${140 / 19.2}vw`} />
+        <WideButton text={`変更する`} w={`10vw`} />
       </Box>
       {showPopup && <PasswordPopupComponent isOpen={true} />}
     </Box>

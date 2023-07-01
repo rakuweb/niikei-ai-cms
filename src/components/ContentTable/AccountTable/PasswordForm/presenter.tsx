@@ -7,6 +7,9 @@ import { z } from 'zod';
 
 import { InputForm } from '../InputForm';
 import Password from '../Password';
+import { apiRoutes, routes } from '@/constants/routes';
+import axios from 'axios';
+import { useAccountStore } from '@/features/account';
 
 // type layer
 export type StyleProps = FlexProps;
@@ -57,9 +60,25 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
       confirmedPassword: '',
     },
   });
+  const uid = useAccountStore((state) => state.uid);
 
-  const submitHandler = (data: Schema) => {
-    console.log(data);
+  const submitHandler = async (data: Schema) => {
+    const { currentPassword, newPassword } = data;
+    const url = apiRoutes.updateUserPassword;
+    const res = await axios
+      .post(url, { uid, currentPassword, newPassword })
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
+    if (res === null) {
+      alert(
+        'パスワードの更新に失敗しました。しばらく経ってからもう一度お試しください。'
+      );
+      return;
+    }
+
+    alert('パスワードを更新しました。');
   };
 
   return (

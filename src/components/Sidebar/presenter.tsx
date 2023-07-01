@@ -27,6 +27,7 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const account = useAccountStore(selectAccountItem);
+
   const {
     siteManamgement,
     articleManagement,

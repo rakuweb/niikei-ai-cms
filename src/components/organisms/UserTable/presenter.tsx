@@ -36,11 +36,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const url = '/settings/users';
   const itemsPerPage = 10;
-
   const handleDelete = async (id: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
-      return;
-    }
+    // INFO:
+    // if (!window.confirm('本当に削除しますか？')) {
+    //   return;
+    // }
 
     const response = await fetch('/api/delete-users', {
       method: 'POST',
@@ -51,16 +51,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     });
 
     const userDocRef = doc(db, 'users', id);
+
     const userDoc = await getDoc(userDocRef);
     const refFieldString = userDoc.data().company_ref;
 
-    const companyEmployeeDocRef = doc(
-      db,
-      'companies',
-      refFieldString,
-      'employees',
-      id
-    );
+    const companyEmployeeDocRef = doc(refFieldString, 'employees', id);
     const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
