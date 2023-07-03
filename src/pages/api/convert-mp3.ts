@@ -27,7 +27,7 @@ export default async function handler(
     };
     const config = {
       encoding: 'LINEAR16' as any,
-      sampleRateHertz: 44100,
+      // sampleRateHertz: 48000,
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,
     };
