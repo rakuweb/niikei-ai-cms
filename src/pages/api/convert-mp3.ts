@@ -6,7 +6,6 @@ import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
