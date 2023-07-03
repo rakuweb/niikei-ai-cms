@@ -1,5 +1,4 @@
 import admin from 'firebase-admin';
-import serviceAccount from 'niikei-391305-335457312a7a.json';
 import { NIIKEI39D3F } from 'constants/env';
 const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
 console.log(credentials);
