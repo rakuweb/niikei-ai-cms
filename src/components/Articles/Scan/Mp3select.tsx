@@ -106,19 +106,27 @@ const Mp3select = ({ setSelectedFileContent }) => {
       const arrayBuffer = await file.arrayBuffer();
 
       const audioContext = new AudioContext();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-      const monoBuffer = audioContext.createBuffer(
-        1,
-        audioBuffer.length,
-        audioBuffer.sampleRate
-      );
-      const leftChannelData = audioBuffer.getChannelData(0);
-      monoBuffer.copyToChannel(leftChannelData, 0);
-      const wav = toWav(monoBuffer);
-      console.log(monoBuffer.numberOfChannels);
-      const channelData = monoBuffer.getChannelData(0);
-      console.log(channelData);
+      let audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
+      if (audioBuffer.numberOfChannels == 2) {
+        let channel1Data = audioBuffer.getChannelData(0);
+        let channel2Data = audioBuffer.getChannelData(1);
+        let newAudioData = new Float32Array(audioBuffer.length);
+
+        for (let i = 0; i < audioBuffer.length; i++) {
+          newAudioData[i] = (channel1Data[i] + channel2Data[i]) / 2;
+        }
+
+        let newAudioBuffer = audioContext.createBuffer(
+          1,
+          audioBuffer.length,
+          audioBuffer.sampleRate
+        );
+        newAudioBuffer.copyToChannel(newAudioData, 0, 0);
+        audioBuffer = newAudioBuffer;
+      }
+
+      const wav = toWav(audioBuffer);
       const blob = new Blob([new Uint8Array(wav)], { type: 'audio/wav' });
       const convertedFile = new File([blob], file.name, {
         type: 'audio/wav',
