@@ -107,7 +107,14 @@ const Mp3select = ({ setSelectedFileContent }) => {
 
       const audioContext = new AudioContext();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-      const wav = toWav(audioBuffer);
+      const monoBuffer = audioContext.createBuffer(
+        1,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
+      const leftChannelData = audioBuffer.getChannelData(0);
+      monoBuffer.copyToChannel(leftChannelData, 0);
+      const wav = toWav(monoBuffer);
       const blob = new Blob([new Uint8Array(wav)], { type: 'audio/wav' });
       const convertedFile = new File([blob], file.name, {
         type: 'audio/wav',
