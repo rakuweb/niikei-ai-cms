@@ -12,7 +12,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.query.file && req.method === 'POST') {
-    const bucketName = 'niikei2';
+    const bucketName = 'niikei3';
     const fileName = 'mp3text';
     const client = new speech.SpeechClient({ credentials: credentials });
 
@@ -33,10 +33,10 @@ export default async function handler(
       enableAutomaticPunctuation: true,
     };
     const request: speech.protos.google.cloud.speech.v1.ILongRunningRecognizeRequest =
-    {
-      audio: audio,
-      config: config,
-    };
+      {
+        audio: audio,
+        config: config,
+      };
 
     const operation = await client.longRunningRecognize(request);
     const [response] = await operation[0].promise();
