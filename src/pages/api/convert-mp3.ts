@@ -31,6 +31,7 @@ export default async function handler(
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,
     };
+
     const request: speech.protos.google.cloud.speech.v1.ILongRunningRecognizeRequest =
       {
         audio: audio,
