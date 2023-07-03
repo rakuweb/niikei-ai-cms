@@ -54,24 +54,39 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(`/api/convert-mp3?file=${fileName}.wav`, {
-          method: 'POST',
-        });
-        const json = await textRes.json();
-        const { text } = json;
+        const fixWavRes = await fetch(`/api/fix-wav?file=${fileName}`);
+        await fixWavRes.json();
 
-        if (textRes.ok) {
-          console.log('Converted to text successfully!');
-          clearInterval(progressInterval);
-          clearTimeout(timerId);
-          setUploadProgress(100);
+        if (fixWavRes.ok) {
+          console.log('Converted to wav successfully!');
 
-          setSelectedFileContent(text);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1000);
+          const textRes = await fetch(
+            `/api/convert-mp3?file=${fileName}-fixed.wav`,
+            {
+              method: 'POST',
+            }
+          );
+          const json = await textRes.json();
+          const { text } = json;
+
+          if (textRes.ok) {
+            console.log('Converted to text successfully!');
+            clearInterval(progressInterval);
+            clearTimeout(timerId);
+            setUploadProgress(100);
+
+            setSelectedFileContent(text);
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
+          } else {
+            console.error('Conversion to text failed.');
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
+          }
         } else {
-          console.error('Conversion to text failed.');
+          console.error('Conversion to wav failed.');
           setTimeout(() => {
             setIsLoading(false);
           }, 1000);
