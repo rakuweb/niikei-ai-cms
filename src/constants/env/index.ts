@@ -14,3 +14,5 @@ export const WORDPRESS_URL = process.env.WORDPRESS_URL ?? undefined;
 
 export const GOOGLE_APPLICATION_CREDENTIALS =
   process.env.GOOGLE_APPLICATION_CREDENTIALS ?? undefined;
+
+export const NIIKEI39D3F = process.env.NIIKEI39D3F ?? undefined;
