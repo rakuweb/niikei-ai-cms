@@ -16,7 +16,7 @@ export default async function uploadHandler(
     const storage = new Storage({
       credentials: credentials,
     });
-    const bucketName = 'niikei2';
+    const bucketName = 'niikei3';
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(req.query.file as string);
     const options = {
