@@ -41,7 +41,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
     try {
       const fileName = 'mp3text';
 
-      const res = await fetch(`/api/uplord-file?file=${fileName}`, {
+      const res = await fetch(`/api/uplord-file?file=${fileName}.wav`, {
         method: 'POST',
       });
       const { url, fields } = await res.json();
