@@ -109,15 +109,15 @@ const Mp3select = ({ setSelectedFileContent }) => {
       let audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
       if (audioBuffer.numberOfChannels == 2) {
-        let channel1Data = audioBuffer.getChannelData(0);
-        let channel2Data = audioBuffer.getChannelData(1);
-        let newAudioData = new Float32Array(audioBuffer.length);
+        const channel1Data = audioBuffer.getChannelData(0);
+        const channel2Data = audioBuffer.getChannelData(1);
+        const newAudioData = new Float32Array(audioBuffer.length);
 
         for (let i = 0; i < audioBuffer.length; i++) {
           newAudioData[i] = (channel1Data[i] + channel2Data[i]) / 2;
         }
 
-        let newAudioBuffer = audioContext.createBuffer(
+        const newAudioBuffer = audioContext.createBuffer(
           1,
           audioBuffer.length,
           audioBuffer.sampleRate
