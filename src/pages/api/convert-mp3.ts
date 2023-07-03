@@ -22,7 +22,7 @@ export default async function handler(
     // });
     // const bucket = storage.bucket(bucketName);
 
-    const gcsUri = `gs://${bucketName}/${fileName}-fixed.wav`;
+    const gcsUri = `gs://${bucketName}/${fileName}`;
     const audio = {
       uri: gcsUri,
     };
