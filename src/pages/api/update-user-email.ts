@@ -1,10 +1,8 @@
 import admin from 'firebase-admin';
-import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
-
-const credentials = JSON.parse(
-  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
-);
-
+import serviceAccount from 'niikei-391305-335457312a7a.json';
+import { NIIKEI39D3F } from 'constants/env';
+const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
+console.log(credentials);
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(credentials as admin.ServiceAccount),

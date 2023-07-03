@@ -67,7 +67,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       }
     } catch (error) {
       console.error('Error updating email: ', error);
-      window.alert('再ログイン後もう一度ご入力下さい');
+      window.alert('メールアドレスの更新に失敗しました');
     }
   };
 
