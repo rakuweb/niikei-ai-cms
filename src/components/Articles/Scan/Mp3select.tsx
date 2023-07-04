@@ -14,7 +14,6 @@ const Mp3select = ({ setSelectedFileContent }) => {
   const [isButtonActive, setButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [convertedFile, setConvertedFile] = useState<File | null>(null);
 
   const { handleSubmit } = useForm({
     defaultValues: { name: '', iconUrl: '' },
@@ -42,10 +41,9 @@ const Mp3select = ({ setSelectedFileContent }) => {
     try {
       const fileName = 'mp3text';
 
-      const res = await fetch(`/api/uplord-file?file=${convertedFile.name}`, {
+      const res = await fetch(`/api/uplord-file?file=${fileName}`, {
         method: 'POST',
       });
-
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {
@@ -56,12 +54,9 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(
-          `/api/convert-mp3?file=${convertedFile.name}`,
-          {
-            method: 'POST',
-          }
-        );
+        const textRes = await fetch(`/api/convert-mp3?file=${fileName}`, {
+          method: 'POST',
+        });
         const json = await textRes.json();
         const { text } = json;
 
@@ -145,7 +140,6 @@ const Mp3select = ({ setSelectedFileContent }) => {
       console.error(err);
       alert('ファイルの変換に失敗しました');
     }
-    setConvertedFile(convertedFile);
   }, []);
 
   const { getRootProps, getInputProps, open } = useDropzone({
