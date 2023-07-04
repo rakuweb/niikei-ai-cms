@@ -17,6 +17,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
 import { PasswordPopupComponent } from './PasswordPopupComponent';
+import { useAccountStore, selectAccountItem } from 'features/account';
 type FormData = {
   email: string;
 };
@@ -38,7 +39,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
-
+  const account = useAccountStore(selectAccountItem);
   const API_URL = '/api/update-user-email';
 
   const onSubmit = async (data: FormData) => {
@@ -81,9 +82,9 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'35vw'}
+      w={'34vw'}
       color={'#222526'}
-      mb={'1.5vw'}
+      mb={'3vw'}
       className="email"
     >
       <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>
@@ -96,7 +97,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
               現在のメールアドレス
             </Text>
             <Text textAlign={'left'} w={'65%'} fontSize={'0.8vw'}>
-              {email}
+              {account.email}
             </Text>
           </Flex>
           <Flex alignItems={'center'}>
