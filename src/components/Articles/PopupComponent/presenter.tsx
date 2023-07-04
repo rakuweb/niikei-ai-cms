@@ -16,7 +16,7 @@ import { WideButton } from './WideButton';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
-
+import { useAccountStore, selectAccountItem } from 'features/account';
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -41,7 +41,7 @@ export const Presenter: FC<PresenterProps> = ({
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCategory(e.target.value);
   };
-
+  const account = useAccountStore(selectAccountItem);
   const handleCreateDocument = async () => {
     try {
       text = text || '';
@@ -55,9 +55,9 @@ export const Presenter: FC<PresenterProps> = ({
       console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const employeeDocRef = doc(db, 'users', user.uid);
+
+        const employeeDocRef = doc(db, 'users', account.uid);
+        console.log(account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(ref, 'articles');
@@ -69,7 +69,7 @@ export const Presenter: FC<PresenterProps> = ({
           status: 'editing',
           due_date: '',
           wp_url: '',
-          created_by: doc(ref, 'employees', user.uid),
+          created_by: doc(ref, 'employees', account.uid),
         });
 
         onClose();
