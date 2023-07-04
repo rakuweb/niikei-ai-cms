@@ -12,11 +12,9 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { db } from 'src/firebase';
-
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
-import { useRouter } from 'next/router';
-import { PasswordPopupComponent } from './PasswordPopupComponent';
+import { useAccountStore, selectAccountItem } from 'features/account';
 type FormData = {
   email: string;
 };
@@ -24,13 +22,14 @@ type FormData = {
 type EmailComponentProps = PresenterProps & {
   id: string;
 };
-export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [email, setEmail] = useState(data.email);
+export const EmailComponent: FC<EmailComponentProps> = () => {
+  const account = useAccountStore(selectAccountItem);
+
+  const id = account.uid;
+  const [email, setEmail] = useState(account.email);
   useEffect(() => {
-    setEmail(data.email);
-  }, [data.email]);
+    setEmail(account.email);
+  }, [account.email]);
   const {
     register,
     handleSubmit,
@@ -73,10 +72,6 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
 
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleEmailSubmit = (e) => {
-    e.stopPropagation();
-    handleSubmit(onSubmit)();
-  };
   return (
     <Box
       as="form"
@@ -121,13 +116,11 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       <Box
         as={'button'}
         w={`10vw`}
-        type="button"
-        onClick={handleEmailSubmit}
+        // type="button"
         mt={'1vw'}
       >
         <WideButton text={`変更する`} w={`10vw`} />
       </Box>
-      {showPopup && <PasswordPopupComponent isOpen={true} />}
     </Box>
   );
 };

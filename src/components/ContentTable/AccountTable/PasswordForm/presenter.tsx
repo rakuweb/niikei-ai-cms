@@ -18,9 +18,6 @@ export type PresenterProps = StyleProps & DataProps;
 
 const schema = z
   .object({
-    currentPassword: z
-      .string({ required_error: `入力してください。` })
-      .min(1, `入力してください。`),
     newPassword: z
       .string({ required_error: `入力してください。` })
       .min(1, `入力してください。`),
@@ -28,19 +25,12 @@ const schema = z
       .string({ required_error: `入力してください。` })
       .min(1, `入力してください。`),
   })
-  .superRefine(({ currentPassword, newPassword, confirmedPassword }, ctx) => {
+  .superRefine(({ newPassword, confirmedPassword }, ctx) => {
     if (newPassword !== confirmedPassword) {
       ctx.addIssue({
         path: ['confirmedPassword'],
         code: 'custom',
         message: `パスワードが一致しません。`,
-      });
-    }
-    if (currentPassword === newPassword) {
-      ctx.addIssue({
-        path: ['newPassword'],
-        code: `custom`,
-        message: `現在のパスワードと同じです。`,
       });
     }
   });
@@ -55,7 +45,6 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
   } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      currentPassword: '',
       newPassword: '',
       confirmedPassword: '',
     },
@@ -63,14 +52,12 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
   const uid = useAccountStore((state) => state.uid);
 
   const submitHandler = async (data: Schema) => {
-    const { currentPassword, newPassword } = data;
+    const { newPassword } = data;
     const url = apiRoutes.updateUserPassword;
-    const res = await axios
-      .post(url, { uid, currentPassword, newPassword })
-      .catch((err) => {
-        console.error(err);
-        return null;
-      });
+    const res = await axios.post(url, { uid, newPassword }).catch((err) => {
+      console.error(err);
+      return null;
+    });
     if (res === null) {
       alert(
         'パスワードの更新に失敗しました。しばらく経ってからもう一度お試しください。'
@@ -87,11 +74,6 @@ export const Presenter: FC<PresenterProps> = ({ ...props }) => {
       title={`パスワード`}
       {...props}
     >
-      <Password
-        registers={register(`currentPassword`)}
-        message={errors?.currentPassword?.message}
-        text={`現在のパスワード`}
-      />
       <Password
         registers={register(`newPassword`)}
         message={errors?.newPassword?.message}
