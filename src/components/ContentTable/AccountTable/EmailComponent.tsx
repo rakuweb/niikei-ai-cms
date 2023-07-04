@@ -12,10 +12,8 @@ import { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { db } from 'src/firebase';
-
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
-import { useRouter } from 'next/router';
 import { useAccountStore, selectAccountItem } from 'features/account';
 type FormData = {
   email: string;
