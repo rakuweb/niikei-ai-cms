@@ -16,7 +16,7 @@ import { db } from 'src/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { PresenterProps } from './presenter';
 import { useRouter } from 'next/router';
-import { PasswordPopupComponent } from './PasswordPopupComponent';
+import { useAccountStore, selectAccountItem } from 'features/account';
 type FormData = {
   email: string;
 };
@@ -24,13 +24,14 @@ type FormData = {
 type EmailComponentProps = PresenterProps & {
   id: string;
 };
-export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [email, setEmail] = useState(data.email);
+export const EmailComponent: FC<EmailComponentProps> = () => {
+  const account = useAccountStore(selectAccountItem);
+  console.log(account.uid);
+  const id = account.uid;
+  const [email, setEmail] = useState(account.email);
   useEffect(() => {
-    setEmail(data.email);
-  }, [data.email]);
+    setEmail(account.email);
+  }, [account.email]);
   const {
     register,
     handleSubmit,
@@ -127,7 +128,6 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
       >
         <WideButton text={`変更する`} w={`10vw`} />
       </Box>
-      {showPopup && <PasswordPopupComponent isOpen={true} />}
     </Box>
   );
 };

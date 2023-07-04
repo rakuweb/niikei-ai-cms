@@ -20,6 +20,7 @@ const updateUserEmail = async (req, res) => {
     await admin.auth().updateUser(uid, { email: newEmail });
     res.status(200).send('User email updated');
   } catch (error) {
+    console.error(error);
     res.status(500).send(error.message);
   }
 };

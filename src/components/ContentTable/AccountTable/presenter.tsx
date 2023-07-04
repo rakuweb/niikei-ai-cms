@@ -7,7 +7,7 @@ import { NameForm } from './NameForm';
 import { PasswordForm } from './PasswordForm';
 import { useCompanyStore, selectCompanyItem } from 'features/company';
 import { RoleSelect } from './RoleSelect';
-import { EmailComponent } from '@/components/organisms/RenewForm/EmailComponent';
+import { EmailComponent } from './EmailComponent';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -25,15 +25,7 @@ export const Presenter: FC = () => {
         <NameForm />
 
         <RoleSelect />
-        <EmailComponent
-          data={{
-            name: '',
-            email: '',
-            role: '',
-            password: '',
-          }}
-          id={''}
-        />
+        <EmailComponent id={''} />
         <PasswordForm />
       </Text>
     </>
