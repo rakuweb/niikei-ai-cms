@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as speech from '@google-cloud/speech';
-
+import { Storage } from '@google-cloud/storage';
 import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 
 const credentials = JSON.parse(
@@ -45,6 +45,12 @@ export default async function handler(
       const transcription = response.results
         .map((result) => result.alternatives[0].transcript)
         .join('\n');
+
+      const storage = new Storage({ credentials: credentials });
+      const bucket = storage.bucket(bucketName);
+
+      const file = bucket.file(fileName);
+      await file.delete();
 
       res.status(200).json({ text: transcription });
     } else {
