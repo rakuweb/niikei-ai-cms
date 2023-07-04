@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import { NIIKEI39D3F } from 'constants/env';
 const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
-console.log(credentials);
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(credentials as admin.ServiceAccount),

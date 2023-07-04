@@ -24,7 +24,7 @@ type EmailComponentProps = PresenterProps & {
 };
 export const EmailComponent: FC<EmailComponentProps> = () => {
   const account = useAccountStore(selectAccountItem);
-  console.log(account.uid);
+
   const id = account.uid;
   const [email, setEmail] = useState(account.email);
   useEffect(() => {
