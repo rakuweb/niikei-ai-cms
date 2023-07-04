@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
-import { Buffer } from 'buffer';
 
 import { WORDPRESS_URL } from 'constants/env';
 const API_USER = `rakuweb`;
@@ -22,7 +21,6 @@ export default async function handler(
     return res.status(400).json({ error: `Invalid request data` });
   }
   const body = req?.body;
-  // console.log(body);
   const { filename } = body;
   console.log(filename);
   const response = await axios
