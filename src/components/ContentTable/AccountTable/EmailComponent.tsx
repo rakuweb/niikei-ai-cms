@@ -72,10 +72,6 @@ export const EmailComponent: FC<EmailComponentProps> = () => {
 
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleEmailSubmit = (e) => {
-    e.stopPropagation();
-    handleSubmit(onSubmit)();
-  };
   return (
     <Box
       as="form"
@@ -120,8 +116,7 @@ export const EmailComponent: FC<EmailComponentProps> = () => {
       <Box
         as={'button'}
         w={`10vw`}
-        type="button"
-        onClick={handleEmailSubmit}
+        // type="button"
         mt={'1vw'}
       >
         <WideButton text={`変更する`} w={`10vw`} />
