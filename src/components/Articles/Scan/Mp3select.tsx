@@ -56,9 +56,12 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(`/api/convert-mp3?file=${fileName}.wav`, {
-          method: 'POST',
-        });
+        const textRes = await fetch(
+          `/api/convert-mp3?file=${convertedFile.name}`,
+          {
+            method: 'POST',
+          }
+        );
         const json = await textRes.json();
         const { text } = json;
 
