@@ -7,6 +7,7 @@ import { NameForm } from './NameForm';
 import { PasswordForm } from './PasswordForm';
 import { useCompanyStore, selectCompanyItem } from 'features/company';
 import { RoleSelect } from './RoleSelect';
+import { EmailComponent } from './EmailComponent';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -24,7 +25,7 @@ export const Presenter: FC = () => {
         <NameForm />
 
         <RoleSelect />
-
+        <EmailComponent id={''} />
         <PasswordForm />
       </Text>
     </>

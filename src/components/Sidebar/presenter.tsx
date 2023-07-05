@@ -137,7 +137,7 @@ export const Presenter: FC = () => {
                 logo={<RobotSvg />}
                 links={siteSubPages}
                 href={undefined}
-                notifications={[1, 1]}
+                notifications={siteManamgement}
               />
               <Popup
                 title="記事管理"

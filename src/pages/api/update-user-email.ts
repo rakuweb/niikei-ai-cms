@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import { NIIKEI39D3F } from 'constants/env';
 const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
-console.log(credentials);
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(credentials as admin.ServiceAccount),
@@ -20,6 +20,7 @@ const updateUserEmail = async (req, res) => {
     await admin.auth().updateUser(uid, { email: newEmail });
     res.status(200).send('User email updated');
   } catch (error) {
+    console.error(error);
     res.status(500).send(error.message);
   }
 };
