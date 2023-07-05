@@ -103,7 +103,7 @@ export const Presenter: FC = () => {
     const reqData = {
       title: data.name,
       url: resWpData?.source_url ?? ``,
-      file_name: filename,
+      filename: filename,
       message: `画像「${data.name}」をアップロードしました。`,
       date: Timestamp.now(),
       wp_id: resWpData?.id ?? ``,
