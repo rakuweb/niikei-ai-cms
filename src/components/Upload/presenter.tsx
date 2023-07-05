@@ -80,7 +80,7 @@ export const Presenter: FC = () => {
       .post(wpRoutes.media, formData, {
         headers: {
           'Content-Type': `multipart/form-data`,
-          'Content-Disposition': `attachment; filename=test.png`,
+          'Content-Disposition': `attachment; filename=test`,
           Authorization: `Basic ${basicData.basic}`,
         },
         // auth: {
@@ -92,6 +92,11 @@ export const Presenter: FC = () => {
         console.error(err);
         return null;
       });
+    if (resUpload === null) {
+      alert(`ネットワークエラーにより画像のアップロードに失敗しました。
+しばらく経ってからもう一度お試しください。`);
+      return;
+    }
 
     // firestore
     const resWpData = resUpload.data;
@@ -105,6 +110,7 @@ export const Presenter: FC = () => {
     };
     await addFortunesLog(companyID, reqData);
 
+    alert('画像をアップロードしました。');
     reset();
     setSelectedFile(null);
     setIsSending(false);
