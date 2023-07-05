@@ -17,7 +17,7 @@ import { uploadImages } from '@/lib/wordpress';
 import { addFortunesLog } from '@/firebase/firestore/fortuneLogs';
 import { Timestamp } from 'firebase/firestore';
 import { useCompanyStore, selectUid } from 'features/company';
-import { apiRoutes } from '@/constants/routes';
+import { apiRoutes, wpRoutes } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -60,9 +60,6 @@ export const Presenter: FC = () => {
     onDrop,
   });
 
-  // const handleFileSelection = (selectedFile) => {
-  //   setSelectedFileContent(selectedFile);
-  // };
   const submitHandler = async (data: Schema) => {
     if (!file) return;
     setIsSending(true);
@@ -73,22 +70,47 @@ export const Presenter: FC = () => {
     formData.append('contentType', contentType);
     formData.append('filename', filename);
     formData.append('file', file);
-    const res = await axios.post(apiRoutes.wpMedia, { ...formData, filename });
-
-    if (res === null) return;
+    const resBasic = await axios.get(apiRoutes.wpBasic).catch((err) => {
+      console.error(err);
+      return null;
+    });
+    if (resBasic === null || !resBasic) return;
+    const basicData = resBasic.data;
+    const resUpload = await axios
+      .post(wpRoutes.media, formData, {
+        headers: {
+          'Content-Type': `multipart/form-data`,
+          'Content-Disposition': `attachment; filename=test`,
+          Authorization: `Basic ${basicData.basic}`,
+        },
+        // auth: {
+        //   username: API_USER,
+        //   password: API_PASSWORD,
+        // },
+      })
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
+    if (resUpload === null) {
+      alert(`ネットワークエラーにより画像のアップロードに失敗しました。
+しばらく経ってからもう一度お試しください。`);
+      return;
+    }
 
     // firestore
-    // const resWpData = res.data();
-    // const reqData = {
-    //   title: data.name,
-    //   url: resWpData?.url ?? ``,
-    //   file_name: filename,
-    //   message: `画像「${data.name}」をアップロードしました。`,
-    //   date: Timestamp.now(),
-    //   wp_id: resWpData?.id ?? ``,
-    // };
-    // await addFortunesLog(companyID, reqData);
+    const resWpData = resUpload.data;
+    const reqData = {
+      title: data.name,
+      url: resWpData?.source_url ?? ``,
+      file_name: filename,
+      message: `画像「${data.name}」をアップロードしました。`,
+      date: Timestamp.now(),
+      wp_id: resWpData?.id ?? ``,
+    };
+    await addFortunesLog(companyID, reqData);
 
+    alert('画像をアップロードしました。');
     reset();
     setSelectedFile(null);
     setIsSending(false);
