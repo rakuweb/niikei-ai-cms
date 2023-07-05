@@ -70,15 +70,14 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       is_auto_patrol: false,
     },
   });
-  const [categories, setCategories] = useState<string[]>([
-    '社会',
-    '政治',
-    '経済',
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([
+    { id: 16, name: '政治・行政' },
+    { id: 12, name: '企業' },
+    { id: 3, name: 'その他' },
   ]);
   const companyID = useCompanyStore(selectUid);
 
   useEffect(() => {
-    // TODO
     const handler = async () => {
       const url = apiRoutes.wpCategories;
       const res = await axios.get(url).catch((err) => {
@@ -88,7 +87,15 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
 
       if (res === null) return;
 
-      setCategories((prev) => res?.data?.categories ?? prev);
+      const resCategories = res?.data?.categories ?? undefined;
+      setCategories((prev) =>
+        resCategories
+          ? resCategories.map((category) => ({
+            id: category.id,
+            name: category.name,
+          }))
+          : prev
+      );
     };
 
     handler();
@@ -226,8 +233,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               borderRadius={'none'}
             >
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={category.name}>
+                  {category.name}
                 </option>
               ))}
             </Select>
