@@ -11,6 +11,7 @@ export type EmployeeType = {
   new_info_notification: boolean;
   auto_publish_notification: boolean;
   fortune_notification: boolean;
+  notifications: any;
 };
 
 export const EMPLOYEE_COLLECTION = 'employees';
