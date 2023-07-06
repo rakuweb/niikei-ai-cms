@@ -56,7 +56,12 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
     }
-
+    await drive.files.update({
+      fileId: documentId,
+      requestBody: {
+        name: title,
+      },
+    });
     res.status(200).json({ documentId, url });
   } catch (error) {
     console.error('Error creating document:', error);
