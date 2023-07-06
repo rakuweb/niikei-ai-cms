@@ -9,7 +9,7 @@ export const createNotificationsSlice: StateCreator<
   NotificationsSlice
 > = (set) => ({
   siteManagement: [],
-  articleManagement: [],
+  articleManagement: { inReview: [], checking: [], fixing: [] },
   autoPostManagement: [],
   originalContentManagement: [],
 
