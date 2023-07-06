@@ -26,6 +26,7 @@ import {
 } from '@/firebase/firestore/fortuneLogs';
 import { ContentContainer } from '@/components/Container/ContentContainer';
 import { Pagination } from '@/components/Pagination';
+import { ExternalLink } from '@/components/links/ExternalLink';
 
 export type PresenterProps = {
   data?: {
@@ -172,9 +173,9 @@ export const Presenter: FC<PresenterProps> = () => {
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                               onChange={(e) =>
                                 handleSwitchChange(log.id, e.target.checked)
@@ -192,12 +193,12 @@ export const Presenter: FC<PresenterProps> = () => {
 
                         <Td>
                           <Box display={'flex'} justifyContent={'space-around'}>
-                            <InternalLink href={``}>
+                            <ExternalLink href={log.url}>
                               <WideButton
                                 text={`編集する`}
                                 w={`${140 / 19.2}vw`}
                               />
-                            </InternalLink>
+                            </ExternalLink>
                             <GrayButton
                               onClick={() => handleDelete(log.id)}
                               text={`削除する`}
