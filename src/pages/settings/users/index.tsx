@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { Box, Spinner } from '@chakra-ui/react';
 import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -26,12 +26,10 @@ const Home: NextPage = () => {
 
       try {
         if (user) {
-          const allowedEmailsRef = collection(
-            db,
-            'companies',
-            user.uid,
-            'employees'
-          );
+          const employeeDocRef = doc(db, 'users', user.uid as string);
+          const employeeDocSnap = await getDoc(employeeDocRef);
+          const ref = employeeDocSnap.data()?.company_ref;
+          const allowedEmailsRef = collection(ref, 'employees');
           const querySnapshot = await getDocs(allowedEmailsRef);
 
           const fetchedData: UserData[] = [];
