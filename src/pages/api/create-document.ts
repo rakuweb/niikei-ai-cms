@@ -22,15 +22,15 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
 
     // Fetch all documents in the specific folder
-    const list = await drive.files.list({
-      q: `'1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO' in parents`,
-    });
-
-    // Find the document with the same documentId
-    const file = list.data.files?.find((file) => file.id === documentId);
-    if (!file) {
-      throw new Error('ドキュメントが見つかりません');
-    }
+    // const list = await drive.files.list({
+    //   q: `'1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO' in parents`,
+    // });
+    //
+    // // Find the document with the same documentId
+    // const file = list.data.files?.find((file) => file.id === documentId);
+    // if (!file) {
+    //   throw new Error('ドキュメントが見つかりません');
+    // }
 
     const url = surl;
 
