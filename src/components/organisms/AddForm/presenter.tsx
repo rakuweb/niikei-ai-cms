@@ -334,6 +334,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               頻度を入力してください
             </FormErrorMessage>
           )}
+
           {errors.interval2 && (
             <FormErrorMessage fontSize={'0.5vw'}>
               時間を入力してください
