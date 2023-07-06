@@ -29,18 +29,29 @@ const Home: NextPage = () => {
           const employeeDocRef = doc(db, 'users', user.uid as string);
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
-          const allowedEmailsRef = collection(ref, 'employees');
-          const querySnapshot = await getDocs(allowedEmailsRef);
 
-          const fetchedData: UserData[] = [];
-          querySnapshot.forEach((doc) => {
-            fetchedData.push({
-              id: doc.id,
-              ...(doc.data() as { role: string; email: string; name: string }),
+          const userRoleRef = doc(ref, 'employees', user.uid as string);
+          const userRoleDoc = await getDoc(userRoleRef);
+          const role = userRoleDoc.data()?.role;
+
+          if (role === 'editor') {
+            const allowedEmailsRef = collection(ref, 'employees');
+            const querySnapshot = await getDocs(allowedEmailsRef);
+
+            const fetchedData: UserData[] = [];
+            querySnapshot.forEach((doc) => {
+              fetchedData.push({
+                id: doc.id,
+                ...(doc.data() as {
+                  role: string;
+                  email: string;
+                  name: string;
+                }),
+              });
             });
-          });
 
-          setData(fetchedData);
+            setData(fetchedData);
+          }
         } else {
           router.push('/');
         }
