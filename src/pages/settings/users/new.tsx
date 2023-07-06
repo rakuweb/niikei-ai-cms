@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { Box } from '@chakra-ui/react';
 import { New } from 'components/New';
 import { Sidebar } from 'components/Sidebar';
@@ -7,9 +8,12 @@ import { useState, useEffect } from 'react';
 import { db } from 'src/firebase';
 
 import { getAuth } from 'firebase/auth';
+import { Role } from '@/features/account';
+import { routes } from '@/constants/routes';
 
 const Home: NextPage = () => {
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<string>('');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -36,11 +40,15 @@ const Home: NextPage = () => {
     fetchUserRole();
   }, []);
 
+  useEffect(() => {
+    if (role === Role.Writer) router.push(routes.articlesNew);
+  }, [role]);
+
   return (
     <>
       <Box>
         <Sidebar />
-        {role === 'editor' && <New />}
+        {<New />}
       </Box>
     </>
   );

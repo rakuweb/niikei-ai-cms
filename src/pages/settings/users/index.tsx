@@ -7,6 +7,7 @@ import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { routes } from '@/constants/routes';
 
 type UserData = {
   role: string;
@@ -51,6 +52,8 @@ const Home: NextPage = () => {
             });
 
             setData(fetchedData);
+          } else {
+            router.push(routes.articlesNew);
           }
         } else {
           router.push('/');
