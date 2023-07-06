@@ -89,7 +89,11 @@ export const Presenter: FC<PresenterProps> = () => {
 
       const { notifications } = employee;
       setSiteManamgementNotifications(notifications?.site ?? []);
-      setArticleManagementNotifications(notifications?.article ?? []);
+      setArticleManagementNotifications({
+        inReview: notifications?.article?.in_review ?? [],
+        checking: notifications?.article?.checking ?? [],
+        fixing: notifications?.article?.fixing ?? [],
+      });
       setAutoPostManagementNotifications(notifications?.auto_post ?? []);
       setOriginalContentManamgementNotifications(notifications?.fortune ?? []);
 
