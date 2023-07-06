@@ -17,6 +17,8 @@ import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
 import { useAccountStore, selectAccountItem } from 'features/account';
+import { fetchFreeDocuments } from '@/firebase/firestore/documents';
+
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
