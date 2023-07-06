@@ -91,9 +91,9 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setCategories((prev) =>
         resCategories
           ? resCategories.map((category) => ({
-            id: category.id,
-            name: category.name,
-          }))
+              id: category.id,
+              name: category.name,
+            }))
           : prev
       );
     };
@@ -158,6 +158,60 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     }
   };
 
+  const [interval2Type, setInterval2Type] = useState<string>('');
+
+  useEffect(() => {
+    if (data?.interval1) {
+      setInterval2Type(data.interval1);
+    }
+  }, [data?.interval1]);
+
+  const getInterval2Input = () => {
+    if (interval2Type === '毎月') {
+      return (
+        <Input
+          type="number"
+          placeholder="日にちを入力"
+          w={'50%'}
+          min="1"
+          max="31"
+          borderRadius={'none'}
+          {...register('interval2', { required: true })}
+          fontSize={'1vw'}
+        />
+      );
+    } else if (interval2Type === '毎週') {
+      return (
+        <Select
+          w={'50%'}
+          placeholder="曜日を選択"
+          {...register('interval2', { required: true })}
+          borderRadius={'none'}
+          fontSize={'1vw'}
+        >
+          <option value="日曜日">日曜日</option>
+          <option value="月曜日">月曜日</option>
+          <option value="月曜日">火曜日</option>
+          <option value="月曜日">水曜日</option>
+          <option value="月曜日">木曜日</option>
+          <option value="月曜日">金曜日</option>
+          <option value="月曜日">土曜日</option>
+        </Select>
+      );
+    } else if (interval2Type === '毎日') {
+      return (
+        <Input
+          type="time"
+          fontSize={'1vw'}
+          w={'50%'}
+          borderRadius={'none'}
+          placeholder="時間を入力"
+          {...register('interval2', { required: true })}
+        />
+      );
+    }
+  };
+
   return (
     <>
       <Box
@@ -172,6 +226,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
             <Input
               mt={'0.5vw'}
               type="text"
+              fontSize={'1vw'}
               placeholder={'登録名を入力'}
               {...register('name', { required: true })}
               borderRadius={'none'}
@@ -186,12 +241,13 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
           <FormLabel>
             <NameLabel name="URL" />
             <Flex alignItems={'center'}>
-              <Box fontSize={'0.8vw'} mr={'1vw'}>
+              <Box fontSize={'1vw'} mr={'1vw'}>
                 https://
               </Box>
               <Input
                 mt={'0.5vw'}
                 // type="url"
+                fontSize={'1vw'}
                 placeholder="URLを入力"
                 {...register('url', {
                   required: true,
@@ -211,6 +267,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
             <Input
               mt={'0.5vw'}
               type="xpath"
+              fontSize={'1vw'}
               placeholder="xpathを入力"
               {...register('xpath', {
                 required: false,
@@ -231,6 +288,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               placeholder="カテゴリを選択"
               {...register('category', { required: true })}
               borderRadius={'none'}
+              fontSize={'1vw'}
             >
               {categories.map((category) => (
                 <option key={category.id} value={category.name}>
@@ -245,29 +303,32 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         </FormControl>
 
         <FormControl isInvalid={!!errors.interval1} mb={'1.5vw'} w={'20vw'}>
-          <FormLabel>
-            <NameLabel name="巡回頻度" />
-            <Flex mt={'0.5vw'} alignItems={'center'}>
-              <Select
-                className="interval1"
-                placeholder="--"
-                {...register('interval1', { required: true })}
-                borderRadius={'none'}
-                mr={'0.5vw'}
-              >
-                <option value="毎月">毎月</option>
-                <option value="毎週">毎週</option>
-                <option value="毎日">毎日</option>
-              </Select>
-              <Input
-                className="interval2"
-                borderRadius={'none'}
-                ml={'0.5vw'}
-                type="time"
-                {...register('interval2', { required: true })}
-              />
-            </Flex>
-          </FormLabel>
+          <FormControl
+            isInvalid={!!errors.interval1 || !!errors.interval2}
+            mb={'1.5vw'}
+            w={'20vw'}
+          >
+            <FormLabel>
+              <NameLabel name="巡回頻度" />
+              <Flex mt={'0.5vw'} alignItems={'center'}>
+                <Select
+                  className="interval1"
+                  placeholder="--"
+                  {...register('interval1', { required: true })}
+                  borderRadius={'none'}
+                  w={'50%'}
+                  mr={'0.5vw'}
+                  onChange={(e) => setInterval2Type(e.target.value)}
+                  fontSize={'1vw'}
+                >
+                  <option value="毎月">毎月</option>
+                  <option value="毎週">毎週</option>
+                  <option value="毎日">毎日</option>
+                </Select>
+                {getInterval2Input()}
+              </Flex>
+            </FormLabel>
+          </FormControl>
           {errors.interval1 && (
             <FormErrorMessage fontSize={'0.5vw'}>
               頻度を入力してください
