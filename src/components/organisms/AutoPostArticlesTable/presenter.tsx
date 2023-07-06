@@ -203,18 +203,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   }
 
   // 時間ソート
-  useEffect(() => {
-    const fetchTimes = async () => {
-      const newTimes = {};
-      for (const item of data) {
-        const times = await getTimes(item.url);
-        newTimes[item.url] = times;
-      }
-      setTimes(newTimes);
-    };
-
-    fetchTimes();
-  }, [data]);
+  // useEffect(() => {
+  //   const fetchTimes = async () => {
+  //     const newTimes = {};
+  //     for (const item of data) {
+  //       const times = await getTimes(item.url);
+  //       newTimes[item.url] = times;
+  //     }
+  //     setTimes(newTimes);
+  //   };
+  //
+  //   fetchTimes();
+  // }, [data]);
 
   const timesArray = Object.entries(times);
 
