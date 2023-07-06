@@ -1,91 +1,46 @@
 import type { NextPage } from 'next';
-import { Box, Spinner } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { New } from 'components/New';
 import { Sidebar } from 'components/Sidebar';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
-import { auth, db } from 'src/firebase';
-import { useRouter } from 'next/router';
-import { onAuthStateChanged } from 'firebase/auth';
+import { db } from 'src/firebase';
 
-type UserData = {
-  role: string;
-  password: string;
-  email: string;
-  name: string;
-};
-type EmployeeData = UserData & {
-  is_company: boolean;
-};
+import { getAuth } from 'firebase/auth';
 
 const Home: NextPage = () => {
-  const [data, setData] = useState<UserData[] | null>(null);
-  const router = useRouter();
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const fetchUserData = async () => {
-          try {
-            const employeeRef = doc(db, 'users', user.uid);
-            const employeeDoc = await getDoc(employeeRef);
+    const fetchUserRole = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
 
-            if (employeeDoc.exists()) {
-              const employeeData = employeeDoc.data() as EmployeeData;
+      try {
+        if (user) {
+          const employeeDocRef = doc(db, 'users', user.uid as string);
+          const employeeDocSnap = await getDoc(employeeDocRef);
+          const ref = employeeDocSnap.data()?.company_ref;
 
-              if (!employeeData.is_company) {
-                return;
-              }
-            } else {
-              return;
-            }
+          const userRoleRef = doc(ref, 'employees', user.uid as string);
+          const userRoleDoc = await getDoc(userRoleRef);
+          const userRole = userRoleDoc.data()?.role;
 
-            const allowedEmailsRef = collection(db, 'users');
-            const querySnapshot = await getDocs(allowedEmailsRef);
-            const fetchedData: UserData[] = [];
-            querySnapshot.forEach((doc) => {
-              fetchedData.push(doc.data() as UserData);
-            });
-            setData(fetchedData);
-          } catch (error) {
-            window.alert(error);
-            router.push('/');
-          }
-        };
-
-        fetchUserData();
-      } else {
-        router.push('/signin');
+          setRole(userRole);
+        }
+      } catch (error) {
+        window.alert(error);
       }
-    });
+    };
 
-    return () => unsubscribe();
+    fetchUserRole();
   }, []);
-
-  if (!data) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="#49BAC0"
-          size="xl"
-        />
-      </Box>
-    );
-  }
 
   return (
     <>
       <Box>
         <Sidebar />
-        <New />
+        {role === 'editor' && <New />}
       </Box>
     </>
   );

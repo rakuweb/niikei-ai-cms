@@ -13,7 +13,6 @@ import {
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
-import { InternalLink } from 'components/links/InternalLink';
 import { css } from '@emotion/react';
 import { Timestamp } from 'firebase/firestore';
 import dayjs from 'dayjs';
@@ -40,6 +39,7 @@ export type PresenterProps = {
   }[];
   currentPage: number;
 };
+
 export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;
   const [list, setList] = useState<FortunesLogType[]>([]);
@@ -72,11 +72,14 @@ export const Presenter: FC<PresenterProps> = () => {
   }, []);
 
   const handleDelete = async (id: string) => {
-    console.log('Handle delete for id:', id);
-    await deleteFortunesLogs(companyID, id).catch((err) => {
+    const res = await deleteFortunesLogs(companyID, id).catch((err) => {
       console.error(err);
       alert('削除に失敗しました。時間経ってからもう一度お試しください。');
+      return null;
     });
+    if (res === null) return;
+    alert('画像を削除しました。');
+    location.reload();
   };
   const handleSwitchChange = async (id: string, used: boolean) => {
     const checkOnly = (id: string) => {
@@ -195,7 +198,7 @@ export const Presenter: FC<PresenterProps> = () => {
                           <Box display={'flex'} justifyContent={'space-around'}>
                             <ExternalLink href={log.url}>
                               <WideButton
-                                text={`編集する`}
+                                text={`確認する`}
                                 w={`${140 / 19.2}vw`}
                               />
                             </ExternalLink>

@@ -1,4 +1,10 @@
-import { Timestamp, collection, getDoc, getDocs } from 'firebase/firestore';
+import {
+  Timestamp,
+  collection,
+  getDoc,
+  getDocs,
+  doc,
+} from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -38,14 +44,18 @@ export const fetchArticles = async (companyID: string) => {
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
     const createdByRef = data.created_by;
-    const createdBySnap = await getDoc(createdByRef);
-    const createdByData = createdBySnap.data() as User;
+    const createdBySnap = await getDoc(doc(db, createdByRef));
+    const createdByData = createdBySnap.data();
     const name = createdByData ? createdByData.name : '';
     return { ...data, name };
   });
 
-  const documents = await Promise.all(documentsPromises);
+  const result = await Promise.allSettled(documentsPromises);
+  const documents = result
+    .filter((item) => item?.status === 'fulfilled')
+    .map((item) => (item as PromiseFulfilledResult<any>).value);
 
+  console.log(documents);
   return documents;
 };
 
