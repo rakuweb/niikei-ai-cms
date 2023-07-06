@@ -63,7 +63,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const docRef = doc(ref, 'registered_sites', id);
+        const docRef = doc(ref, 'sites', id);
         await deleteDoc(docRef);
       }
       window.alert('選択項目を削除しました');
