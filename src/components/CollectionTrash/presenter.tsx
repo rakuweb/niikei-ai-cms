@@ -21,7 +21,6 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
-  console.log(data);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>

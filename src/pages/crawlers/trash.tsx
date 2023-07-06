@@ -56,17 +56,17 @@ const Home: NextPage = () => {
             querySnapshot.docs.map(async (doc) => {
               const docData = doc.data() as UserData;
               const siteRefSnap = await getDoc(docData.site_ref);
-              const siteData = siteRefSnap.data() as { category: string };
+              const siteData = siteRefSnap.data(); //as { category: string };
 
-              fetchedData.push({
-                ...docData,
-                id: doc.id,
-                category: siteData.category,
-              });
+              siteData &&
+                fetchedData.push({
+                  ...docData,
+                  id: doc.id,
+                  category: String(siteData?.category ?? ''),
+                });
             })
           );
-          setData(fetchedData);
-          console.log(fetchedData);
+          setData(fetchedData.filter((item) => !!item));
         } else {
           router.push('/');
         }
