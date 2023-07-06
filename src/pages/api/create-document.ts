@@ -8,13 +8,11 @@ const credentials = JSON.parse(
 );
 
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { title, text } = req.body;
+  const { title, text, documentId } = req.body;
 
   try {
     const auth = new google.auth.GoogleAuth({
       credentials: credentials,
-      // WARN:
-      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: [
         'https://www.googleapis.com/auth/drive',
         'https://www.googleapis.com/auth/documents',
@@ -22,36 +20,32 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
-    const documentMetadata = {
-      name: title,
-      mimeType: 'application/vnd.google-apps.document',
-      parents: ['1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO'],
-    };
-    const createdDocument = await drive.files.create({
-      requestBody: documentMetadata,
+
+    // Fetch all documents in the specific folder
+    const list = await drive.files.list({
+      q: `'1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO' in parents`,
     });
 
-    const { id: documentId } = createdDocument.data;
+    // Find the document with the same documentId
+    const file = list.data.files?.find((file) => file.id === documentId);
+    if (!file) {
+      throw new Error('ドキュメントが見つかりません');
+    }
 
-    const document = await drive.files.get({
-      fileId: documentId,
-      fields: 'webViewLink',
-    });
-
-    const url = document.data.webViewLink;
+    const url = file.webViewLink;
 
     const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
     const requests = text
       ? [
-        {
-          insertText: {
-            location: {
-              index: 1,
+          {
+            insertText: {
+              location: {
+                index: 1,
+              },
+              text,
             },
-            text,
           },
-        },
-      ]
+        ]
       : [];
 
     if (requests.length > 0) {
