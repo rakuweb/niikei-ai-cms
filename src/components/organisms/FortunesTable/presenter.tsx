@@ -39,6 +39,7 @@ export type PresenterProps = {
   }[];
   currentPage: number;
 };
+
 export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;
   const [list, setList] = useState<FortunesLogType[]>([]);
@@ -71,11 +72,14 @@ export const Presenter: FC<PresenterProps> = () => {
   }, []);
 
   const handleDelete = async (id: string) => {
-    await deleteFortunesLogs(companyID, id).catch((err) => {
+    const res = await deleteFortunesLogs(companyID, id).catch((err) => {
       console.error(err);
       alert('削除に失敗しました。時間経ってからもう一度お試しください。');
+      return null;
     });
+    if (res === null) return;
     alert('画像を削除しました。');
+    location.reload();
   };
   const handleSwitchChange = async (id: string, used: boolean) => {
     const checkOnly = (id: string) => {
