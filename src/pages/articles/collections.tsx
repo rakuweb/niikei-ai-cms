@@ -52,12 +52,12 @@ const Home: NextPage = () => {
             querySnapshot.docs.map(async (doc) => {
               const docData = doc.data() as UserData;
               const siteRefSnap = await getDoc(docData.site_ref);
-              const siteData = siteRefSnap.data() as { category: string };
+              const siteData = siteRefSnap?.data() as { category: string };
 
               fetchedData.push({
                 ...docData,
                 id: doc.id,
-                category: siteData.category,
+                category: siteData?.category ?? '',
               });
             })
           );
