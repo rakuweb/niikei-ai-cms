@@ -8,8 +8,8 @@ const credentials = JSON.parse(
 );
 
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { title, text, documentId } = req.body;
-
+  const { title, text, documentId, url } = req.body;
+  const surl = url;
   try {
     const auth = new google.auth.GoogleAuth({
       credentials: credentials,
@@ -32,7 +32,7 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
       throw new Error('ドキュメントが見つかりません');
     }
 
-    const url = file.webViewLink;
+    const url = surl;
 
     const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
     const requests = text

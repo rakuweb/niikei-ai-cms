@@ -65,14 +65,20 @@ export const Presenter: FC<PresenterProps> = ({
         return;
       }
 
-      const { document_id } = freeDoc.data();
+      const { document_id, url } = freeDoc.data();
+      console.log(url);
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // Pass the document_id to the API
-        body: JSON.stringify({ title, text, documentId: document_id }),
+
+        body: JSON.stringify({
+          title,
+          text,
+          documentId: document_id,
+          url: url,
+        }),
       });
       console.log(response);
       if (response.ok) {
