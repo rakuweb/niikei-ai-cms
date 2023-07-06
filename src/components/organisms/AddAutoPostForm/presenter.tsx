@@ -222,6 +222,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
             <Input
               mt={'0.5vw'}
               type="text"
+              fontSize={'1vw'}
               placeholder={'登録名を入力'}
               {...register('name', { required: true })}
               borderRadius={'none'}
@@ -242,6 +243,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               <Input
                 mt={'0.5vw'}
                 // type="url"
+                fontSize={'1vw'}
                 placeholder="URLを入力"
                 {...register('url', {
                   required: true,
@@ -261,6 +263,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
             <Input
               mt={'0.5vw'}
               type="xpath"
+              fontSize={'1vw'}
               placeholder="xpathを入力"
               {...register('xpath', {
                 required: false,
@@ -281,6 +284,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               placeholder="カテゴリを選択"
               {...register('category', { required: true })}
               borderRadius={'none'}
+              fontSize={'1vw'}
             >
               {categories.map((category) => (
                 <option key={category.id} value={category.name}>
