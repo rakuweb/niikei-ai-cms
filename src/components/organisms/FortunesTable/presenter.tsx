@@ -188,8 +188,8 @@ export const Presenter: FC<PresenterProps> = () => {
                           )}
                         </Td>
                         <Td>
-                          {log.date &&
-                            dayjs(log.date.toDate()).format('YYYY/MM/DD')}
+                          {log?.date &&
+                            dayjs(log?.date?.toDate())?.format('YYYY/MM/DD')}
                         </Td>
                         <Td>{log.title}</Td>
                         <Td>{log.message}</Td>
