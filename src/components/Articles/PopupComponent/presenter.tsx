@@ -13,10 +13,19 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
 import { useAccountStore, selectAccountItem } from 'features/account';
+import { fetchFreeDocument } from './documents';
+
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -44,13 +53,32 @@ export const Presenter: FC<PresenterProps> = ({
   const account = useAccountStore(selectAccountItem);
   const handleCreateDocument = async () => {
     try {
-      text = text || '';
+      const freeDocRef = collection(db, 'documents');
+
+      const freeDocsSnap = await getDocs(freeDocRef);
+
+      const freeDoc = freeDocsSnap.docs.find(
+        (doc) => doc.data().status === 'free'
+      );
+      if (!freeDoc) {
+        window.alert('利用可能なGoogleドキュメントがありません');
+        return;
+      }
+
+      const { document_id, url } = freeDoc.data();
+      console.log(url);
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, text }),
+
+        body: JSON.stringify({
+          title,
+          text,
+          documentId: document_id,
+          url: url,
+        }),
       });
       console.log(response);
       if (response.ok) {
@@ -70,6 +98,10 @@ export const Presenter: FC<PresenterProps> = ({
           due_date: '',
           wp_url: '',
           created_by: doc(ref, 'employees', account.uid),
+        });
+        const documenIdRef = doc(db, 'documents', documentId);
+        await updateDoc(documenIdRef, {
+          status: 'using',
         });
 
         onClose();
