@@ -15,12 +15,6 @@ export default async function handler(
     const auth = getAuth();
     const { name, email, password, role, is_company, currentUserUid } =
       req.body;
-    // const currentUser = auth.currentUser;
-    // let userToken = '';
-    // if (currentUser) {
-    //   const tokenResult = await currentUser.getIdTokenResult();
-    //   userToken = tokenResult.token;
-    // }
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -28,7 +22,16 @@ export default async function handler(
     );
     const { user } = userCredential;
 
-    const dataWithoutPassword = { name, email, role };
+    const dataWithoutPassword = {
+      name,
+      email,
+      role,
+      new_info_notification: false,
+      auto_publish_notification: false,
+      fortune_notification: false,
+      // eslint-disable-line
+      notifications: { site: [], article: [], autoPost: [], fortune: [] },
+    };
     let companyDocRef: DocumentReference;
     if (is_company) {
       companyDocRef = doc(db, 'companies', user.uid, 'employees', user.uid);
@@ -41,17 +44,17 @@ export default async function handler(
         user.uid
       );
     }
-    const employeeDocRef = doc(db, 'users', user.uid);
+    const userDocRef = doc(db, 'users', user.uid);
 
     await setDoc(companyDocRef, dataWithoutPassword);
     const companyRef = doc(db, 'companies', currentUserUid);
-    await setDoc(employeeDocRef, {
+    await setDoc(userDocRef, {
       is_company: is_company,
       company_ref: companyRef,
     });
 
     if (!is_company) {
-      await setDoc(employeeDocRef, {
+      await setDoc(userDocRef, {
         is_company: is_company,
         company_ref: companyRef,
       });

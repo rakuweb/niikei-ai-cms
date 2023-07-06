@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Box,
   Table,
@@ -11,6 +11,7 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -25,6 +26,8 @@ import { DropDown } from '../DropDown';
 import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
+import { Popup } from 'components/Articles/PopupComponent';
+import { apiRoutes } from '@/constants/routes';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -46,10 +49,21 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const itemsPerPage = 10;
+  const [target, setTarget] = useState('');
 
   const [selectedItems, setSelectedItems] = useState<{ [id: string]: boolean }>(
     {}
   );
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupText, setPopupText] = useState('');
+  const [categories, setCategories] = useState([]);
+  const openPopup = () => {
+    setIsOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
+  };
 
   const handleCheckboxClick = (id: string) => {
     setSelectedItems((prevState) => ({
@@ -126,10 +140,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const docRef = doc(ref, 'infomation', id);
 
     await updateDoc(docRef, {
-      status: 'stand_by',
+      status: '',
+      // status: 'stand_by',
     });
 
-    window.alert('ステータスを変更しました');
+    // window.alert('ステータスを変更しました');
     location.reload();
   };
   const handleSetAllStandBy = async () => {
@@ -151,6 +166,24 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     window.alert('選択項目を記事化しました');
     location.reload();
   };
+
+  useEffect(() => {
+    const url = apiRoutes.wpCategories;
+    const handler = async () => {
+      const res = await axios.get(url);
+      const data = res.data;
+
+      setCategories(
+        data.categories.map((category) => ({
+          id: category.id,
+          name: category.name,
+        }))
+      );
+    };
+
+    handler();
+  }, []);
+
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -218,7 +251,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <WideButton
                                 text={`記事にする`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleSetStandBy(data.id)}
+                                onClick={() => {
+                                  setTarget(data.id);
+                                  openPopup();
+                                }}
+                              // onClick={() => handleSetStandBy(data.id)}
                               />
 
                               <GrayButton
@@ -244,7 +281,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
             handleSetAllStandBy={handleSetAllStandBy}
-            options={['まとめて元に戻す', 'まとめて記事化する']}
+            options={['まとめて元に戻す']}
+          // options={['まとめて元に戻す', 'まとめて記事化する']}
           />
         </Box>
         <Pagination
@@ -254,6 +292,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           handlePageChange={handlePageChange}
         />
       </Flex>
+      <Popup
+        isOpen={isOpen}
+        onClose={closePopup}
+        text={popupText}
+        setText={setPopupText}
+        list={categories}
+        onChangeArticle={() => handleSetStandBy(target)}
+      />
     </>
   );
 };
