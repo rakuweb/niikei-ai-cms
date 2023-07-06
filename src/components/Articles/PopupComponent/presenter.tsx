@@ -32,6 +32,7 @@ export type PresenterProps = {
   text: string;
   setText: (text: string) => void;
   list: { id: string; name: string }[];
+  onChangeArticle?: () => void;
 };
 
 export const Presenter: FC<PresenterProps> = ({
@@ -39,6 +40,7 @@ export const Presenter: FC<PresenterProps> = ({
   onClose,
   text,
   list,
+  onChangeArticle,
 }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -103,6 +105,7 @@ export const Presenter: FC<PresenterProps> = ({
         await updateDoc(documenIdRef, {
           status: 'using',
         });
+        onChangeArticle && onChangeArticle();
 
         onClose();
         window.open(url, '_blank');
