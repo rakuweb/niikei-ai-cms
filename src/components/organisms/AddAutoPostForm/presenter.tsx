@@ -74,10 +74,10 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       is_auto_posts: false,
     },
   });
-  const [categories, setCategories] = useState<string[]>([
-    '社会',
-    '政治',
-    '経済',
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([
+    { id: 16, name: '政治・行政' },
+    { id: 12, name: '企業' },
+    { id: 3, name: 'その他' },
   ]);
   const companyID = useCompanyStore(selectUid);
 
@@ -283,8 +283,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
               borderRadius={'none'}
             >
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={category.name}>
+                  {category.name}
                 </option>
               ))}
             </Select>
