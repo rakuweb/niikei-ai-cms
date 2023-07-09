@@ -125,8 +125,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     if (data?.interval2) {
       setValue('interval2', data.interval2);
     }
-    setValue('is_notified', data?.is_notified || false);
-    setValue('is_auto_patrol', data?.is_auto_patrol || false);
+    setValue('is_notified', data?.is_notified);
+    setValue('is_auto_patrol', data?.is_auto_patrol);
   }, [
     data?.name,
     data?.url,
