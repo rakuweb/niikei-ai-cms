@@ -5,7 +5,7 @@ import { COMPANY_COLLECTION } from './companies';
 
 export const InformationStatus = {
   InReview: 'in_review',
-  StandBy: 'stand_by',
+  StandBy: 'standby',
   IsDeleted: 'is_deleted',
 };
 export type InformationStatus =
@@ -17,6 +17,7 @@ export type InformationType = {
   title: string;
   url: string;
   status: string;
+  category: { id: number; name: string };
 };
 
 export const INFORMATION_COLLECTION = 'information';

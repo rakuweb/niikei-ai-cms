@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
+import { CheckingTable } from 'components/organisms/CheckingTable';
 import { InternalLink } from 'components/links/InternalLink';
-import { ArticlesTrashTable } from '../organisms/ArticlesTrashTable';
 import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
@@ -43,7 +42,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               </InternalLink>
             </Flex>
 
-            <ArticlesTrashTable data={data} currentPage={0} />
+            <CheckingTable data={data} currentPage={0} />
           </Text>
         </OutsideContainer>
       </Box>

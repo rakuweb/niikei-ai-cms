@@ -35,7 +35,7 @@ export type ArticleType = {
 export type User = {
   name: string;
 };
-export const ARTICLE_COLLECTION = 'auto_post_articles';
+export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
 
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
@@ -43,11 +43,7 @@ export const fetchArticles = async (companyID: string) => {
   const snapshots = await getDocs(docsRef);
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
-    const createdByRef = data.created_by;
-    const createdBySnap = await getDoc(doc(db, createdByRef));
-    const createdByData = createdBySnap.data();
-    const name = createdByData ? createdByData.name : '';
-    return { ...data, name };
+    return { ...data };
   });
 
   const result = await Promise.allSettled(documentsPromises);
@@ -55,7 +51,6 @@ export const fetchArticles = async (companyID: string) => {
     .filter((item) => item?.status === 'fulfilled')
     .map((item) => (item as PromiseFulfilledResult<any>).value);
 
-  console.log(documents);
   return documents;
 };
 
@@ -64,7 +59,7 @@ export const getArticleDocsRef = (companyID: string) => {
     db,
     COMPANY_COLLECTION,
     companyID,
-    ARTICLE_COLLECTION
+    AUTO_POST_ARTICLE_COLLECTION
   );
 
   return docsRef;

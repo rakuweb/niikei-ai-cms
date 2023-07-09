@@ -18,7 +18,8 @@ import { css } from '@emotion/react';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
-import { doc, getDoc, deleteDoc } from '@firebase/firestore';
+import { ExternalLink } from 'components/links/ExternalLink';
+import { doc, getDoc } from '@firebase/firestore';
 import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -65,7 +66,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const selectedUrls = Object.keys(selectedItems).filter(
       (url) => selectedItems[url]
     );
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
@@ -74,14 +75,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const refFieldString = userDoc.data().company_ref;
 
     for (const url of selectedUrls) {
-      await fetch('/api/delete-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ urls: [url] }),
-      });
-
       const index = data.findIndex((item) => item.url === url);
       const document_id = data[index]?.document_id;
 
@@ -93,22 +86,28 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
       if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(companyEmployeeDocRef);
+        await updateDoc(companyEmployeeDocRef, {
+          status: 'is_deleted',
+        });
       } else {
-        console.log('指定したユーザー情報が存在しません');
+        alert(
+          'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+        );
+        return;
       }
     }
 
-    window.alert('選択項目を削除しました');
+    window.alert('ゴミ箱へ移動しました');
     location.reload();
 
     setSelectedItems({});
   };
+
   // DeleteSelected
 
   // single
   const handleDeleteSingle = async (url: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
@@ -116,86 +115,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const userDoc = await getDoc(userDocRef);
     const refFieldString = userDoc.data().company_ref;
 
-    await fetch('/api/delete-document', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ urls: [url] }),
-    });
-
-    const index = data.findIndex((item) => item.url === url);
-    const document_id = data[index]?.document_id;
-
-    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
-    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
-
-    if (userDoc.exists() && companyEmployeeDoc.exists()) {
-      await deleteDoc(companyEmployeeDocRef);
-    } else {
-      console.log('指定した情報が存在しません');
-    }
-
-    window.alert('選択項目を削除しました');
-    location.reload();
-  };
-  // single
-
-  // DropDown
-  const [selectedValue, setSelectedValue] = useState('');
-
-  const handleExecute = async () => {
-    if (selectedValue === 'まとめて削除する') {
-      handleDeleteSelected();
-    }
-    if (selectedValue === 'まとめて元に戻す') {
-      const selectedUrls = Object.keys(selectedItems).filter(
-        (url) => selectedItems[url]
-      );
-      if (!window.confirm('本当に元に戻しますか？')) {
-        return;
-      }
-
-      const userDocRef = doc(db, 'users', id);
-      const userDoc = await getDoc(userDocRef);
-      const refFieldString = userDoc.data().company_ref;
-
-      for (const url of selectedUrls) {
-        const index = data.findIndex((item) => item.url === url);
-        const document_id = data[index]?.document_id;
-
-        const companyEmployeeDocRef = doc(
-          refFieldString,
-          'articles',
-          document_id
-        );
-        const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
-
-        if (userDoc.exists() && companyEmployeeDoc.exists()) {
-          await updateDoc(companyEmployeeDocRef, {
-            status: 'editing',
-          });
-        } else {
-          console.log('指定した情報が存在しません');
-        }
-      }
-
-      window.alert('選択項目を元に戻しました');
-      location.reload();
-    }
-  };
-  // DropDown
-
-  // 元に戻す
-  const handleRevertToEditing = async (url: string) => {
-    if (!window.confirm('下書きに戻しますか？')) {
-      return;
-    }
-
-    const userDocRef = doc(db, 'users', id);
-    const userDoc = await getDoc(userDocRef);
-    const refFieldString = userDoc.data().company_ref;
-    console.log(refFieldString);
     const index = data.findIndex((item) => item.url === url);
     const document_id = data[index]?.document_id;
 
@@ -204,16 +123,30 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
       await updateDoc(companyEmployeeDocRef, {
-        status: 'editing',
+        status: 'is_deleted',
       });
     } else {
-      console.log('指定したユーザー情報が存在しません');
+      alert(
+        'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+      );
+      return;
     }
 
-    window.alert('下書きに戻しました');
+    window.alert('ゴミ箱へ移動しました');
     location.reload();
   };
-  // 元に戻す
+
+  // single
+
+  // DropDown
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const handleExecute = () => {
+    if (selectedValue === 'まとめて削除する') {
+      handleDeleteSelected();
+    }
+  };
+  // DropDown
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -351,14 +284,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <WideButton
-                                text={`元に戻す`}
-                                w={`${140 / 19.2}vw`}
-                                onClick={() =>
-                                  handleRevertToEditing(data?.url || '')
-                                }
-                              />
-
+                              <ExternalLink href={`${data?.wp_url || ''}`}>
+                                <WideButton
+                                  text={`確認する`}
+                                  w={`${140 / 19.2}vw`}
+                                />
+                              </ExternalLink>
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
@@ -383,7 +314,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             selectedValue={selectedValue}
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
-            options={['まとめて削除する', 'まとめて元に戻す']}
+            options={['まとめて削除する']}
           />
         </Box>
         <Pagination

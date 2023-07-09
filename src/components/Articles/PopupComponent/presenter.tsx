@@ -14,6 +14,7 @@ import {
 import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
 import {
+  Timestamp,
   collection,
   doc,
   getDoc,
@@ -25,13 +26,20 @@ import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
 import { useAccountStore, selectAccountItem } from 'features/account';
 import { fetchFreeDocument } from './documents';
+import {
+  DOCUMENT_COLLECTION,
+  DocumentStatus,
+} from '@/firebase/firestore/documents';
+import { ARTICLE_COLLECTION, Status } from '@/firebase/firestore/articles';
+import { apiRoutes, routes } from '@/constants/routes';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
   text: string;
   setText: (text: string) => void;
-  list: { id: string; name: string }[];
+  list: Category[];
   onChangeArticle?: () => void;
 };
 
@@ -43,24 +51,28 @@ export const Presenter: FC<PresenterProps> = ({
   onChangeArticle,
 }) => {
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<Category>({
+    id: undefined,
+    name: '',
+  });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
+    const target = list.find((item) => String(item.id) === e.target.value);
+    setCategory(target);
   };
   const account = useAccountStore(selectAccountItem);
   const handleCreateDocument = async () => {
     try {
-      const freeDocRef = collection(db, 'documents');
+      const freeDocRef = collection(db, DOCUMENT_COLLECTION);
 
       const freeDocsSnap = await getDocs(freeDocRef);
 
       const freeDoc = freeDocsSnap.docs.find(
-        (doc) => doc.data().status === 'free'
+        (doc) => doc.data().status === DocumentStatus.Free
       );
       if (!freeDoc) {
         window.alert('利用可能なGoogleドキュメントがありません');
@@ -68,8 +80,7 @@ export const Presenter: FC<PresenterProps> = ({
       }
 
       const { document_id, url } = freeDoc.data();
-      console.log(url);
-      const response = await fetch('/api/create-document', {
+      const response = await fetch(apiRoutes.createDocument, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,15 +93,13 @@ export const Presenter: FC<PresenterProps> = ({
           url: url,
         }),
       });
-      console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
 
         const employeeDocRef = doc(db, 'users', account.uid);
-        console.log(account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const allowedEmailsRef = collection(ref, 'articles');
+        const allowedEmailsRef = collection(ref, ARTICLE_COLLECTION);
         const documentRef = doc(allowedEmailsRef, documentId);
         await setDoc(documentRef, {
           document_id: documentId || '',
@@ -100,10 +109,12 @@ export const Presenter: FC<PresenterProps> = ({
           due_date: '',
           wp_url: '',
           created_by: doc(ref, 'employees', account.uid),
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
         });
-        const documenIdRef = doc(db, 'documents', documentId);
+        const documenIdRef = doc(db, DOCUMENT_COLLECTION, documentId);
         await updateDoc(documenIdRef, {
-          status: 'using',
+          status: DocumentStatus.Using,
         });
         onChangeArticle && onChangeArticle();
 
@@ -142,7 +153,7 @@ export const Presenter: FC<PresenterProps> = ({
                 placeholder="カテゴリを選択"
                 borderRadius={0}
                 fontSize={{ base: '1vw' }}
-                value={category}
+                value={category.id}
                 onChange={handleCategoryChange}
               >
                 {list.map((item) => (

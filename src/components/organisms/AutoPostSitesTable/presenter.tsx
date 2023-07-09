@@ -27,6 +27,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { db, auth } from 'src/firebase';
 import { InternalLink } from 'components/links/InternalLink';
+import { Category } from '@/firebase/firestore/sites';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -41,7 +42,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: admin.firestore.Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_posts?: boolean;
@@ -117,13 +118,13 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isChecked={data?.is_auto_posts || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>
-                          <Td>{data?.category || ''}</Td>
+                          <Td>{data?.category.name || ''}</Td>
                           <Td>
                             <Box display={'flex'} alignItems={'center'}>
                               {data?.is_renewal && (
@@ -152,9 +153,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                             />
                           </Td>

@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -42,4 +42,24 @@ export const getEmployeeDocRef = (companyID: string, employeeID: string) => {
   );
 
   return docRef;
+};
+
+export const deleteSiteNotificationByID = async (
+  companyID: string,
+  employeeID: string,
+  notification_id: string
+) => {
+  const employeeDocRef = getEmployeeDocRef(companyID, employeeID);
+  const currentData = await getDoc(employeeDocRef);
+  const { notifications } = currentData.data();
+
+  const newData = {
+    notifications: {
+      ...notifications,
+      site: notifications.site.filter(
+        (item: string) => item !== notification_id
+      ),
+    },
+  };
+  await updateEmployee({ companyID, employeeID }, newData);
 };

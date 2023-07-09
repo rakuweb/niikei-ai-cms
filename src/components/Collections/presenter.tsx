@@ -6,6 +6,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: {
@@ -13,7 +14,7 @@ export type PresenterProps = {
     message?: string;
     title?: string;
     status?: string;
-    category?: string;
+    category?: Category;
     url?: string;
     id?: string;
   }[];

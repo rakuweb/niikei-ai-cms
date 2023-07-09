@@ -3,7 +3,7 @@ export type Notification = string;
 export type NotificationsSliceData = {
   siteManagement: Notification[];
   articleManagement: {
-    inReview: Notification[];
+    standby: Notification[];
     checking: Notification[];
     fixing: Notification[];
   };
@@ -14,7 +14,7 @@ export type NotificationsSliceData = {
 export type NotificationsSlice = NotificationsSliceData & {
   setSiteManagementNotifications: (notifications: Notification[]) => void;
   setArticleManagementNotifications: (notifications: {
-    inReview: Notification[];
+    standby: Notification[];
     checking: Notification[];
     fixing: Notification[];
   }) => void;
@@ -22,4 +22,5 @@ export type NotificationsSlice = NotificationsSliceData & {
   setOriginalContentManagementNotifications: (
     notifications: Notification[]
   ) => void;
+  deleteSiteManagementByID: (id: string) => void;
 };

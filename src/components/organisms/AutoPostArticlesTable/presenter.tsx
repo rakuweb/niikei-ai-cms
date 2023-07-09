@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+import { Category } from '@/firebase/firestore/sites';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,7 +37,7 @@ export type PresenterProps = {
     url: string;
     document_id: string;
     status: string;
-    category: string;
+    category: Category;
     wp_url: string;
     created_at: Date;
     due_date: Date;
@@ -163,31 +164,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [titles, setTitles] = useState<{ [url: string]: string }>({});
   const [times, setTimes] = useState<{ [url: string]: string }>({});
 
-  useEffect(() => {
-    const fetchTitles = async () => {
-      const newTitles = {};
-      for (const item of data) {
-        const title = await getTitle(item.url);
-        newTitles[item.url] = title;
-      }
-      setTitles(newTitles);
-    };
+  // useEffect(() => {
+  //   const fetchTitles = async () => {
+  //     const newTitles = {};
+  //     for (const item of data) {
+  //       const title = await getTitle(item.url);
+  //       newTitles[item.url] = title;
+  //     }
+  //     setTitles(newTitles);
+  //   };
+  //
+  //   fetchTitles();
+  // }, [data]);
 
-    fetchTitles();
-  }, [data]);
-
-  useEffect(() => {
-    const fetchTimes = async () => {
-      const newTimes = {};
-      for (const item of data) {
-        const times = await getTimes(item.url);
-        newTimes[item.url] = times;
-      }
-      setTimes(newTimes);
-    };
-
-    fetchTimes();
-  }, [data]);
+  // useEffect(() => {
+  //   const fetchTimes = async () => {
+  //     const newTimes = {};
+  //     for (const item of data) {
+  //       const times = await getTimes(item.url);
+  //       newTimes[item.url] = times;
+  //     }
+  //     setTimes(newTimes);
+  //   };
+  //
+  //   fetchTimes();
+  // }, [data]);
 
   async function getTitle(url: string) {
     const response = await fetch(`/api/title?url=${url}`);
@@ -264,10 +265,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                    {
-                                      backgroundColor: '#49BAC0',
-                                      borderColor: `#49BAC0`,
-                                    },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -281,18 +282,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
-                          <Td>{data?.category || ''}</Td>
-                          <Td>{titles[data?.url || '']}</Td>
-                          <Td>{data?.name || ''}</Td>
+                          <Td>{data?.category?.name || ''}</Td>
+                          <Td>{data.title}</Td>
+                          <Td>{`自動生成`}</Td>
 
                           <Td>
                             <Box
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.url || ''}`}>
+                              <ExternalLink href={`${data?.wp_url || ''}`}>
                                 <WideButton
-                                  text={`編集する`}
+                                  text={`確認する`}
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>

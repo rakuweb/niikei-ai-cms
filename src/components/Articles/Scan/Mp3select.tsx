@@ -44,6 +44,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
       const res = await fetch(`/api/uplord-file?file=${fileName}`, {
         method: 'POST',
       });
+      console.log(res);
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {

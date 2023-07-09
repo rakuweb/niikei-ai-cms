@@ -14,3 +14,6 @@ export const selectSetNotificationsAll = (state: NotificationsSlice) => ({
   setOriginalContentManamgementNotifications:
     state.setOriginalContentManagementNotifications,
 });
+
+export const selectDeleteSiteNotificationByID = (state: NotificationsSlice) =>
+  state.deleteSiteManagementByID;

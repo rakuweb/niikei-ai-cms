@@ -7,9 +7,13 @@ export const createNotificationsSlice: StateCreator<
   [],
   [],
   NotificationsSlice
-> = (set) => ({
+> = (set, get) => ({
   siteManagement: [],
-  articleManagement: { inReview: [], checking: [], fixing: [] },
+  articleManagement: {
+    standby: [],
+    checking: [],
+    fixing: [],
+  },
   autoPostManagement: [],
   originalContentManagement: [],
 
@@ -24,5 +28,11 @@ export const createNotificationsSlice: StateCreator<
   },
   setOriginalContentManagementNotifications: (notifications) => {
     set(() => ({ originalContentManagement: notifications }));
+  },
+  deleteSiteManagementByID: (id) => {
+    const { siteManagement } = get();
+    set(() => ({
+      siteManagement: siteManagement.filter((item) => item !== id),
+    }));
   },
 });

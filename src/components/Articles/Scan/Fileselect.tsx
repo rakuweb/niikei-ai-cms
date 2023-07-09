@@ -101,6 +101,15 @@ const Fileselect = ({ setSelectedFileContent }) => {
 
   const handleClick = handleSubmit(async () => {
     if (file) {
+      const fileSizeInBytes = file.size;
+      const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
+      if (fileSizeInMegabytes >= 2) {
+        alert(
+          '選択されたPDFファイルは2MB以上です。2MB未満にしてからもう一度お試しください。'
+        );
+        return;
+      }
+
       uploadpdf(file);
       setIsLoading(true);
       setUploadProgress(0);

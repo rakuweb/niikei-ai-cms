@@ -30,7 +30,12 @@ export default async function handler(
       auto_publish_notification: false,
       fortune_notification: false,
       // eslint-disable-line
-      notifications: { site: [], article: [], autoPost: [], fortune: [] },
+      notifications: {
+        site: { standby: [], checking: [], fixing: [] },
+        article: [],
+        autoPost: [],
+        fortune: [],
+      },
     };
     let companyDocRef: DocumentReference;
     if (is_company) {
