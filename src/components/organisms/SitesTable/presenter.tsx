@@ -76,10 +76,6 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
     }
   };
 
-  // const handlePatrolSwitch = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   const res = await
-  // }
-
   useEffect(() => {
     const length = data.length;
     const arr = new Array(length);
