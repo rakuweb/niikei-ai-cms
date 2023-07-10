@@ -121,6 +121,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                                 {
                                   backgroundColor: '#49BAC0',
                                 },
+                                span: {
+                                  cursor: `not-allowed`,
+                                },
                               }}
                             />
                           </Td>
@@ -155,6 +158,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                 {
                                   backgroundColor: '#49BAC0',
+                                },
+                                span: {
+                                  cursor: `not-allowed`,
                                 },
                               }}
                             />

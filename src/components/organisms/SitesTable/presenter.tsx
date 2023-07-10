@@ -127,19 +127,22 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              checked={
+                              isChecked={
                                 !!data.is_auto_patrol
                                 // switchValues[
                                 // (currentPage - 1) * itemsPerPage + index
                                 // ]
                               }
                               // onChange={(e) => handlePatrolSwitch(e)}
-                              defaultChecked={!!data?.is_auto_patrol}
+                              // defaultChecked={!!data?.is_auto_patrol}
                               // onClick={(e) => handlePatrolSwitch(e.tar)}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                 {
                                   backgroundColor: '#49BAC0',
+                                },
+                                span: {
+                                  cursor: `not-allowed`,
                                 },
                               }}
                             />
@@ -169,11 +172,15 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           <Td>
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              defaultChecked={!!data?.is_notified}
+                              isChecked={!!data?.is_notified}
+                              // defaultChecked={!!data?.is_notified}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                 {
                                   backgroundColor: '#49BAC0',
+                                },
+                                span: {
+                                  cursor: `not-allowed`,
                                 },
                               }}
                             />
