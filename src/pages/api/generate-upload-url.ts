@@ -60,3 +60,11 @@ export default async function uploadHandler(
     console.log('Method Not Allowed');
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '2mb',
+    },
+  },
+};
