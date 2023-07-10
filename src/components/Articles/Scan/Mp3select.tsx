@@ -7,6 +7,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import LordingComponent from './LordingComponent';
 import toWav from 'audiobuffer-to-wav';
+import { decode } from 'audio-decode';
 
 const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
