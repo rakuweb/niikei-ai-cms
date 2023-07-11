@@ -1,30 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { docs_v1, drive_v3, google } from 'googleapis';
 
-import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
-
-const credentials = JSON.parse(
-  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
-);
-
 const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { title, text } = req.body;
+  const { title, text, accessToken } = req.body;
 
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: credentials,
-      // WARN:
-      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-      scopes: [
-        'https://www.googleapis.com/auth/drive',
-        'https://www.googleapis.com/auth/documents',
-      ],
+    // アクセストークンを使用してOAuth2クライアントを作成します
+    const oauth2Client = new google.auth.OAuth2();
+    oauth2Client.setCredentials({ access_token: accessToken });
+
+    const drive: drive_v3.Drive = google.drive({
+      version: 'v3',
+      auth: oauth2Client,
     });
 
-    const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
-
     // Define the ID of the document to be copied
-    const templateDocumentId = '1AGAw71KiCMR_fvDGfPHtbjZkfAXLzoecynCAaehK6W4';
+    const templateDocumentId = '1ChARyTPMZzrH5ms9hbctEPpnIyynhWN95s4aUuqsRYE';
     const documentCopy = await drive.files.copy({
       fileId: templateDocumentId,
       requestBody: {
@@ -42,7 +33,10 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const url = document.data.webViewLink;
 
-    const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
+    const docs: docs_v1.Docs = google.docs({
+      version: 'v1',
+      auth: oauth2Client,
+    });
     const requests = text
       ? [
           {

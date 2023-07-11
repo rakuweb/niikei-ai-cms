@@ -16,7 +16,12 @@ import { WideButton } from './WideButton';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
-import { useAccountStore, selectAccountItem } from 'features/account';
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
+
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -33,7 +38,29 @@ export const Presenter: FC<PresenterProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
+  const [token, setToken] = useState<string | null>(null);
 
+  const handleLogin = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
+    console.log(response);
+    if ('tokenId' in response) {
+      setToken(response.tokenId);
+    }
+  };
+
+  const handleLoginFailure = (response: any) => {
+    console.error('Failed to log in', response);
+    if (response.error === 'popup_closed_by_user') {
+      window.alert(
+        'ログインがキャンセルされました。再度ログインしてください。'
+      );
+    }
+  };
+
+  // Replace YOUR_CLIENT_ID with your actual client id
+  const YOUR_CLIENT_ID =
+    '769478816418-qac386dl97v313u265s1a6urnaa9t6i2.apps.googleusercontent.com';
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -42,46 +69,28 @@ export const Presenter: FC<PresenterProps> = ({
     setCategory(e.target.value);
   };
 
-  const account = useAccountStore(selectAccountItem);
-  const YOUR_CLIENT_ID =
-    '259408642692-60sqhkla2vja32tiqv7t0hh6a5tegdst.apps.googleusercontent.com';
-  const YOUR_CLIENT_SECRET = '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';
-  const YOUR_REDIRECT_URI = 'http://localhost:3000/articles/new';
-  const authenticationGoogle = () => {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/documents&redirect_uri=${YOUR_REDIRECT_URI}`;
-    window.location.href = authUrl;
-  };
-
   const handleCreateDocument = async () => {
+    if (!token) {
+      window.alert('Googleにログインしてください');
+
+      return;
+    }
     try {
-      const authCode = new URL(window.location.href).searchParams.get('code');
-
-      const responseToken = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `code=${authCode}&client_id=${YOUR_CLIENT_ID}&client_secret=${YOUR_CLIENT_SECRET}&redirect_uri=${YOUR_REDIRECT_URI}&grant_type=authorization_code`,
-      });
-
-      const data = await responseToken.json();
-      const accessToken = data.access_token;
-
+      text = text || '';
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, text, accessToken }),
+        body: JSON.stringify({ title, text }),
       });
 
-      console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
-
-        const employeeDocRef = doc(db, 'users', account.uid);
-        console.log(account.uid);
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(ref, 'articles');
@@ -93,7 +102,7 @@ export const Presenter: FC<PresenterProps> = ({
           status: 'editing',
           due_date: '',
           wp_url: '',
-          created_by: doc(ref, 'employees', account.uid),
+          created_by: doc(ref, 'employees', user.uid),
         });
 
         onClose();
@@ -109,6 +118,16 @@ export const Presenter: FC<PresenterProps> = ({
 
   return (
     <>
+      <GoogleLogin
+        clientId={YOUR_CLIENT_ID} // replace with your client id
+        buttonText="Googleでログイン"
+        onSuccess={handleLogin}
+        onFailure={handleLoginFailure}
+        cookiePolicy={'single_host_origin'}
+        uxMode="redirect"
+        redirectUri="http://localhost:3000/articles/new"
+        isSignedIn={true}
+      />
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="100vw">
         <ModalOverlay />
         <ModalContent p={{ base: '3vw 1.5vw' }} w={{ base: '40%' }}>
@@ -143,11 +162,6 @@ export const Presenter: FC<PresenterProps> = ({
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <WideButton
-              onClick={authenticationGoogle}
-              text="ユーザー認証する"
-              fontSize={{ base: '1.2vw' }}
-            />
             <WideButton
               onClick={handleCreateDocument}
               text=" Googleドキュメントで記事を作成する"
