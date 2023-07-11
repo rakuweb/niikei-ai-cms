@@ -139,7 +139,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
   // 修正依頼
   const handleChangeStatus = async (url: string) => {
-    if (!window.confirm('修正依頼を出しますか。')) {
+    if (!window.confirm('確認依頼を出しますか。')) {
       return;
     }
 
@@ -155,7 +155,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
       await updateDoc(companyEmployeeDocRef, {
-        status: Status.Fixing,
+        status: Status.Checking,
       });
     } else {
       alert(
@@ -164,7 +164,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       return;
     }
 
-    window.alert('修正記事にしました。');
+    window.alert('確認記事にしました。');
     location.reload();
   };
 
@@ -324,7 +324,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               </ExternalLink>
                               <WideButton
                                 mx={`0.5vw`}
-                                text={`修正依頼を出す`}
+                                text={`確認依頼を出す`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() => handleChangeStatus(data.url)}
                               />
