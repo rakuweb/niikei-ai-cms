@@ -13,21 +13,34 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
+import { useAccountStore, selectAccountItem } from 'features/account';
+import { fetchFreeDocument } from './documents';
 import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login';
+  DOCUMENT_COLLECTION,
+  DocumentStatus,
+} from '@/firebase/firestore/documents';
+import { ARTICLE_COLLECTION, Status } from '@/firebase/firestore/articles';
+import { apiRoutes, routes } from '@/constants/routes';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
   text: string;
   setText: (text: string) => void;
-  list: { id: string; name: string }[];
+  list: Category[];
+  onChangeArticle?: () => void;
 };
 
 export const Presenter: FC<PresenterProps> = ({
@@ -35,58 +48,58 @@ export const Presenter: FC<PresenterProps> = ({
   onClose,
   text,
   list,
+  onChangeArticle,
 }) => {
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [token, setToken] = useState<string | null>(null);
+  const [category, setCategory] = useState<Category>({
+    id: undefined,
+    name: '',
+  });
 
-  const handleLogin = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) => {
-    if ('tokenId' in response) {
-      setToken(response.tokenId);
-    }
-  };
-
-  const handleLoginFailure = (response: any) => {
-    console.error('Failed to log in', response);
-  };
-
-  // Replace YOUR_CLIENT_ID with your actual client id
-  const YOUR_CLIENT_ID =
-    '769478816418-i5mhdfmofq9nu3n9qkt93uiq6q7a6rv1.apps.googleusercontent.com';
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
+    const target = list.find((item) => String(item.id) === e.target.value);
+    setCategory(target);
   };
-
+  const account = useAccountStore(selectAccountItem);
   const handleCreateDocument = async () => {
-    if (!token) {
-      window.alert('Googleにログインしてください');
-      return;
-    }
     try {
-      text = text || '';
-      const response = await fetch('/api/create-document', {
+      const freeDocRef = collection(db, DOCUMENT_COLLECTION);
+
+      const freeDocsSnap = await getDocs(freeDocRef);
+
+      const freeDoc = freeDocsSnap.docs.find(
+        (doc) => doc.data().status === DocumentStatus.Free
+      );
+      if (!freeDoc) {
+        window.alert('利用可能なGoogleドキュメントがありません');
+        return;
+      }
+
+      const { document_id, url } = freeDoc.data();
+      const response = await fetch(apiRoutes.createDocument, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, text }),
-      });
 
+        body: JSON.stringify({
+          title,
+          text,
+          documentId: document_id,
+          url: url,
+        }),
+      });
       if (response.ok) {
         const { documentId, url } = await response.json();
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const employeeDocRef = doc(db, 'users', user.uid);
+
+        const employeeDocRef = doc(db, 'users', account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const allowedEmailsRef = collection(ref, 'articles');
+        const allowedEmailsRef = collection(ref, ARTICLE_COLLECTION);
         const documentRef = doc(allowedEmailsRef, documentId);
         await setDoc(documentRef, {
           document_id: documentId || '',
@@ -95,8 +108,15 @@ export const Presenter: FC<PresenterProps> = ({
           status: 'editing',
           due_date: '',
           wp_url: '',
-          created_by: doc(ref, 'employees', user.uid),
+          created_by: doc(ref, 'employees', account.uid),
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
         });
+        const documenIdRef = doc(db, DOCUMENT_COLLECTION, documentId);
+        await updateDoc(documenIdRef, {
+          status: DocumentStatus.Using,
+        });
+        onChangeArticle && onChangeArticle();
 
         onClose();
         window.open(url, '_blank');
@@ -111,13 +131,6 @@ export const Presenter: FC<PresenterProps> = ({
 
   return (
     <>
-      <GoogleLogin
-        clientId={YOUR_CLIENT_ID} // replace with your client id
-        buttonText="Login with Google"
-        onSuccess={handleLogin}
-        onFailure={handleLoginFailure}
-        cookiePolicy={'single_host_origin'}
-      />
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="100vw">
         <ModalOverlay />
         <ModalContent p={{ base: '3vw 1.5vw' }} w={{ base: '40%' }}>
@@ -140,7 +153,7 @@ export const Presenter: FC<PresenterProps> = ({
                 placeholder="カテゴリを選択"
                 borderRadius={0}
                 fontSize={{ base: '1vw' }}
-                value={category}
+                value={category.id}
                 onChange={handleCategoryChange}
               >
                 {list.map((item) => (
