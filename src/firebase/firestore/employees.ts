@@ -11,7 +11,13 @@ export type EmployeeType = {
   new_info_notification: boolean;
   auto_publish_notification: boolean;
   fortune_notification: boolean;
-  notifications: any;
+  notifications: Notifications;
+};
+export type Notifications = {
+  site: [];
+  article: { standby: []; checking: []; fixing: [] };
+  auto_post: [];
+  fortune: [];
 };
 
 export const EMPLOYEE_COLLECTION = 'employees';
@@ -62,4 +68,18 @@ export const deleteSiteNotificationByID = async (
     },
   };
   await updateEmployee({ companyID, employeeID }, newData);
+};
+
+export const fetchNotifications = async (
+  companyID: string,
+  employeeID: string
+) => {
+  const employee = await getEmployee(companyID, employeeID).catch((err) => {
+    throw err;
+  });
+  const data = employee.data() as EmployeeType;
+
+  const { notifications } = data;
+
+  return notifications;
 };
