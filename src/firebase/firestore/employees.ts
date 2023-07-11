@@ -19,6 +19,12 @@ export type Notifications = {
   auto_post: [];
   fortune: [];
 };
+export const NotificationKind = {
+  Site: 'site',
+  Article: { Standby: 'standby', Checking: 'checking', Fixing: 'fixing' },
+  AutoPost: 'auto_post',
+  Fortune: 'fortune',
+};
 
 export const EMPLOYEE_COLLECTION = 'employees';
 
@@ -64,6 +70,30 @@ export const deleteSiteNotificationByID = async (
       ...notifications,
       site: notifications.site.filter(
         (item: string) => item !== notification_id
+      ),
+    },
+  };
+  await updateEmployee({ companyID, employeeID }, newData);
+};
+
+export const deleteNotificationByID = async (
+  ids: {
+    companyID: string;
+    employeeID: string;
+    notificationID: string;
+  },
+  kind: string
+) => {
+  const { companyID, employeeID, notificationID } = ids;
+  const employeeDocRef = getEmployeeDocRef(companyID, employeeID);
+  const currentData = await getDoc(employeeDocRef);
+  const { notifications } = currentData.data();
+
+  const newData = {
+    notifications: {
+      ...notifications,
+      [NotificationKind[kind]]: notifications[kind].filter(
+        (item: string) => item !== notificationID
       ),
     },
   };

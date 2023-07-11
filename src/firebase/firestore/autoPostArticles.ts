@@ -36,14 +36,13 @@ export type User = {
   name: string;
 };
 export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
-
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
 
   const snapshots = await getDocs(docsRef);
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
-    return { ...data };
+    return { ...data, id: document.id };
   });
 
   const result = await Promise.allSettled(documentsPromises);

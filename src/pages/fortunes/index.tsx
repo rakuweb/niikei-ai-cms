@@ -59,7 +59,7 @@ const Home: NextPage = () => {
           );
           setData(fetchedData);
         } else {
-          router.push('/');
+          router.push('/signin');
         }
       } catch (error) {
         window.alert(error);
