@@ -5,7 +5,6 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title, text, accessToken } = req.body;
 
   try {
-    // アクセストークンを使用してOAuth2クライアントを作成します
     const oauth2Client = new google.auth.OAuth2();
     oauth2Client.setCredentials({ access_token: accessToken });
 
@@ -14,7 +13,6 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
       auth: oauth2Client,
     });
 
-    // Define the ID of the document to be copied
     const templateDocumentId = '1ChARyTPMZzrH5ms9hbctEPpnIyynhWN95s4aUuqsRYE';
     const documentCopy = await drive.files.copy({
       fileId: templateDocumentId,
