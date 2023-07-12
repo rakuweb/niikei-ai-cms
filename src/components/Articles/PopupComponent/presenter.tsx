@@ -48,7 +48,7 @@ export const Presenter: FC<PresenterProps> = ({
   const YOUR_CLIENT_SECRET = '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';
   const YOUR_REDIRECT_URI = 'http://localhost:3000/articles/new';
   const authenticationGoogle = () => {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/documents&redirect_uri=${YOUR_REDIRECT_URI}`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive&redirect_uri=${YOUR_REDIRECT_URI}`;
     window.location.href = authUrl;
   };
 

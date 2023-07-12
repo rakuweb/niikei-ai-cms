@@ -59,7 +59,7 @@ export const Presenter: FC<PresenterProps> = ({
   };
 
   // Replace YOUR_CLIENT_ID with your actual client id
-  const YOUR_CLIENT_ID =
+  const CLIENT_ID =
     '769478816418-qac386dl97v313u265s1a6urnaa9t6i2.apps.googleusercontent.com';
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -119,7 +119,7 @@ export const Presenter: FC<PresenterProps> = ({
   return (
     <>
       <GoogleLogin
-        clientId={YOUR_CLIENT_ID} // replace with your client id
+        clientId={CLIENT_ID}
         buttonText="Googleでログイン"
         onSuccess={handleLogin}
         onFailure={handleLoginFailure}
