@@ -35,4 +35,24 @@ export const createNotificationsSlice: StateCreator<
       siteManagement: siteManagement.filter((item) => item !== id),
     }));
   },
+  deleteAutoPostManagementByID: (id) => {
+    const { autoPostManagement } = get();
+    set(() => ({
+      autoPostManagement: autoPostManagement.filter((item) => item !== id),
+    }));
+  },
+  deleteOriginalContentManagementByID: (id) => {
+    const { originalContentManagement } = get();
+    set(() => ({
+      originalContentManagement: originalContentManagement.filter(
+        (item) => item !== id
+      ),
+    }));
+  },
+  deleteArticleManagementByKindAndID: (kind, id) => {
+    const { articleManagement } = get();
+    set(() => ({
+      articleManagement: articleManagement[kind].filter((item) => item !== id),
+    }));
+  },
 });

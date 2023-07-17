@@ -11,6 +11,7 @@ import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: Partial<{
+    id?: string;
     title: string;
     url: string;
     document_id: string;

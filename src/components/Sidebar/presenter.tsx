@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Box, Link } from '@chakra-ui/react';
 
 import { Header } from 'components/Header';
@@ -22,18 +22,25 @@ import AntennaSvg from 'public/svg/antenna.svg';
 import RobotSvg from 'public/svg/robot.svg';
 import GearSvg from 'public/svg/gear.svg';
 import { useAccountStore, Role, selectAccountItem } from 'features/account';
+import { fetchNotifications } from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
+  const companyID = useCompanyStore(selectUid);
   const account = useAccountStore(selectAccountItem);
 
   const {
-    siteManamgement,
+    siteManagement,
     articleManagement,
     autoPostManagement,
-    originalContentManamgement,
-  } = useNotificationsStore(selectNotificationsAll);
+    originalContentManagement,
+    setSiteManagementNotifications,
+    setArticleManagementNotifications,
+    setAutoPostManagementNotifications,
+    setOriginalContentManagementNotifications,
+  } = useNotificationsStore();
 
   const siteSubPages = [
     { text: 'サイトを登録', url: routes.crawlersAdd },
@@ -75,6 +82,33 @@ export const Presenter: FC = () => {
   const isOpen = useStore((state) => state.open);
   const toggleSidebar = useStore((state) => state.toggleOpen);
 
+  const fiftyFifty = () => {
+    return Math.random() < 0.7;
+  };
+
+  useEffect(() => {
+    if (fiftyFifty()) return;
+
+    const handler = async () => {
+      const notifications = await fetchNotifications(
+        companyID,
+        account.uid
+      ).catch((err) => {
+        console.error(err);
+        // return null;
+      });
+      if (!notifications) return;
+      // if (notifications === null) return;
+
+      setSiteManagementNotifications(notifications.site);
+      setArticleManagementNotifications(notifications.article);
+      setAutoPostManagementNotifications(notifications.auto_post);
+      setOriginalContentManagementNotifications(notifications.fortune);
+    };
+
+    handler();
+  }, []);
+
   return (
     <>
       <Box position={'relative'} zIndex={'10'}>
@@ -91,7 +125,7 @@ export const Presenter: FC = () => {
                 logo={<RobotSvg />}
                 links={siteSubPages}
                 href={undefined}
-                notifications={siteManamgement}
+                notifications={siteManagement}
               />
               <Popup
                 title=""
@@ -112,7 +146,7 @@ export const Presenter: FC = () => {
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
                 href={undefined}
-                notifications={originalContentManamgement}
+                notifications={originalContentManagement}
               />
               <Popup
                 title=""
@@ -137,7 +171,7 @@ export const Presenter: FC = () => {
                 logo={<RobotSvg />}
                 links={siteSubPages}
                 href={undefined}
-                notifications={siteManamgement}
+                notifications={siteManagement}
               />
               <Popup
                 title="記事管理"
@@ -158,7 +192,7 @@ export const Presenter: FC = () => {
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
                 href={undefined}
-                notifications={originalContentManamgement}
+                notifications={originalContentManagement}
               />
               <Popup
                 title="設定"

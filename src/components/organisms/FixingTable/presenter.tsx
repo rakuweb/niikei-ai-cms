@@ -11,30 +11,32 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
-import { css } from '@emotion/react';
-import { doc, getDoc, deleteDoc } from '@firebase/firestore';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/ja';
-
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
+import { css } from '@emotion/react';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
+import { doc, getDoc } from '@firebase/firestore';
 import { db, auth } from 'src/firebase';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
+import { Status } from '@/firebase/firestore/articles';
 import {
   NotificationKind,
-  deleteNotificationByID,
+  deleteArticleNotificationByID,
+  updateArticleNotification,
 } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
-import { useAccountStore } from '@/features/account';
+import { selectAccountItem, useAccountStore } from '@/features/account';
 import {
-  selectDeleteAutoPostNotificationByID,
+  selectDeleteArticleManagementByKindAndID,
   useNotificationsStore,
 } from '@/features/notifications';
 
@@ -53,20 +55,20 @@ export type PresenterProps = {
     created_at: Date;
     due_date: Date;
     name?: string;
-    id: string;
+    id?: string;
   }>[];
   currentPage: number;
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteArticleManagementByKindAndID = useNotificationsStore(
+    selectDeleteArticleManagementByKindAndID
+  );
   const user = auth.currentUser;
   const id = user?.uid;
   const itemsPerPage = 10;
-  const companyID = useCompanyStore(selectUid);
-  const employeeID = useAccountStore((state) => state.uid);
-  const deleteAutoPostManagementByID = useNotificationsStore(
-    selectDeleteAutoPostNotificationByID
-  );
 
   const [selectedItems, setSelectedItems] = useState<{
     [url: string]: boolean;
@@ -82,7 +84,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const selectedUrls = Object.keys(selectedItems).filter(
       (url) => selectedItems[url]
     );
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
@@ -91,41 +93,39 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const refFieldString = userDoc.data().company_ref;
 
     for (const url of selectedUrls) {
-      await fetch('/api/delete-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ urls: [url] }),
-      });
-
       const index = data.findIndex((item) => item.url === url);
       const document_id = data[index]?.document_id;
 
       const companyEmployeeDocRef = doc(
         refFieldString,
-        'auto_post_articles',
+        'articles',
         document_id
       );
       const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
       if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(companyEmployeeDocRef);
+        await updateDoc(companyEmployeeDocRef, {
+          status: 'is_deleted',
+        });
       } else {
-        console.log('指定したユーザー情報が存在しません');
+        alert(
+          'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+        );
+        return;
       }
     }
 
-    window.alert('選択項目を削除しました');
+    window.alert('ゴミ箱へ移動しました');
     location.reload();
 
     setSelectedItems({});
   };
+
   // DeleteSelected
 
   // single
   const handleDeleteSingle = async (url: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
+    if (!window.confirm('ゴミ箱へ移動しますか？')) {
       return;
     }
 
@@ -133,40 +133,64 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const userDoc = await getDoc(userDocRef);
     const refFieldString = userDoc.data().company_ref;
 
-    await fetch('/api/delete-document', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ urls: [url] }),
-    });
+    const index = data.findIndex((item) => item.url === url);
+    const document_id = data[index]?.document_id;
+
+    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
+    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+    if (userDoc.exists() && companyEmployeeDoc.exists()) {
+      await updateDoc(companyEmployeeDocRef, {
+        status: 'is_deleted',
+      });
+    } else {
+      alert(
+        'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+      );
+      return;
+    }
+
+    window.alert('ゴミ箱へ移動しました');
+    location.reload();
+  };
+
+  // 修正依頼
+  const handleChangeStatus = async (url: string) => {
+    if (!window.confirm('確認依頼を出しますか。')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
 
     const index = data.findIndex((item) => item.url === url);
     const document_id = data[index]?.document_id;
 
-    const companyEmployeeDocRef = doc(
-      refFieldString,
-      'auto_post_articles',
-      document_id
-    );
+    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
     const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
 
     if (userDoc.exists() && companyEmployeeDoc.exists()) {
-      await deleteDoc(companyEmployeeDocRef);
+      await updateDoc(companyEmployeeDocRef, {
+        status: Status.Checking,
+      });
+      await updateArticleNotification(
+        companyID,
+        employeeID,
+        NotificationKind.Article.Checking,
+        document_id
+      );
     } else {
-      console.log('指定したユーザー情報が存在しません');
+      alert(
+        'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+      );
+      return;
     }
 
-    const postArticleID = data[index].id ?? null;
-    if (postArticleID === null) return;
-    await deleteNotificationByID(
-      { companyID, employeeID, notificationID: postArticleID },
-      NotificationKind.AutoPost
-    );
-    deleteAutoPostManagementByID(postArticleID);
-    window.alert('選択項目を削除しました');
+    window.alert('確認記事にしました。');
     location.reload();
   };
+
   // single
 
   // DropDown
@@ -188,31 +212,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [titles, setTitles] = useState<{ [url: string]: string }>({});
   const [times, setTimes] = useState<{ [url: string]: string }>({});
 
-  // useEffect(() => {
-  //   const fetchTitles = async () => {
-  //     const newTitles = {};
-  //     for (const item of data) {
-  //       const title = await getTitle(item.url);
-  //       newTitles[item.url] = title;
-  //     }
-  //     setTitles(newTitles);
-  //   };
-  //
-  //   fetchTitles();
-  // }, [data]);
+  useEffect(() => {
+    const fetchTitles = async () => {
+      const newTitles = {};
+      for (const item of data) {
+        const title = await getTitle(item.url);
+        newTitles[item.url] = title;
+      }
+      setTitles(newTitles);
+    };
 
-  // useEffect(() => {
-  //   const fetchTimes = async () => {
-  //     const newTimes = {};
-  //     for (const item of data) {
-  //       const times = await getTimes(item.url);
-  //       newTimes[item.url] = times;
-  //     }
-  //     setTimes(newTimes);
-  //   };
-  //
-  //   fetchTimes();
-  // }, [data]);
+    fetchTitles();
+  }, [data]);
+
+  useEffect(() => {
+    const fetchTimes = async () => {
+      const newTimes = {};
+      for (const item of data) {
+        const times = await getTimes(item.url);
+        newTimes[item.url] = times;
+      }
+      setTimes(newTimes);
+    };
+
+    fetchTimes();
+  }, [data]);
 
   async function getTitle(url: string) {
     const response = await fetch(`/api/title?url=${url}`);
@@ -228,18 +252,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   }
 
   // 時間ソート
-  // useEffect(() => {
-  //   const fetchTimes = async () => {
-  //     const newTimes = {};
-  //     for (const item of data) {
-  //       const times = await getTimes(item.url);
-  //       newTimes[item.url] = times;
-  //     }
-  //     setTimes(newTimes);
-  //   };
-  //
-  //   fetchTimes();
-  // }, [data]);
+  useEffect(() => {
+    const fetchTimes = async () => {
+      const newTimes = {};
+      for (const item of data) {
+        const times = await getTimes(item.url);
+        newTimes[item.url] = times;
+      }
+      setTimes(newTimes);
+    };
+
+    fetchTimes();
+  }, [data]);
 
   const timesArray = Object.entries(times);
 
@@ -306,9 +330,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
-                          <Td>{data?.category?.name || ''}</Td>
-                          <Td>{data.title}</Td>
-                          <Td>{`自動生成`}</Td>
+                          <Td>{data?.category.name || ''}</Td>
+                          <Td>{titles[data?.url || '']}</Td>
+                          <Td>{data?.name || ''}</Td>
 
                           <Td>
                             <Box
@@ -316,30 +340,59 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               justifyContent={'space-around'}
                             >
                               <ExternalLink
-                                onClick={async () => {
-                                  await deleteNotificationByID(
-                                    {
-                                      companyID,
-                                      employeeID,
-                                      notificationID: data.id,
-                                    },
-                                    NotificationKind.AutoPost
-                                  );
-                                  deleteAutoPostManagementByID(data.id);
-                                }}
                                 href={`${data?.wp_url || ''}`}
+                                onClick={async () => {
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                }}
                               >
                                 <WideButton
                                   text={`確認する`}
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>
+                              <WideButton
+                                mx={`0.5vw`}
+                                text={`確認依頼を出す`}
+                                w={`${140 / 19.2}vw`}
+                                onClick={async () => {
+                                  await handleChangeStatus(data.url);
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                }}
+                              />
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() =>
-                                  handleDeleteSingle(data?.url || '')
-                                }
+                                onClick={async () => {
+                                  await handleDeleteSingle(data?.url || '');
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Fixing,
+                                    data.id
+                                  );
+                                }}
                               />
                             </Box>
                           </Td>

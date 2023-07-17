@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
 import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
 import { DocumentData } from 'firebase/firestore';
-import { Checking } from '@/components/Checking';
+import { Fixing } from '@/components/Fixing';
 
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<DocumentData[] | null>(null);
@@ -53,7 +53,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Checking data={data} titles={'修正記事一覧'} />
+        <Fixing data={data} titles={'修正記事一覧'} />
       </Box>
     </>
   );

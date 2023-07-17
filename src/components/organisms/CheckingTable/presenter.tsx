@@ -27,6 +27,18 @@ import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
 import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
+import { Status } from '@/firebase/firestore/articles';
+import {
+  NotificationKind,
+  deleteArticleNotificationByID,
+  updateArticleNotification,
+} from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteArticleManagementByKindAndID,
+  useNotificationsStore,
+} from '@/features/notifications';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,6 +46,7 @@ dayjs.locale('ja');
 
 export type PresenterProps = {
   data?: Partial<{
+    id: string;
     title: string;
     url: string;
     document_id: string;
@@ -48,6 +61,11 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteArticleManagementByKindAndID = useNotificationsStore(
+    selectDeleteArticleManagementByKindAndID
+  );
   const user = auth.currentUser;
   const id = user?.uid;
   const itemsPerPage = 10;
@@ -133,6 +151,43 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     }
 
     window.alert('ゴミ箱へ移動しました');
+    location.reload();
+  };
+
+  // 修正依頼
+  const handleChangeStatus = async (url: string) => {
+    if (!window.confirm('修正依頼を出しますか。')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
+
+    const index = data.findIndex((item) => item.url === url);
+    const document_id = data[index]?.document_id;
+
+    const companyEmployeeDocRef = doc(refFieldString, 'articles', document_id);
+    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+    if (userDoc.exists() && companyEmployeeDoc.exists()) {
+      await updateDoc(companyEmployeeDocRef, {
+        status: Status.Fixing,
+      });
+      await updateArticleNotification(
+        companyID,
+        employeeID,
+        NotificationKind.Article.Fixing,
+        document_id
+      );
+    } else {
+      alert(
+        'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
+      );
+      return;
+    }
+
+    window.alert('修正記事にしました。');
     location.reload();
   };
 
@@ -284,18 +339,60 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.wp_url || ''}`}>
+                              <ExternalLink
+                                href={`${data?.wp_url || ''}`}
+                                onClick={async () => {
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
+                              >
                                 <WideButton
                                   text={`確認する`}
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>
+                              <WideButton
+                                mx={`0.5vw`}
+                                text={`修正依頼を出す`}
+                                w={`${140 / 19.2}vw`}
+                                onClick={async () => {
+                                  await handleChangeStatus(data.url);
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
+                              />
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() =>
-                                  handleDeleteSingle(data?.url || '')
-                                }
+                                onClick={async () => {
+                                  await handleDeleteSingle(data?.url || '');
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
                               />
                             </Box>
                           </Td>

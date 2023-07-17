@@ -239,8 +239,8 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                             >
                               <ExternalLink
                                 href={data?.url || ''}
-                                onClick={() => {
-                                  deleteSiteNotificationByID(
+                                onClick={async () => {
+                                  await deleteSiteNotificationByID(
                                     companyID,
                                     employeeID,
                                     data.id
