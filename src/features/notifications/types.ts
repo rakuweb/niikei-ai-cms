@@ -1,3 +1,5 @@
+import { ArticleNotificationKind } from '@/firebase/firestore/employees';
+
 export type Notification = string;
 
 export type NotificationsSliceData = {
@@ -25,4 +27,8 @@ export type NotificationsSlice = NotificationsSliceData & {
   deleteSiteManagementByID: (id: string) => void;
   deleteAutoPostManagementByID: (id: string) => void;
   deleteOriginalContentManagementByID: (id: string) => void;
+  deleteArticleManagementByKindAndID: (
+    kind: ArticleNotificationKind,
+    id: string
+  ) => void;
 };

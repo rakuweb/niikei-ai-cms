@@ -26,6 +26,9 @@ export const NotificationKind = {
   Fortune: 'fortune',
 };
 
+export type ArticleNotificationKind =
+  (typeof NotificationKind.Article)[keyof typeof NotificationKind.Article];
+
 export const EMPLOYEE_COLLECTION = 'employees';
 
 export const getEmployee = async (companyID: string, employeeID: string) => {
@@ -54,6 +57,28 @@ export const getEmployeeDocRef = (companyID: string, employeeID: string) => {
   );
 
   return docRef;
+};
+
+export const updateArticleNotification = async (
+  companyID: string,
+  employeeID: string,
+  kind: ArticleNotificationKind,
+  id: string
+) => {
+  const employee = await getEmployee(companyID, employeeID).catch((err) => {
+    throw err;
+  });
+  const { notifications } = employee;
+  const newData = {
+    notifications: {
+      ...notifications,
+      article: {
+        ...notifications.article,
+        [kind]: [...notifications.article[kind], id],
+      },
+    },
+  };
+  await updateEmployee({ companyID, employeeID }, newData);
 };
 
 export const deleteSiteNotificationByID = async (
@@ -95,6 +120,29 @@ export const deleteNotificationByID = async (
       [NotificationKind[kind]]: notifications[kind].filter(
         (item: string) => item !== notificationID
       ),
+    },
+  };
+  await updateEmployee({ companyID, employeeID }, newData);
+};
+
+export const deleteArticleNotificationByID = async (
+  companyID: string,
+  employeeID: string,
+  kind: ArticleNotificationKind,
+  notification_id: string
+) => {
+  const employeeDocRef = getEmployeeDocRef(companyID, employeeID);
+  const currentData = await getDoc(employeeDocRef);
+  const { notifications } = currentData.data();
+
+  const newData = {
+    notifications: {
+      ...notifications,
+      article: {
+        [kind]: notifications.article[kind].filter(
+          (item: string) => item !== notification_id
+        ),
+      },
     },
   };
   await updateEmployee({ companyID, employeeID }, newData);

@@ -48,7 +48,7 @@ export const fetchArticlesWhere = async (companyID: string, status: Status) => {
     const createdBySnap = await getDoc(createdByRef);
     const createdByData = createdBySnap.data() as User;
     const name = createdByData ? createdByData.name : '';
-    return { ...data, name };
+    return { ...data, name, id: document.id };
   });
 
   const documents = await Promise.all(documentsPromises);

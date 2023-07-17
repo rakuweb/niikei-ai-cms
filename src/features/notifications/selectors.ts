@@ -23,3 +23,6 @@ export const selectDeleteAutoPostNotificationByID = (
 export const selectDeleteOriginalContentNotificationByID = (
   state: NotificationsSlice
 ) => state.deleteOriginalContentManagementByID;
+export const selectDeleteArticleManagementByKindAndID = (
+  state: NotificationsSlice
+) => state.deleteArticleManagementByKindAndID;

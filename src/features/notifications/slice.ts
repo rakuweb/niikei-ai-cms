@@ -49,4 +49,10 @@ export const createNotificationsSlice: StateCreator<
       ),
     }));
   },
+  deleteArticleManagementByKindAndID: (kind, id) => {
+    const { articleManagement } = get();
+    set(() => ({
+      articleManagement: articleManagement[kind].filter((item) => item !== id),
+    }));
+  },
 });
