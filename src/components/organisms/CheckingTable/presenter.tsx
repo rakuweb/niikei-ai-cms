@@ -28,6 +28,17 @@ import 'dayjs/locale/ja';
 import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
 import { Status } from '@/firebase/firestore/articles';
+import {
+  NotificationKind,
+  deleteArticleNotificationByID,
+  updateArticleNotification,
+} from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteArticleManagementByKindAndID,
+  useNotificationsStore,
+} from '@/features/notifications';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,6 +46,7 @@ dayjs.locale('ja');
 
 export type PresenterProps = {
   data?: Partial<{
+    id: string;
     title: string;
     url: string;
     document_id: string;
@@ -49,6 +61,11 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteArticleManagementByKindAndID = useNotificationsStore(
+    selectDeleteArticleManagementByKindAndID
+  );
   const user = auth.currentUser;
   const id = user?.uid;
   const itemsPerPage = 10;
@@ -157,6 +174,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       await updateDoc(companyEmployeeDocRef, {
         status: Status.Fixing,
       });
+      await updateArticleNotification(
+        companyID,
+        employeeID,
+        NotificationKind.Article.Fixing,
+        document_id
+      );
     } else {
       alert(
         'サーバへのアクセスに失敗しました。ログアウト後にもう一度ログインしてください。'
@@ -316,7 +339,21 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.wp_url || ''}`}>
+                              <ExternalLink
+                                href={`${data?.wp_url || ''}`}
+                                onClick={async () => {
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
+                              >
                                 <WideButton
                                   text={`確認する`}
                                   w={`${140 / 19.2}vw`}
@@ -326,14 +363,36 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 mx={`0.5vw`}
                                 text={`修正依頼を出す`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleChangeStatus(data.url)}
+                                onClick={async () => {
+                                  await handleChangeStatus(data.url);
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
                               />
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() =>
-                                  handleDeleteSingle(data?.url || '')
-                                }
+                                onClick={async () => {
+                                  await handleDeleteSingle(data?.url || '');
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Checking,
+                                    data.id
+                                  );
+                                }}
                               />
                             </Box>
                           </Td>
