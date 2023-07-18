@@ -23,6 +23,7 @@ export type PresenterProps = {
   text: string;
   setText: (text: string) => void;
   list: { id: string; name: string }[];
+  onChangeArticle?: (id: string) => void;
 };
 
 export const Presenter: FC<PresenterProps> = ({
