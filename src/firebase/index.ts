@@ -13,13 +13,22 @@ import { getFirestore } from 'firebase/firestore';
 // } from 'constants/env';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAYt6ZyGJ2ZTjp2ALCo3D6Uhw72julmsUQ',
-  authDomain: 'niikei-39d3f.firebaseapp.com',
-  projectId: 'niikei-39d3f',
-  storageBucket: 'niikei-39d3f.appspot.com',
-  messagingSenderId: '234851398955',
-  appId: '1:234851398955:web:932a1c255d5f612d59416e',
+  apiKey: 'AIzaSyCMoarbmdaLkqiF-kYXWiV4HzdePAgUl2A',
+  authDomain: 'niikei-cms.firebaseapp.com',
+  projectId: 'niikei-cms',
+  storageBucket: 'niikei-cms.appspot.com',
+  messagingSenderId: '769478816418',
+  appId: '1:769478816418:web:9b13a89183ea486c729dfb',
 };
+// INFO: ~20270707
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyAYt6ZyGJ2ZTjp2ALCo3D6Uhw72julmsUQ',
+//   authDomain: 'niikei-39d3f.firebaseapp.com',
+//   projectId: 'niikei-39d3f',
+//   storageBucket: 'niikei-39d3f.appspot.com',
+//   messagingSenderId: '234851398955',
+//   appId: '1:234851398955:web:932a1c255d5f612d59416e',
+// };
 // envから読み込み用
 // const firebaseConfig = {
 //   apiKey: API_KEY ?? 'AIzaSyAYt6ZyGJ2ZTjp2ALCo3D6Uhw72julmsUQ',

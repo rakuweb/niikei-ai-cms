@@ -13,8 +13,6 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const auth = new google.auth.GoogleAuth({
       credentials: credentials,
-      // WARN:
-      // keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: [
         'https://www.googleapis.com/auth/drive',
         'https://www.googleapis.com/auth/documents',
@@ -24,14 +22,15 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
     const documentMetadata = {
       name: title,
-      mimeType: 'application/vnd.google-apps.document',
       parents: ['1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO'],
     };
-    const createdDocument = await drive.files.create({
+
+    const copiedDocument = await drive.files.copy({
+      fileId: '1Zyb5JFlDyBsTIqHYiMFZibXbGscTQ3Vo5XO2zhFfSyc',
       requestBody: documentMetadata,
     });
 
-    const { id: documentId } = createdDocument.data;
+    const { id: documentId } = copiedDocument.data;
 
     const document = await drive.files.get({
       fileId: documentId,
@@ -43,15 +42,15 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
     const requests = text
       ? [
-        {
-          insertText: {
-            location: {
-              index: 1,
+          {
+            insertText: {
+              location: {
+                index: 1,
+              },
+              text,
             },
-            text,
           },
-        },
-      ]
+        ]
       : [];
 
     if (requests.length > 0) {
