@@ -13,7 +13,7 @@ import Mp3select from './Mp3select';
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
-  const title = `データを読み込む`;
+  const title = `新規作成する`;
   const [selectedFileContent, setSelectedFileContent] = useState(null);
   const [isPDFSelected, setIsPDFSelected] = useState(true);
 

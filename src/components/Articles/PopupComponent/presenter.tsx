@@ -54,29 +54,33 @@ export const Presenter: FC<PresenterProps> = ({
 
   const handleCreateDocument = async () => {
     try {
-      const authCode = new URL(window.location.href).searchParams.get('code');
+      // const authCode = new URL(window.location.href).searchParams.get('code');
 
-      const responseToken = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `code=${authCode}&client_id=${YOUR_CLIENT_ID}&client_secret=${YOUR_CLIENT_SECRET}&redirect_uri=${YOUR_REDIRECT_URI}&grant_type=authorization_code`,
-      });
+      // const responseToken = await fetch('https://oauth2.googleapis.com/token', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //   },
+      //   body: `code=${authCode}&client_id=${YOUR_CLIENT_ID}&client_secret=${YOUR_CLIENT_SECRET}&redirect_uri=${YOUR_REDIRECT_URI}&grant_type=authorization_code`,
+      // });
 
-      const data = await responseToken.json();
-      const accessToken = data.access_token;
+      // const data = await responseToken.json();
+      // const accessToken = data.access_token;
 
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          // Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ title, text, accessToken }),
+        body: JSON.stringify({
+          title,
+          text,
+          // accessToken
+        }),
       });
 
-      console.log(response);
+      // console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
 
@@ -143,11 +147,13 @@ export const Presenter: FC<PresenterProps> = ({
             </FormControl>
           </ModalBody>
           <ModalFooter>
+            {/*
             <WideButton
               onClick={authenticationGoogle}
               text="ユーザー認証する"
               fontSize={{ base: '1.2vw' }}
             />
+          */}
             <WideButton
               onClick={handleCreateDocument}
               text=" Googleドキュメントで記事を作成する"

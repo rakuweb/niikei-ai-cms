@@ -1,26 +1,56 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { docs_v1, drive_v3, google } from 'googleapis';
 
+import {
+  GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT,
+  GOOGLE_TEMPLATE_DOCUMENT_ID,
+  GOOGLE_PARENT_FOLDER,
+} from 'constants/env';
+
+const credentials = JSON.parse(
+  Buffer.from(
+    GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT,
+    'base64'
+  ).toString()
+);
+
 const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { title, text, accessToken } = req.body;
+  const { title, text } = req.body;
 
   try {
-    const oauth2Client = new google.auth.OAuth2();
-    oauth2Client.setCredentials({ access_token: accessToken });
+    const auth = new google.auth.GoogleAuth({
+      credentials: credentials,
+      scopes: [
+        'https://www.googleapis.com/auth/drive',
+        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/documents',
+      ],
+    });
 
     const drive: drive_v3.Drive = google.drive({
       version: 'v3',
-      auth: oauth2Client,
+      auth,
     });
 
-    const templateDocumentId = '1ChARyTPMZzrH5ms9hbctEPpnIyynhWN95s4aUuqsRYE';
-    const documentCopy = await drive.files.copy({
-      fileId: templateDocumentId,
+    const templateDocumentId =
+      // `1kMReUCl_F3_VwxchShAHY3IUO9UaTxunizKo52RfGO0`;
+      GOOGLE_TEMPLATE_DOCUMENT_ID;
+    // console.log(await drive.files.list());
+    const documentCopy = await drive.files.create({
       requestBody: {
         name: title,
-        parents: ['1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO'],
+        mimeType: 'application/vnd.google-apps.document',
+        // parents: [GOOGLE_PARENT_FOLDER],
       },
     });
+    // const documentCopy = await drive.files.copy({
+    //   fileId: templateDocumentId,
+    //   requestBody: {
+    //     name: title,
+    //     // parents: [GOOGLE_PARENT_FOLDER],
+    //   },
+    // });
 
     const { id: documentId } = documentCopy.data;
 
@@ -33,19 +63,19 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const docs: docs_v1.Docs = google.docs({
       version: 'v1',
-      auth: oauth2Client,
+      auth,
     });
     const requests = text
       ? [
-          {
-            insertText: {
-              location: {
-                index: 1,
-              },
-              text,
+        {
+          insertText: {
+            location: {
+              index: 1,
             },
+            text,
           },
-        ]
+        },
+      ]
       : [];
 
     if (requests.length > 0) {
