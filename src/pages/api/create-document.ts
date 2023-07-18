@@ -1,13 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { docs_v1, drive_v3, google } from 'googleapis';
 
-import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
+import {
+  GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT,
+  GOOGLE_TEMPLATE_DOCUMENT_ID,
+  GOOGLE_PARENT_FOLDER,
+} from 'constants/env';
 
 const credentials = JSON.parse(
-  Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
+  Buffer.from(
+    GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT,
+    'base64'
+  ).toString()
 );
 
-const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
+const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title, text } = req.body;
 
   try {
@@ -15,6 +22,8 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
       credentials: credentials,
       scopes: [
         'https://www.googleapis.com/auth/drive',
+        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/drive.file',
         'https://www.googleapis.com/auth/documents',
       ],
     });
@@ -29,6 +38,13 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
       fileId: '1Zyb5JFlDyBsTIqHYiMFZibXbGscTQ3Vo5XO2zhFfSyc',
       requestBody: documentMetadata,
     });
+    // const documentCopy = await drive.files.copy({
+    //   fileId: templateDocumentId,
+    //   requestBody: {
+    //     name: title,
+    //     // parents: [GOOGLE_PARENT_FOLDER],
+    //   },
+    // });
 
     const { id: documentId } = copiedDocument.data;
 
@@ -39,7 +55,10 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const url = document.data.webViewLink;
 
-    const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
+    const docs: docs_v1.Docs = google.docs({
+      version: 'v1',
+      auth,
+    });
     const requests = text
       ? [
           {
@@ -69,4 +88,4 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default createDocument;
+export default copyDocument;

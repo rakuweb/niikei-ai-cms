@@ -24,6 +24,7 @@ export default async function uploadHandler(
       fields: { 'x-goog-meta-test': 'data' },
     };
     const [response] = await file.generateSignedPostPolicyV4(options);
+    console.log(response);
     res.status(200).json(response);
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });

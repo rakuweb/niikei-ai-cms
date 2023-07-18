@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import {
   Box,
   Table,
@@ -27,6 +27,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { db, auth } from 'src/firebase';
 import { InternalLink } from 'components/links/InternalLink';
+import { Category } from '@/firebase/firestore/sites';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -41,7 +42,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: admin.firestore.Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_patrol?: boolean;
@@ -53,6 +54,8 @@ export type PresenterProps = {
 export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [switchValues, setSwitchValues] = useState([]);
 
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
@@ -63,7 +66,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
         const employeeDocRef = doc(db, 'users', user.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
-        const docRef = doc(ref, 'registered_sites', id);
+        const docRef = doc(ref, 'sites', id);
         await deleteDoc(docRef);
       }
       window.alert('選択項目を削除しました');
@@ -73,7 +76,13 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    const length = data.length;
+    const arr = new Array(length);
+    const result = arr.map((item, idx) => !!data[idx]?.is_auto_patrol);
+
+    setSwitchValues(result);
+  }, [data]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -114,16 +123,27 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_auto_patrol || false}
+                              isChecked={
+                                !!data.is_auto_patrol
+                                // switchValues[
+                                // (currentPage - 1) * itemsPerPage + index
+                                // ]
+                              }
+                              // onChange={(e) => handlePatrolSwitch(e)}
+                              // defaultChecked={!!data?.is_auto_patrol}
+                              // onClick={(e) => handlePatrolSwitch(e.tar)}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                 {
                                   backgroundColor: '#49BAC0',
                                 },
+                                span: {
+                                  cursor: `not-allowed`,
+                                },
                               }}
                             />
                           </Td>
-                          <Td>{data?.category || ''}</Td>
+                          <Td>{data?.category.name || ''}</Td>
                           <Td>
                             <Box display={'flex'} alignItems={'center'}>
                               {data?.is_renewal && (
@@ -148,12 +168,15 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           <Td>
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_notified || false}
-                              isReadOnly
+                              isChecked={!!data?.is_notified}
+                              // defaultChecked={!!data?.is_notified}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
                                 {
                                   backgroundColor: '#49BAC0',
+                                },
+                                span: {
+                                  cursor: `not-allowed`,
                                 },
                               }}
                             />

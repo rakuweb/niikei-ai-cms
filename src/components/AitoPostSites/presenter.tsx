@@ -7,6 +7,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { AutoPostSitesTable } from '../organisms/AutoPostSitesTable';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: {
@@ -17,7 +18,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_posts?: boolean;

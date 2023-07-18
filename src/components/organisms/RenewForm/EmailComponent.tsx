@@ -81,9 +81,9 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     <Box
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      w={'35vw'}
+      w={'34.5vw'}
       color={'#222526'}
-      mb={'1.5vw'}
+      mb={'3vw'}
       className="email"
     >
       <Box fontSize={'1vw'} mt={'3vw'} mb={'0.5vw'}>

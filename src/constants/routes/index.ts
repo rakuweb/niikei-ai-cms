@@ -1,3 +1,5 @@
+import { WORDPRESS_URL } from '@/constants/env';
+
 export const routes = {
   signin: `/signin`,
   passwordReset: `/password-reset`,
@@ -30,7 +32,11 @@ export const apiRoutes = {
   wpCategories: `/api/wp/categories`,
   wpMedia: `/api/wp/media`,
   updateUserPassword: `/api/update-user-password`,
+  wpBasic: `/api/wp/basic`,
+  createDocument: `/api/create-document`,
 };
+
+export const wpRoutes = { media: `${WORDPRESS_URL}/wp-json/wp/v2/media` };
 
 export const niikeiURL = `https://www.niikei.jp/`;
 

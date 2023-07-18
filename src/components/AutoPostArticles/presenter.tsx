@@ -6,6 +6,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { AutoPostArticlesTable } from '../organisms/AutoPostArticlesTable';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -13,11 +14,12 @@ export type PresenterProps = {
     url: string;
     document_id: string;
     status: string;
-    category: string;
+    category: Category;
     wp_url: string;
     created_at: Date;
     due_date: Date;
     name?: string;
+    id: string;
   }>[];
   titles?: string;
 };

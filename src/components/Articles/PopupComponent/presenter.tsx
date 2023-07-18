@@ -16,7 +16,7 @@ import { WideButton } from './WideButton';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { getAuth } from 'firebase/auth';
-
+import { useAccountStore, selectAccountItem } from 'features/account';
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -42,22 +42,50 @@ export const Presenter: FC<PresenterProps> = ({
     setCategory(e.target.value);
   };
 
+  const account = useAccountStore(selectAccountItem);
+  const YOUR_CLIENT_ID =
+    '259408642692-60sqhkla2vja32tiqv7t0hh6a5tegdst.apps.googleusercontent.com';
+  const YOUR_CLIENT_SECRET = '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';
+  const YOUR_REDIRECT_URI = 'http://localhost:3000/articles/new';
+  const authenticationGoogle = () => {
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive&redirect_uri=${YOUR_REDIRECT_URI}`;
+    window.location.href = authUrl;
+  };
+
   const handleCreateDocument = async () => {
     try {
-      text = text || '';
+      // const authCode = new URL(window.location.href).searchParams.get('code');
+
+      // const responseToken = await fetch('https://oauth2.googleapis.com/token', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //   },
+      //   body: `code=${authCode}&client_id=${YOUR_CLIENT_ID}&client_secret=${YOUR_CLIENT_SECRET}&redirect_uri=${YOUR_REDIRECT_URI}&grant_type=authorization_code`,
+      // });
+
+      // const data = await responseToken.json();
+      // const accessToken = data.access_token;
+
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ title, text }),
+        body: JSON.stringify({
+          title,
+          text,
+          // accessToken
+        }),
       });
-      console.log(response);
+
+      // console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const employeeDocRef = doc(db, 'users', user.uid);
+
+        const employeeDocRef = doc(db, 'users', account.uid);
+        console.log(account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(ref, 'articles');
@@ -69,7 +97,7 @@ export const Presenter: FC<PresenterProps> = ({
           status: 'editing',
           due_date: '',
           wp_url: '',
-          created_by: doc(ref, 'employees', user.uid),
+          created_by: doc(ref, 'employees', account.uid),
         });
 
         onClose();
@@ -119,6 +147,13 @@ export const Presenter: FC<PresenterProps> = ({
             </FormControl>
           </ModalBody>
           <ModalFooter>
+            {/*
+            <WideButton
+              onClick={authenticationGoogle}
+              text="ユーザー認証する"
+              fontSize={{ base: '1.2vw' }}
+            />
+          */}
             <WideButton
               onClick={handleCreateDocument}
               text=" Googleドキュメントで記事を作成する"

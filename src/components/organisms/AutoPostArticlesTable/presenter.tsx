@@ -11,20 +11,32 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
-import { WideButton } from 'components/Button/WideButton';
-import { GrayButton } from 'components/Button/GrayButton';
 import { css } from '@emotion/react';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
-import { DropDown } from '../DropDown';
-import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc, deleteDoc } from '@firebase/firestore';
-import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
+import { ContentContainer } from 'components/Container/ContentContainer';
+import { Pagination } from 'components/Pagination';
+import { DropDown } from '../DropDown';
+import { ExternalLink } from 'components/links/ExternalLink';
+import { db, auth } from 'src/firebase';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  NotificationKind,
+  deleteNotificationByID,
+} from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { useAccountStore } from '@/features/account';
+import {
+  selectDeleteAutoPostNotificationByID,
+  useNotificationsStore,
+} from '@/features/notifications';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,11 +48,12 @@ export type PresenterProps = {
     url: string;
     document_id: string;
     status: string;
-    category: string;
+    category: Category;
     wp_url: string;
     created_at: Date;
     due_date: Date;
     name?: string;
+    id: string;
   }>[];
   currentPage: number;
 };
@@ -49,6 +62,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const user = auth.currentUser;
   const id = user?.uid;
   const itemsPerPage = 10;
+  const companyID = useCompanyStore(selectUid);
+  const employeeID = useAccountStore((state) => state.uid);
+  const deleteAutoPostManagementByID = useNotificationsStore(
+    selectDeleteAutoPostNotificationByID
+  );
 
   const [selectedItems, setSelectedItems] = useState<{
     [url: string]: boolean;
@@ -139,6 +157,13 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       console.log('指定したユーザー情報が存在しません');
     }
 
+    const postArticleID = data[index].id ?? null;
+    if (postArticleID === null) return;
+    await deleteNotificationByID(
+      { companyID, employeeID, notificationID: postArticleID },
+      NotificationKind.AutoPost
+    );
+    deleteAutoPostManagementByID(postArticleID);
     window.alert('選択項目を削除しました');
     location.reload();
   };
@@ -163,31 +188,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   const [titles, setTitles] = useState<{ [url: string]: string }>({});
   const [times, setTimes] = useState<{ [url: string]: string }>({});
 
-  useEffect(() => {
-    const fetchTitles = async () => {
-      const newTitles = {};
-      for (const item of data) {
-        const title = await getTitle(item.url);
-        newTitles[item.url] = title;
-      }
-      setTitles(newTitles);
-    };
+  // useEffect(() => {
+  //   const fetchTitles = async () => {
+  //     const newTitles = {};
+  //     for (const item of data) {
+  //       const title = await getTitle(item.url);
+  //       newTitles[item.url] = title;
+  //     }
+  //     setTitles(newTitles);
+  //   };
+  //
+  //   fetchTitles();
+  // }, [data]);
 
-    fetchTitles();
-  }, [data]);
-
-  useEffect(() => {
-    const fetchTimes = async () => {
-      const newTimes = {};
-      for (const item of data) {
-        const times = await getTimes(item.url);
-        newTimes[item.url] = times;
-      }
-      setTimes(newTimes);
-    };
-
-    fetchTimes();
-  }, [data]);
+  // useEffect(() => {
+  //   const fetchTimes = async () => {
+  //     const newTimes = {};
+  //     for (const item of data) {
+  //       const times = await getTimes(item.url);
+  //       newTimes[item.url] = times;
+  //     }
+  //     setTimes(newTimes);
+  //   };
+  //
+  //   fetchTimes();
+  // }, [data]);
 
   async function getTitle(url: string) {
     const response = await fetch(`/api/title?url=${url}`);
@@ -203,18 +228,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   }
 
   // 時間ソート
-  useEffect(() => {
-    const fetchTimes = async () => {
-      const newTimes = {};
-      for (const item of data) {
-        const times = await getTimes(item.url);
-        newTimes[item.url] = times;
-      }
-      setTimes(newTimes);
-    };
-
-    fetchTimes();
-  }, [data]);
+  // useEffect(() => {
+  //   const fetchTimes = async () => {
+  //     const newTimes = {};
+  //     for (const item of data) {
+  //       const times = await getTimes(item.url);
+  //       newTimes[item.url] = times;
+  //     }
+  //     setTimes(newTimes);
+  //   };
+  //
+  //   fetchTimes();
+  // }, [data]);
 
   const timesArray = Object.entries(times);
 
@@ -264,10 +289,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                    {
-                                      backgroundColor: '#49BAC0',
-                                      borderColor: `#49BAC0`,
-                                    },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -281,18 +306,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
-                          <Td>{data?.category || ''}</Td>
-                          <Td>{titles[data?.url || '']}</Td>
-                          <Td>{data?.name || ''}</Td>
+                          <Td>{data?.category?.name || ''}</Td>
+                          <Td>{data.title}</Td>
+                          <Td>{`自動生成`}</Td>
 
                           <Td>
                             <Box
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={`${data?.url || ''}`}>
+                              <ExternalLink
+                                onClick={async () => {
+                                  await deleteNotificationByID(
+                                    {
+                                      companyID,
+                                      employeeID,
+                                      notificationID: data.id,
+                                    },
+                                    NotificationKind.AutoPost
+                                  );
+                                  deleteAutoPostManagementByID(data.id);
+                                }}
+                                href={`${data?.wp_url || ''}`}
+                              >
                                 <WideButton
-                                  text={`編集する`}
+                                  text={`確認する`}
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>

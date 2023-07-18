@@ -18,14 +18,27 @@ export type SiteType = {
   interval1: string;
   interval2: string;
   created_at: Timestamp;
-  category: string;
+  category: Category;
   is_notified: boolean;
   is_renewal: boolean;
   is_auto_patrol: boolean;
-  previous_structure: Map<string, string>;
+  previous_structure: string[];
+  previous_target: string;
 };
+export type Category = { id: number; name: string };
 
 export const SITE_COLLECTION = 'sites';
+
+export const switchAutoPatrol = async (
+  id: { companyID: string; siteID: string },
+  data: boolean
+) => {
+  const { companyID, siteID } = id;
+  const reqestData = { is_auto_patrol: data };
+  await updateSites(companyID, siteID, reqestData).catch((err) => {
+    throw err;
+  });
+};
 
 export const fetchSites = async (companyID: string) => {
   const docsRef = collection(
@@ -35,7 +48,6 @@ export const fetchSites = async (companyID: string) => {
     SITE_COLLECTION
   );
   const snapshots = await getDocs(docsRef);
-  // const documents = snapshots.docs.map((document) => document.data());
   const documents = snapshots.docs.map((document) => ({
     id: document.id, // Here is the document ID
     ...document.data(),
@@ -47,7 +59,13 @@ export const fetchSites = async (companyID: string) => {
 export const addSites = async (companyID: string, data: Partial<SiteType>) => {
   const collectionRef = getSiteCollectionRef(companyID);
 
-  const storeData: Partial<SiteType> = { ...data, created_at: Timestamp.now() };
+  const storeData: Partial<SiteType> = {
+    ...data,
+    created_at: Timestamp.now(),
+    is_renewal: false,
+    previous_structure: [],
+    previous_target: '',
+  };
   await addDoc(collectionRef, { ...storeData }).catch((err) => {
     console.error(err);
     throw err;

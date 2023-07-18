@@ -1,4 +1,10 @@
-import { Timestamp, collection, getDoc, getDocs } from 'firebase/firestore';
+import {
+  Timestamp,
+  collection,
+  getDoc,
+  getDocs,
+  doc,
+} from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -29,22 +35,20 @@ export type ArticleType = {
 export type User = {
   name: string;
 };
-export const ARTICLE_COLLECTION = 'auto_post_articles';
-
+export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
 
   const snapshots = await getDocs(docsRef);
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
-    const createdByRef = data.created_by;
-    const createdBySnap = await getDoc(createdByRef);
-    const createdByData = createdBySnap.data() as User;
-    const name = createdByData ? createdByData.name : '';
-    return { ...data, name };
+    return { ...data, id: document.id };
   });
 
-  const documents = await Promise.all(documentsPromises);
+  const result = await Promise.allSettled(documentsPromises);
+  const documents = result
+    .filter((item) => item?.status === 'fulfilled')
+    .map((item) => (item as PromiseFulfilledResult<any>).value);
 
   return documents;
 };
@@ -54,7 +58,7 @@ export const getArticleDocsRef = (companyID: string) => {
     db,
     COMPANY_COLLECTION,
     companyID,
-    ARTICLE_COLLECTION
+    AUTO_POST_ARTICLE_COLLECTION
   );
 
   return docsRef;

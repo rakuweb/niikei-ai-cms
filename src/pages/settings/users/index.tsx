@@ -2,11 +2,12 @@ import { NextPage } from 'next';
 import { Box, Spinner } from '@chakra-ui/react';
 import { Users } from 'components/Users';
 import { Sidebar } from 'components/Sidebar';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db, auth } from 'src/firebase';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { routes } from '@/constants/routes';
 
 type UserData = {
   role: string;
@@ -26,23 +27,34 @@ const Home: NextPage = () => {
 
       try {
         if (user) {
-          const allowedEmailsRef = collection(
-            db,
-            'companies',
-            user.uid,
-            'employees'
-          );
-          const querySnapshot = await getDocs(allowedEmailsRef);
+          const employeeDocRef = doc(db, 'users', user.uid as string);
+          const employeeDocSnap = await getDoc(employeeDocRef);
+          const ref = employeeDocSnap.data()?.company_ref;
 
-          const fetchedData: UserData[] = [];
-          querySnapshot.forEach((doc) => {
-            fetchedData.push({
-              id: doc.id,
-              ...(doc.data() as { role: string; email: string; name: string }),
+          const userRoleRef = doc(ref, 'employees', user.uid as string);
+          const userRoleDoc = await getDoc(userRoleRef);
+          const role = userRoleDoc.data()?.role;
+
+          if (role === 'editor') {
+            const allowedEmailsRef = collection(ref, 'employees');
+            const querySnapshot = await getDocs(allowedEmailsRef);
+
+            const fetchedData: UserData[] = [];
+            querySnapshot.forEach((doc) => {
+              fetchedData.push({
+                id: doc.id,
+                ...(doc.data() as {
+                  role: string;
+                  email: string;
+                  name: string;
+                }),
+              });
             });
-          });
 
-          setData(fetchedData);
+            setData(fetchedData);
+          } else {
+            router.push(routes.articlesNew);
+          }
         } else {
           router.push('/');
         }

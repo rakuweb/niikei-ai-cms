@@ -88,14 +88,16 @@ export const Presenter: FC<PresenterProps> = () => {
       setAccount(accountInfo);
 
       const { notifications } = employee;
-      notifications?.length > 0 &&
-        setSiteManamgementNotifications(notifications[0]);
-      notifications?.length > 1 &&
-        setArticleManagementNotifications(notifications[1]);
-      notifications?.length > 2 &&
-        setAutoPostManagementNotifications(notifications[2]);
-      notifications?.length > 3 &&
-        setOriginalContentManamgementNotifications(notifications[3]);
+      setSiteManamgementNotifications(notifications?.site ?? []);
+      setArticleManagementNotifications({
+        standby: notifications?.article?.standby ?? [],
+        // WARN:
+        // inReview: notifications?.article?.in_review ?? [],
+        checking: notifications?.article?.checking ?? [],
+        fixing: notifications?.article?.fixing ?? [],
+      });
+      setAutoPostManagementNotifications(notifications?.auto_post ?? []);
+      setOriginalContentManamgementNotifications(notifications?.fortune ?? []);
 
       router.push(routes.articlesNew);
     } catch (error) {

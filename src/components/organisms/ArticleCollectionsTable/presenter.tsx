@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Box,
   Table,
@@ -11,6 +11,7 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -22,9 +23,32 @@ import { GrayButton } from 'components/Button/GrayButton';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
-import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  Timestamp,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
+import { Popup } from 'components/Articles/PopupComponent';
+import { apiRoutes } from '@/constants/routes';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  INFORMATION_COLLECTION,
+  InformationStatus,
+} from '@/firebase/firestore/information';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteArticleManagementByKindAndID,
+  useNotificationsStore,
+} from '@/features/notifications';
+import {
+  NotificationKind,
+  deleteArticleNotificationByID,
+} from '@/firebase/firestore/employees';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,7 +60,7 @@ export type PresenterProps = {
     message: string;
     title: string;
     status: string;
-    category: string;
+    category: Category;
     id: string;
     url: string;
   }[];
@@ -45,11 +69,27 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteArticleManagementByKindAndID = useNotificationsStore(
+    selectDeleteArticleManagementByKindAndID
+  );
   const itemsPerPage = 10;
+  const [target, setTarget] = useState('');
 
   const [selectedItems, setSelectedItems] = useState<{ [id: string]: boolean }>(
     {}
   );
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupText, setPopupText] = useState('');
+  const [categories, setCategories] = useState([]);
+  const openPopup = () => {
+    setIsOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
+  };
 
   const handleCheckboxClick = (id: string) => {
     setSelectedItems((prevState) => ({
@@ -73,10 +113,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
 
     await updateDoc(docRef, {
-      status: 'in_review',
+      status: InformationStatus.InReview,
     });
 
     window.alert('新着情報一覧に移動しました');
@@ -95,9 +135,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
-          status: 'in_review',
+          status: InformationStatus.InReview,
         });
       }
     }
@@ -116,7 +156,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
   const [selectedValue, setSelectedValue] = useState('');
 
-  // 状態をstand_byへ
   const handleSetStandBy = async (id: string) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -125,11 +164,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const ref = employeeDocSnap.data()?.company_ref;
     const docRef = doc(ref, 'infomation', id);
 
-    await updateDoc(docRef, {
-      status: 'stand_by',
-    });
+    await deleteDoc(docRef);
+    // await updateDoc(docRef, {
+    //   status: InformationStatus.InReview,
+    // });
 
-    window.alert('ステータスを変更しました');
+    // window.alert('ステータスを変更しました');
     location.reload();
   };
   const handleSetAllStandBy = async () => {
@@ -144,13 +184,31 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         console.log(id);
         const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
-          status: 'stand_by',
+          status: InformationStatus.StandBy,
         });
       }
     }
     window.alert('選択項目を記事化しました');
     location.reload();
   };
+
+  useEffect(() => {
+    const url = apiRoutes.wpCategories;
+    const handler = async () => {
+      const res = await axios.get(url);
+      const data = res.data;
+
+      setCategories(
+        data.categories.map((category) => ({
+          id: category.id,
+          name: category.name,
+        }))
+      );
+    };
+
+    handler();
+  }, []);
+
   return (
     <>
       <ContentContainer h={`${702 / 19.2}vw`}>
@@ -206,7 +264,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               'YYYY/MM/DD'
                             )}
                           </Td>
-                          <Td>{data.category || ''}</Td>
+                          <Td>{data.category.name || ''}</Td>
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
 
@@ -218,13 +276,39 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <WideButton
                                 text={`記事にする`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleSetStandBy(data.id)}
+                                onClick={async () => {
+                                  setTarget(data.id);
+                                  deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                  openPopup();
+                                }}
                               />
 
                               <GrayButton
+                                ml={`0.5vw`}
                                 text={`元に戻す`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleDelete(data.id)}
+                                onClick={async () => {
+                                  await handleDelete(data.id);
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                  await deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                }}
                               />
                             </Box>
                           </Td>
@@ -244,7 +328,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             handleSelect={setSelectedValue}
             handleExecute={handleExecute}
             handleSetAllStandBy={handleSetAllStandBy}
-            options={['まとめて元に戻す', 'まとめて記事化する']}
+            options={['まとめて元に戻す']}
           />
         </Box>
         <Pagination
@@ -254,6 +338,14 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
           handlePageChange={handlePageChange}
         />
       </Flex>
+      <Popup
+        isOpen={isOpen}
+        onClose={closePopup}
+        text={popupText}
+        setText={setPopupText}
+        list={categories}
+        onChangeArticle={() => handleSetStandBy(target)}
+      />
     </>
   );
 };

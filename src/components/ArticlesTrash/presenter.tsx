@@ -8,6 +8,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { InternalLink } from 'components/links/InternalLink';
 import { ArticlesTrashTable } from '../organisms/ArticlesTrashTable';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -15,7 +16,7 @@ export type PresenterProps = {
     url: string;
     document_id: string;
     status: string;
-    category: string;
+    category: Category;
     wp_url: string;
     created_at: Date;
     due_date: Date;

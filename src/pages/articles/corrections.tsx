@@ -2,10 +2,10 @@ import { NextPage } from 'next';
 import { Box, Spinner } from '@chakra-ui/react';
 import { Sidebar } from 'components/Sidebar';
 import { useEffect, useState } from 'react';
-import { Drafts } from 'components/Drafts';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
 import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
 import { DocumentData } from 'firebase/firestore';
+import { Fixing } from '@/components/Fixing';
 
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<DocumentData[] | null>(null);
@@ -53,7 +53,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Drafts data={data} titles={'修正記事一覧'} />
+        <Fixing data={data} titles={'修正記事一覧'} />
       </Box>
     </>
   );

@@ -7,7 +7,6 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import LordingComponent from './LordingComponent';
 import toWav from 'audiobuffer-to-wav';
-import { decode } from 'audio-decode';
 
 const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -44,6 +43,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
       const res = await fetch(`/api/uplord-file?file=${fileName}`, {
         method: 'POST',
       });
+      console.log(res);
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {
@@ -54,9 +54,12 @@ const Mp3select = ({ setSelectedFileContent }) => {
       if (upload.ok) {
         console.log('Uploaded successfully!');
 
-        const textRes = await fetch(`/api/convert-mp3?file=${fileName}.wav`, {
+        const gcfEndpoint = `https://convertmp3-lhlegjmbwq-uc.a.run.app?file=${fileName}`;
+
+        const textRes = await fetch(gcfEndpoint, {
           method: 'POST',
         });
+
         const json = await textRes.json();
         const { text } = json;
 
@@ -106,7 +109,26 @@ const Mp3select = ({ setSelectedFileContent }) => {
       const arrayBuffer = await file.arrayBuffer();
 
       const audioContext = new AudioContext();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      let audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+      if (audioBuffer.numberOfChannels == 2) {
+        const channel1Data = audioBuffer.getChannelData(0);
+        const channel2Data = audioBuffer.getChannelData(1);
+        const newAudioData = new Float32Array(audioBuffer.length);
+
+        for (let i = 0; i < audioBuffer.length; i++) {
+          newAudioData[i] = (channel1Data[i] + channel2Data[i]) / 2;
+        }
+
+        const newAudioBuffer = audioContext.createBuffer(
+          1,
+          audioBuffer.length,
+          audioBuffer.sampleRate
+        );
+        newAudioBuffer.copyToChannel(newAudioData, 0, 0);
+        audioBuffer = newAudioBuffer;
+      }
+
       const wav = toWav(audioBuffer);
       const blob = new Blob([new Uint8Array(wav)], { type: 'audio/wav' });
       const convertedFile = new File([blob], file.name, {

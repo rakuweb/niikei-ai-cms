@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as speech from '@google-cloud/speech';
-
+import { Storage } from '@google-cloud/storage';
 import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 
 const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -22,16 +21,17 @@ export default async function handler(
     // });
     // const bucket = storage.bucket(bucketName);
 
-    const gcsUri = `gs://${bucketName}/${fileName}-fixed.wav`;
+    const gcsUri = `gs://${bucketName}/${fileName}`;
     const audio = {
       uri: gcsUri,
     };
     const config = {
       encoding: 'LINEAR16' as any,
-      sampleRateHertz: 44100,
+      // sampleRateHertz: 48000,
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,
     };
+
     const request: speech.protos.google.cloud.speech.v1.ILongRunningRecognizeRequest =
       {
         audio: audio,
@@ -45,6 +45,12 @@ export default async function handler(
       const transcription = response.results
         .map((result) => result.alternatives[0].transcript)
         .join('\n');
+
+      const storage = new Storage({ credentials: credentials });
+      const bucket = storage.bucket(bucketName);
+
+      const file = bucket.file(fileName);
+      await file.delete();
 
       res.status(200).json({ text: transcription });
     } else {

@@ -13,7 +13,7 @@ export type AccountSliceData = {
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
-  notifications: any[];
+  notifications: any;
 };
 
 type SetAccountInfoProps = {
@@ -24,7 +24,7 @@ type SetAccountInfoProps = {
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
-  notifications: any[];
+  notifications: any;
 };
 
 export type AccountSlice = AccountSliceData & {

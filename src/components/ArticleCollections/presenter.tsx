@@ -7,6 +7,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ArticleCollectionsTable } from '../organisms/ArticleCollectionsTable';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: {
@@ -14,7 +15,7 @@ export type PresenterProps = {
     message: string;
     title: string;
     status: string;
-    category: string;
+    category: Category;
     url: string;
     id: string;
   }[];
@@ -22,7 +23,6 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
-  console.log(data);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>

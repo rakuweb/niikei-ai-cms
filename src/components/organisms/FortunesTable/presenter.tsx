@@ -10,13 +10,13 @@ import {
   TableContainer,
   Switch,
 } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
-import { WideButton } from 'components/Button/WideButton';
-import { GrayButton } from 'components/Button/GrayButton';
-import { InternalLink } from 'components/links/InternalLink';
 import { css } from '@emotion/react';
 import { Timestamp } from 'firebase/firestore';
 import dayjs from 'dayjs';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
 import { selectUid, useCompanyStore } from '@/features/company';
 import {
   FortunesLogType,
@@ -26,6 +26,16 @@ import {
 } from '@/firebase/firestore/fortuneLogs';
 import { ContentContainer } from '@/components/Container/ContentContainer';
 import { Pagination } from '@/components/Pagination';
+import { ExternalLink } from '@/components/links/ExternalLink';
+import {
+  selectDeleteOriginalContentNotificationByID,
+  useNotificationsStore,
+} from '@/features/notifications';
+import {
+  NotificationKind,
+  deleteNotificationByID,
+} from '@/firebase/firestore/employees';
+import { useAccountStore } from '@/features/account';
 
 export type PresenterProps = {
   data?: {
@@ -39,12 +49,17 @@ export type PresenterProps = {
   }[];
   currentPage: number;
 };
+
 export const Presenter: FC<PresenterProps> = () => {
   const itemsPerPage = 10;
   const [list, setList] = useState<FortunesLogType[]>([]);
   const companyID = useCompanyStore(selectUid);
   const [displayList, setDisplayList] = useState<FortunesLogType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const deleteOriginalContentNotificationByID = useNotificationsStore(
+    selectDeleteOriginalContentNotificationByID
+  );
+  const employeeID = useAccountStore((state) => state.uid);
 
   const handlePageChange = (newPage: number) => {
     const start = (newPage - 1) * itemsPerPage;
@@ -71,11 +86,20 @@ export const Presenter: FC<PresenterProps> = () => {
   }, []);
 
   const handleDelete = async (id: string) => {
-    console.log('Handle delete for id:', id);
-    await deleteFortunesLogs(companyID, id).catch((err) => {
+    const res = await deleteFortunesLogs(companyID, id).catch((err) => {
       console.error(err);
       alert('削除に失敗しました。時間経ってからもう一度お試しください。');
+      return null;
     });
+    if (res === null) return;
+
+    await deleteNotificationByID(
+      { companyID, employeeID, notificationID: id },
+      NotificationKind.AutoPost
+    );
+    deleteOriginalContentNotificationByID(id);
+    alert('画像を削除しました。');
+    location.reload();
   };
   const handleSwitchChange = async (id: string, used: boolean) => {
     const checkOnly = (id: string) => {
@@ -172,9 +196,9 @@ export const Presenter: FC<PresenterProps> = () => {
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                  },
+                                {
+                                  backgroundColor: '#49BAC0',
+                                },
                               }}
                               onChange={(e) =>
                                 handleSwitchChange(log.id, e.target.checked)
@@ -184,20 +208,33 @@ export const Presenter: FC<PresenterProps> = () => {
                           )}
                         </Td>
                         <Td>
-                          {log.date &&
-                            dayjs(log.date.toDate()).format('YYYY/MM/DD')}
+                          {log?.date &&
+                            dayjs(log?.date?.toDate())?.format('YYYY/MM/DD')}
                         </Td>
                         <Td>{log.title}</Td>
                         <Td>{log.message}</Td>
 
                         <Td>
                           <Box display={'flex'} justifyContent={'space-around'}>
-                            <InternalLink href={``}>
+                            <ExternalLink
+                              href={log.url}
+                              onClick={async () => {
+                                await deleteNotificationByID(
+                                  {
+                                    companyID,
+                                    employeeID,
+                                    notificationID: log.id,
+                                  },
+                                  NotificationKind.Fortune
+                                );
+                                deleteOriginalContentNotificationByID(log.id);
+                              }}
+                            >
                               <WideButton
-                                text={`編集する`}
+                                text={`確認する`}
                                 w={`${140 / 19.2}vw`}
                               />
-                            </InternalLink>
+                            </ExternalLink>
                             <GrayButton
                               onClick={() => handleDelete(log.id)}
                               text={`削除する`}

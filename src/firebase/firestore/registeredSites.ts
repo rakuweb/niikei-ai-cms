@@ -9,6 +9,7 @@ import {
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
+import { Category } from './sites';
 
 export type SiteType = {
   id: string;
@@ -18,11 +19,11 @@ export type SiteType = {
   interval1: string;
   interval2: string;
   created_at: Timestamp;
-  category: string;
+  category: Category;
   is_notified: boolean;
   is_renewal: boolean;
   is_auto_posts: boolean;
-  previous_structure: Map<string, string>;
+  previous_structure: string[];
 };
 
 export const SITE_COLLECTION = 'registered_sites';
