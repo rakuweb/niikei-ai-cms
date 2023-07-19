@@ -136,7 +136,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   };
   const [selectedValue, setSelectedValue] = useState('');
 
-  // 状態をstand_byへ
+  // 状態をstandbyへ
   const handleSetStandBy = async (id: string) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -164,7 +164,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
         console.log(id);
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
           status: InformationStatus.StandBy,
         });
@@ -254,6 +254,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                                 />
                               </ExternalLink>
                               <WideButton
+                                mx={`0.5vw`}
                                 text={`記事化する`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() => handleSetStandBy(data.id)}

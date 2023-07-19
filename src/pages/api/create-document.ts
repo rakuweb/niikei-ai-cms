@@ -31,20 +31,15 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const drive: drive_v3.Drive = google.drive({ version: 'v3', auth });
     const documentMetadata = {
       name: title,
-      parents: ['1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO'],
+      parents: [GOOGLE_PARENT_FOLDER],
+      // parents: ['1MTtd2Kd3J7vyS3RraDtqQh1vMJLslWkO'],
     };
 
     const copiedDocument = await drive.files.copy({
-      fileId: '1Zyb5JFlDyBsTIqHYiMFZibXbGscTQ3Vo5XO2zhFfSyc',
+      fileId: GOOGLE_TEMPLATE_DOCUMENT_ID,
+      // fileId: '1Zyb5JFlDyBsTIqHYiMFZibXbGscTQ3Vo5XO2zhFfSyc',
       requestBody: documentMetadata,
     });
-    // const documentCopy = await drive.files.copy({
-    //   fileId: templateDocumentId,
-    //   requestBody: {
-    //     name: title,
-    //     // parents: [GOOGLE_PARENT_FOLDER],
-    //   },
-    // });
 
     const { id: documentId } = copiedDocument.data;
 

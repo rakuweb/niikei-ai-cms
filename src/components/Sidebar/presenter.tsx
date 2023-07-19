@@ -7,10 +7,7 @@ import Popup from './Popup';
 
 import { useStore } from 'lib/store';
 import { routes } from 'constants/routes';
-import {
-  useNotificationsStore,
-  selectNotificationsAll,
-} from 'features/notifications';
+import { useNotificationsStore } from 'features/notifications';
 
 import AutorenewSvg from 'public/svg/autorenew.svg';
 import DescriptionSvg from 'public/svg/description.svg';
@@ -95,10 +92,8 @@ export const Presenter: FC = () => {
         account.uid
       ).catch((err) => {
         console.error(err);
-        // return null;
       });
       if (!notifications) return;
-      // if (notifications === null) return;
 
       setSiteManagementNotifications(notifications.site);
       setArticleManagementNotifications(notifications.article);

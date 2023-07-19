@@ -185,47 +185,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
-  const [titles, setTitles] = useState<{ [url: string]: string }>({});
   const [times, setTimes] = useState<{ [url: string]: string }>({});
-
-  // useEffect(() => {
-  //   const fetchTitles = async () => {
-  //     const newTitles = {};
-  //     for (const item of data) {
-  //       const title = await getTitle(item.url);
-  //       newTitles[item.url] = title;
-  //     }
-  //     setTitles(newTitles);
-  //   };
-  //
-  //   fetchTitles();
-  // }, [data]);
-
-  // useEffect(() => {
-  //   const fetchTimes = async () => {
-  //     const newTimes = {};
-  //     for (const item of data) {
-  //       const times = await getTimes(item.url);
-  //       newTimes[item.url] = times;
-  //     }
-  //     setTimes(newTimes);
-  //   };
-  //
-  //   fetchTimes();
-  // }, [data]);
-
-  async function getTitle(url: string) {
-    const response = await fetch(`/api/title?url=${url}`);
-    const data2 = await response.json();
-
-    return data2.title;
-  }
-  async function getTimes(url: string) {
-    const response = await fetch(`/api/modified-time?url=${url}`);
-    const data2 = await response.json();
-
-    return data2.modifiedTime;
-  }
 
   // 時間ソート
   // useEffect(() => {
