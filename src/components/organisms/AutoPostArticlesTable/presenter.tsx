@@ -12,7 +12,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { doc, getDoc, deleteDoc } from '@firebase/firestore';
+import { doc, getDoc, deleteDoc, Timestamp } from '@firebase/firestore';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -32,11 +32,12 @@ import {
   deleteNotificationByID,
 } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
-import { useAccountStore } from '@/features/account';
+import { selectAccountItem, useAccountStore } from '@/features/account';
 import {
   selectDeleteAutoPostNotificationByID,
   useNotificationsStore,
 } from '@/features/notifications';
+import { deleteAutoPostArticle } from '@/firebase/firestore/autoPostArticles';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -51,6 +52,7 @@ export type PresenterProps = {
     category: Category;
     wp_url: string;
     created_at: Date;
+    date: Timestamp;
     due_date: Date;
     name?: string;
     id: string;
@@ -91,13 +93,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const refFieldString = userDoc.data().company_ref;
 
     for (const url of selectedUrls) {
-      await fetch('/api/delete-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ urls: [url] }),
-      });
 
       const index = data.findIndex((item) => item.url === url);
       const document_id = data[index]?.document_id;
@@ -121,7 +116,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     setSelectedItems({});
   };
-  // DeleteSelected
 
   // single
   const handleDeleteSingle = async (url: string) => {
@@ -129,32 +123,18 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       return;
     }
 
-    const userDocRef = doc(db, 'users', id);
-    const userDoc = await getDoc(userDocRef);
-    const refFieldString = userDoc.data().company_ref;
+    const index = data.findIndex((item) => item.wp_url === url);
+    const articleID = data[index]?.id;
 
-    await fetch('/api/delete-document', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ urls: [url] }),
-    });
-
-    const index = data.findIndex((item) => item.url === url);
-    const document_id = data[index]?.document_id;
-
-    const companyEmployeeDocRef = doc(
-      refFieldString,
-      'auto_post_articles',
-      document_id
+    const resDelete = await deleteAutoPostArticle(companyID, articleID).catch(
+      (err) => {
+        console.error(err);
+        return null;
+      }
     );
-    const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
-
-    if (userDoc.exists() && companyEmployeeDoc.exists()) {
-      await deleteDoc(companyEmployeeDocRef);
-    } else {
-      console.log('指定したユーザー情報が存在しません');
+    if (resDelete === null) {
+      alert('削除に失敗しました。時間が経ってからもう一度お試しください。');
+      return;
     }
 
     const postArticleID = data[index].id ?? null;
@@ -186,20 +166,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   const [times, setTimes] = useState<{ [url: string]: string }>({});
-
-  // 時間ソート
-  // useEffect(() => {
-  //   const fetchTimes = async () => {
-  //     const newTimes = {};
-  //     for (const item of data) {
-  //       const times = await getTimes(item.url);
-  //       newTimes[item.url] = times;
-  //     }
-  //     setTimes(newTimes);
-  //   };
-  //
-  //   fetchTimes();
-  // }, [data]);
 
   const timesArray = Object.entries(times);
 
@@ -254,15 +220,15 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                     borderColor: `#49BAC0`,
                                   },
                                 }}
-                                checked={selectedItems[data.url || '']}
+                                checked={selectedItems[data.wp_url || '']}
                                 onChange={() =>
-                                  handleCheckboxClick(data.url || '')
+                                  handleCheckboxClick(data.wp_url || '')
                                 }
                               />
                             </Flex>
                           </Td>
                           <Td>
-                            {dayjs(times[data.url || ''])
+                            {dayjs(data.date.toDate())
                               .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
@@ -298,7 +264,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() =>
-                                  handleDeleteSingle(data?.url || '')
+                                  handleDeleteSingle(data?.wp_url || '')
                                 }
                               />
                             </Box>
