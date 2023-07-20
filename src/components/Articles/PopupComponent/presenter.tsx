@@ -15,7 +15,6 @@ import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
-import { getAuth } from 'firebase/auth';
 import { useAccountStore, selectAccountItem } from 'features/account';
 export type PresenterProps = {
   isOpen: boolean;
@@ -44,60 +43,36 @@ export const Presenter: FC<PresenterProps> = ({
   };
 
   const account = useAccountStore(selectAccountItem);
-  const YOUR_CLIENT_ID =
-    '259408642692-60sqhkla2vja32tiqv7t0hh6a5tegdst.apps.googleusercontent.com';
-  const YOUR_CLIENT_SECRET = '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';
-  const YOUR_REDIRECT_URI = 'http://localhost:3000/articles/new';
-  const authenticationGoogle = () => {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive&redirect_uri=${YOUR_REDIRECT_URI}`;
-    window.location.href = authUrl;
-  };
 
   const handleCreateDocument = async () => {
     try {
-      // const authCode = new URL(window.location.href).searchParams.get('code');
-
-      // const responseToken = await fetch('https://oauth2.googleapis.com/token', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded',
-      //   },
-      //   body: `code=${authCode}&client_id=${YOUR_CLIENT_ID}&client_secret=${YOUR_CLIENT_SECRET}&redirect_uri=${YOUR_REDIRECT_URI}&grant_type=authorization_code`,
-      // });
-
-      // const data = await responseToken.json();
-      // const accessToken = data.access_token;
-
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title,
           text,
-          // accessToken
         }),
       });
 
-      // console.log(response);
       if (response.ok) {
         const { documentId, url } = await response.json();
 
         const employeeDocRef = doc(db, 'users', account.uid);
-        console.log(account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(ref, 'articles');
         const documentRef = doc(allowedEmailsRef, documentId);
         await setDoc(documentRef, {
           document_id: documentId || '',
-          category: category || '',
+          category: list.filter((item) => String(item.id) === category)?.[0],
           url: url || '',
           status: 'editing',
-          due_date: '',
-          wp_url: '',
+          due_date: null,
+          wp_url: null,
+          wp_id: null,
           created_by: doc(ref, 'employees', account.uid),
         });
 

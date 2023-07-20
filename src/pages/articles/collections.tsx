@@ -59,13 +59,10 @@ const Home: NextPage = () => {
           await Promise.all(
             querySnapshot.docs.map(async (doc) => {
               const docData = doc.data() as UserData;
-              const siteRefSnap = await getDoc(docData.site_ref);
-              const siteData = siteRefSnap?.data() as SiteType;
 
               fetchedData.push({
                 ...docData,
                 id: doc.id,
-                category: siteData?.category,
               });
             })
           );
