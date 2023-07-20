@@ -95,7 +95,7 @@ export const Presenter: FC<PresenterProps> = () => {
 
     await deleteNotificationByID(
       { companyID, employeeID, notificationID: id },
-      NotificationKind.AutoPost
+      NotificationKind.Fortune
     );
     deleteOriginalContentNotificationByID(id);
     alert('画像を削除しました。');
@@ -236,6 +236,7 @@ export const Presenter: FC<PresenterProps> = () => {
                               />
                             </ExternalLink>
                             <GrayButton
+                              ml={`0.5vw`}
                               onClick={() => handleDelete(log.id)}
                               text={`削除する`}
                               w={`${140 / 19.2}vw`}
