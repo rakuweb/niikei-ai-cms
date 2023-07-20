@@ -14,7 +14,7 @@ export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const title = `新規作成する`;
-  const [selectedFileContent, setSelectedFileContent] = useState(null);
+  const [selectedFileContent, setSelectedFileContent] = useState("");
   const [isPDFSelected, setIsPDFSelected] = useState(true);
 
   const handlePDFButtonClick = () => {
