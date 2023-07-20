@@ -18,7 +18,8 @@ export const WORDPRESS_URL =
 
 export const GOOGLE_APPLICATION_CREDENTIALS =
   process.env.GOOGLE_APPLICATION_CREDENTIALS ?? undefined;
-export const GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT = process.env.GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT ?? undefined;
+export const GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT =
+  process.env.GOOGLE_APPLICATION_CREDENTIALS_CREATE_DOCUMENT ?? undefined;
 export const GOOGLE_TEMPLATE_DOCUMENT_ID =
   process.env.GOOGLE_TEMPLATE_DOCUMENT_ID ?? undefined;
 export const GOOGLE_PARENT_FOLDER =
@@ -26,3 +27,6 @@ export const GOOGLE_PARENT_FOLDER =
 
 export const NIIKEI39D3F = process.env.NIIKEI_CMS ?? undefined;
 // export const NIIKEI39D3F = process.env.NIIKEI39D3F ?? undefined;
+
+export const OPENAI_KEY = process.env.OPENAI_KEY ?? undefined;
+export const OPENAI_ORGANIZATION = process.env.OPENAI_ORGANIZATION ?? undefined;
