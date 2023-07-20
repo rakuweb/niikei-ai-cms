@@ -1,0 +1,318 @@
+import React, { FC, useEffect, useState } from 'react';
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Checkbox,
+  Flex,
+} from '@chakra-ui/react';
+import { css } from '@emotion/react';
+import { doc, getDoc, deleteDoc, Timestamp } from '@firebase/firestore';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
+import { ContentContainer } from 'components/Container/ContentContainer';
+import { Pagination } from 'components/Pagination';
+import { DropDown } from '../DropDown';
+import { ExternalLink } from 'components/links/ExternalLink';
+import { db, auth } from 'src/firebase';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  NotificationKind,
+  deleteNotificationByID,
+} from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteAutoPostNotificationByID,
+  useNotificationsStore,
+} from '@/features/notifications';
+import { deleteAutoPostArticle } from '@/firebase/firestore/autoPostArticles';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale('ja');
+
+export type PresenterProps = {
+  data?: Partial<{
+    title: string;
+    url: string;
+    document_id: string;
+    status: string;
+    category: Category;
+    wp_url: string;
+    created_at: Date;
+    date: Timestamp;
+    due_date: Date;
+    name?: string;
+    id: string;
+  }>[];
+  currentPage: number;
+};
+
+export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const user = auth.currentUser;
+  const id = user?.uid;
+  const itemsPerPage = 10;
+  const companyID = useCompanyStore(selectUid);
+  const employeeID = useAccountStore((state) => state.uid);
+  const deleteAutoPostManagementByID = useNotificationsStore(
+    selectDeleteAutoPostNotificationByID
+  );
+
+  const [selectedItems, setSelectedItems] = useState<{
+    [url: string]: boolean;
+  }>({});
+  const handleCheckboxClick = (url: string) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [url]: !prevState[url],
+    }));
+  };
+
+  const handleDeleteSelected = async () => {
+    const selectedUrls = Object.keys(selectedItems).filter(
+      (url) => selectedItems[url]
+    );
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', id);
+    const userDoc = await getDoc(userDocRef);
+    const refFieldString = userDoc.data().company_ref;
+
+    for (const url of selectedUrls) {
+
+      const index = data.findIndex((item) => item.url === url);
+      const document_id = data[index]?.document_id;
+
+      const companyEmployeeDocRef = doc(
+        refFieldString,
+        'auto_post_articles',
+        document_id
+      );
+      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
+
+      if (userDoc.exists() && companyEmployeeDoc.exists()) {
+        await deleteDoc(companyEmployeeDocRef);
+      } else {
+        console.log('指定したユーザー情報が存在しません');
+      }
+    }
+
+    window.alert('選択項目を削除しました');
+    location.reload();
+
+    setSelectedItems({});
+  };
+
+  // single
+  const handleDeleteSingle = async (url: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    const index = data.findIndex((item) => item.wp_url === url);
+    const articleID = data[index]?.id;
+
+    const resDelete = await deleteAutoPostArticle(companyID, articleID).catch(
+      (err) => {
+        console.error(err);
+        return null;
+      }
+    );
+    if (resDelete === null) {
+      alert('削除に失敗しました。時間が経ってからもう一度お試しください。');
+      return;
+    }
+
+    const postArticleID = data[index].id ?? null;
+    if (postArticleID === null) return;
+    await deleteNotificationByID(
+      { companyID, employeeID, notificationID: postArticleID },
+      NotificationKind.AutoPost
+    );
+    deleteAutoPostManagementByID(postArticleID);
+    window.alert('選択項目を削除しました');
+    location.reload();
+  };
+  // single
+
+  // DropDown
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const handleExecute = () => {
+    if (selectedValue === 'まとめて削除する') {
+      handleDeleteSelected();
+    }
+  };
+  // DropDown
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const [times, setTimes] = useState<{ [url: string]: string }>({});
+
+  const timesArray = Object.entries(times);
+
+  timesArray.sort((a, b) => {
+    return dayjs(b[1]).valueOf() - dayjs(a[1]).valueOf();
+  });
+
+  const sortedData = [...data].sort((a, b) => {
+    return dayjs(times[b.url]).valueOf() - dayjs(times[a.url]).valueOf();
+  });
+
+  return (
+    <>
+      <ContentContainer h={`${702 / 19.2}vw`}>
+        <TableContainer>
+          <Box>
+            <Text letterSpacing={`0`} fontSize={`${16 / 19.2}vw`}>
+              <TableContainer>
+                <Table>
+                  <Thead>
+                    <Tr css={thstyles}>
+                      <Th w={`${52 / 19.2}vw`} h={`${20 / 19.2}vw`} />
+                      <Th w={`${52 / 19.2}vw`}>更新日時</Th>
+                      <Th w={`${30 / 19.2}vw`}>カテゴリ</Th>
+                      <Th w={`${350 / 19.2}vw`}>タイトル</Th>
+                      <Th w={`${350 / 19.2}vw`}>作成者</Th>
+                      <Th w={`${10 / 19.2}vw`}>アクション</Th>
+                    </Tr>
+                  </Thead>
+
+                  <Tbody>
+                    {sortedData
+                      .slice(
+                        (currentPage - 1) * itemsPerPage,
+                        currentPage * itemsPerPage
+                      )
+                      .map((data, index) => (
+                        <Tr key={index} css={tdstyles}>
+                          <Td
+                            w={`${52 / 19.2}vw`}
+                            h={`${59 / 19.2}vw`}
+                            borderLeft={`1px`}
+                          >
+                            <Flex justify={`center`} alignItems={`center`}>
+                              <Checkbox
+                                borderColor={`#707070`}
+                                size={{ lg: `sm`, '2xl': `md` }}
+                                sx={{
+                                  '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                    borderColor: `#49BAC0`,
+                                  },
+                                }}
+                                checked={selectedItems[data.wp_url || '']}
+                                onChange={() =>
+                                  handleCheckboxClick(data.wp_url || '')
+                                }
+                              />
+                            </Flex>
+                          </Td>
+                          <Td>
+                            {dayjs(data.date.toDate())
+                              .tz('Asia/Tokyo')
+                              .format('YYYY/MM/DD')}
+                          </Td>
+                          <Td>{data?.category?.name || ''}</Td>
+                          <Td>{data.title}</Td>
+                          <Td>{`自動生成`}</Td>
+
+                          <Td>
+                            <Box
+                              display={'flex'}
+                              justifyContent={'space-around'}
+                            >
+                              <ExternalLink
+                                onClick={async () => {
+                                  await deleteNotificationByID(
+                                    {
+                                      companyID,
+                                      employeeID,
+                                      notificationID: data.id,
+                                    },
+                                    NotificationKind.AutoPost
+                                  );
+                                  deleteAutoPostManagementByID(data.id);
+                                }}
+                                href={`${data?.wp_url || ''}`}
+                              >
+                                <WideButton
+                                  text={`確認する`}
+                                  w={`${140 / 19.2}vw`}
+                                />
+                              </ExternalLink>
+                              <GrayButton
+                                text={`削除する`}
+                                w={`${140 / 19.2}vw`}
+                                onClick={() =>
+                                  handleDeleteSingle(data?.wp_url || '')
+                                }
+                              />
+                            </Box>
+                          </Td>
+                        </Tr>
+                      ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Text>
+          </Box>
+        </TableContainer>
+      </ContentContainer>
+      <Flex alignItems={'center'} position={'relative'}>
+        <Box position={'absolute'}>
+          <DropDown
+            selectedValue={selectedValue}
+            handleSelect={setSelectedValue}
+            handleExecute={handleExecute}
+            options={['まとめて削除する']}
+          />
+        </Box>
+        <Pagination
+          currentPage={currentPage}
+          totalData={data ? data.length : 0}
+          itemsPerPage={10}
+          handlePageChange={handlePageChange}
+        />
+      </Flex>
+    </>
+  );
+};
+
+const thstyles = css`
+  th {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: ${14 / 19.2}vw;
+    letter-spacing: 0;
+    border-color: #d6d6d6;
+    padding: 0 ${20 / 19.2}vw ${12 / 19.2}vw;
+  }
+`;
+
+const tdstyles = css`
+  td {
+    letter-spacing: 0;
+    border-color: #d6d6d6;
+    border-right: 1px solid #d6d6d6;
+    padding: 0 ${20 / 19.2}vw;
+  }
+`;

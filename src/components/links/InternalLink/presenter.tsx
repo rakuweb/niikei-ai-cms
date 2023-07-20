@@ -1,13 +1,10 @@
 // import layer
 import { FC } from 'react';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
-import {
-  Link as ChakraLink,
-  LinkProps as ChakraLinkProps,
-} from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 
 // type layer
-export type StyleProps = ChakraLinkProps & NextLinkProps;
+export type StyleProps = BoxProps & NextLinkProps;
 export type DataProps = Record<string, unknown>;
 export type PresenterProps = StyleProps & DataProps;
 
@@ -35,7 +32,7 @@ export const Presenter: FC<PresenterProps> = ({
       prefetch={prefetch}
       locale={locale}
     >
-      <ChakraLink
+      <Box
         transition={`all .3s`}
         _hover={{
           cursor: 'pointer',
@@ -45,7 +42,7 @@ export const Presenter: FC<PresenterProps> = ({
         {...props}
       >
         {children}
-      </ChakraLink>
+      </Box>
     </NextLink>
   );
 };

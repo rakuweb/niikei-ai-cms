@@ -1,0 +1,68 @@
+import {
+  Timestamp,
+  collection,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
+
+import { db } from '..';
+import { COMPANY_COLLECTION } from './companies';
+
+export const Status = {
+  Editing: 'editing',
+  Checking: 'checking',
+  Fixing: 'fixing',
+  Published: 'published',
+  IsDeleted: 'is_deleted',
+} as const;
+
+export type Status = (typeof Status)[keyof typeof Status];
+
+export type ArticleType = {
+  title: string;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+  url: string;
+  document_id: string;
+  status: string;
+  created_by: string;
+  due_date: Timestamp;
+  category: string;
+  wp_url: string;
+  name: string;
+};
+export type User = {
+  name: string;
+};
+export const ARTICLE_COLLECTION = 'articles';
+
+export const fetchArticlesWhere = async (companyID: string, status: Status) => {
+  const collectionRef = getArticleDocsRef(companyID);
+  const articleQuery = query(collectionRef, where('status', '==', status));
+  const snapshots = await getDocs(articleQuery);
+  const documentsPromises = snapshots.docs.map(async (document) => {
+    const data = document.data();
+    const createdByRef = data.created_by;
+    const createdBySnap = await getDoc(createdByRef);
+    const createdByData = createdBySnap.data() as User;
+    const name = createdByData ? createdByData.name : '';
+    return { ...data, name, id: document.id };
+  });
+
+  const documents = await Promise.all(documentsPromises);
+
+  return documents;
+};
+
+export const getArticleDocsRef = (companyID: string) => {
+  const collectionRef = collection(
+    db,
+    COMPANY_COLLECTION,
+    companyID,
+    ARTICLE_COLLECTION
+  );
+
+  return collectionRef;
+};
