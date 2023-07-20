@@ -43,15 +43,15 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const docs: docs_v1.Docs = google.docs({ version: 'v1', auth });
     const requests = text
       ? [
-        {
-          insertText: {
-            location: {
-              index: 1,
+          {
+            insertText: {
+              location: {
+                index: 1,
+              },
+              text,
             },
-            text,
           },
-        },
-      ]
+        ]
       : [];
 
     if (requests.length > 0) {

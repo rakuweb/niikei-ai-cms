@@ -3,6 +3,7 @@ import {
   collection,
   getDoc,
   getDocs,
+  deleteDoc,
   doc,
 } from 'firebase/firestore';
 
@@ -35,7 +36,7 @@ export type ArticleType = {
 export type User = {
   name: string;
 };
-export const ARTICLE_COLLECTION = 'auto_post_articles';
+export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
 
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
@@ -43,11 +44,7 @@ export const fetchArticles = async (companyID: string) => {
   const snapshots = await getDocs(docsRef);
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
-    const createdByRef = data.created_by;
-    const createdBySnap = await getDoc(doc(db, createdByRef));
-    const createdByData = createdBySnap.data();
-    const name = createdByData ? createdByData.name : '';
-    return { ...data, name };
+    return { ...data, id: document.id };
   });
 
   const result = await Promise.allSettled(documentsPromises);
@@ -55,8 +52,18 @@ export const fetchArticles = async (companyID: string) => {
     .filter((item) => item?.status === 'fulfilled')
     .map((item) => (item as PromiseFulfilledResult<any>).value);
 
-  console.log(documents);
   return documents;
+};
+
+export const deleteAutoPostArticle = async (
+  companyID: string,
+  articleID: string
+) => {
+  const docRef = getArticleDocRef(companyID, articleID);
+  await deleteDoc(docRef).catch((err) => {
+    console.error(err);
+    throw err;
+  });
 };
 
 export const getArticleDocsRef = (companyID: string) => {
@@ -64,8 +71,20 @@ export const getArticleDocsRef = (companyID: string) => {
     db,
     COMPANY_COLLECTION,
     companyID,
-    ARTICLE_COLLECTION
+    AUTO_POST_ARTICLE_COLLECTION
   );
 
   return docsRef;
+};
+
+export const getArticleDocRef = (companyID: string, articleID: string) => {
+  const docRef = doc(
+    db,
+    COMPANY_COLLECTION,
+    companyID,
+    AUTO_POST_ARTICLE_COLLECTION,
+    articleID
+  );
+
+  return docRef;
 };

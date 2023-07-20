@@ -31,6 +31,11 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  INFORMATION_COLLECTION,
+  InformationStatus,
+} from '@/firebase/firestore/information';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -42,7 +47,7 @@ export type PresenterProps = {
     message: string;
     title: string;
     status: string;
-    category: string;
+    category: Category;
     id: string;
     url: string;
   }[];
@@ -79,7 +84,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
     await deleteDoc(docRef);
     window.alert('選択項目を削除しました');
     location.reload();
@@ -97,8 +102,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        console.log(id);
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await deleteDoc(docRef);
       }
     }
@@ -123,10 +127,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
 
     await updateDoc(docRef, {
-      status: 'in_review',
+      status: InformationStatus.InReview,
     });
 
     window.alert('新着情報一覧に戻しました。');
@@ -141,9 +145,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
-          status: 'in_review',
+          status: InformationStatus.InReview,
         });
       }
     }
@@ -206,7 +210,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               'YYYY/MM/DD'
                             )}
                           </Td>
-                          <Td>{data.category || ''}</Td>
+                          <Td>{data.category.name || ''}</Td>
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
 

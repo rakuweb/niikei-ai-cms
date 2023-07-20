@@ -23,11 +23,32 @@ import { GrayButton } from 'components/Button/GrayButton';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
-import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  Timestamp,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
 import { Popup } from 'components/Articles/PopupComponent';
 import { apiRoutes } from '@/constants/routes';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  INFORMATION_COLLECTION,
+  InformationStatus,
+} from '@/firebase/firestore/information';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteArticleManagementByKindAndID,
+  useNotificationsStore,
+} from '@/features/notifications';
+import {
+  NotificationKind,
+  deleteArticleNotificationByID,
+} from '@/firebase/firestore/employees';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -39,7 +60,7 @@ export type PresenterProps = {
     message: string;
     title: string;
     status: string;
-    category: string;
+    category: Category;
     id: string;
     url: string;
   }[];
@@ -48,6 +69,11 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteArticleManagementByKindAndID = useNotificationsStore(
+    selectDeleteArticleManagementByKindAndID
+  );
   const itemsPerPage = 10;
   const [target, setTarget] = useState('');
 
@@ -87,10 +113,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
 
     await updateDoc(docRef, {
-      status: 'in_review',
+      status: InformationStatus.InReview,
     });
 
     window.alert('新着情報一覧に移動しました');
@@ -109,9 +135,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
-          status: 'in_review',
+          status: InformationStatus.InReview,
         });
       }
     }
@@ -130,7 +156,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
   const [selectedValue, setSelectedValue] = useState('');
 
-  // 状態をstand_byへ
   const handleSetStandBy = async (id: string) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -139,10 +164,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const ref = employeeDocSnap.data()?.company_ref;
     const docRef = doc(ref, 'infomation', id);
 
-    await updateDoc(docRef, {
-      status: '',
-      // status: 'stand_by',
-    });
+    await deleteDoc(docRef);
+    // await updateDoc(docRef, {
+    //   status: InformationStatus.InReview,
+    // });
 
     // window.alert('ステータスを変更しました');
     location.reload();
@@ -159,7 +184,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         console.log(id);
         const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
-          status: 'stand_by',
+          status: InformationStatus.StandBy,
         });
       }
     }
@@ -239,7 +264,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               'YYYY/MM/DD'
                             )}
                           </Td>
-                          <Td>{data.category || ''}</Td>
+                          <Td>{data.category.name || ''}</Td>
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
 
@@ -251,17 +276,39 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               <WideButton
                                 text={`記事にする`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => {
+                                onClick={async () => {
                                   setTarget(data.id);
+                                  deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                  deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
                                   openPopup();
                                 }}
-                              // onClick={() => handleSetStandBy(data.id)}
                               />
 
                               <GrayButton
+                                ml={`0.5vw`}
                                 text={`元に戻す`}
                                 w={`${140 / 19.2}vw`}
-                                onClick={() => handleDelete(data.id)}
+                                onClick={async () => {
+                                  await handleDelete(data.id);
+                                  await deleteArticleNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                  await deleteArticleManagementByKindAndID(
+                                    NotificationKind.Article.Standby,
+                                    data.id
+                                  );
+                                }}
                               />
                             </Box>
                           </Td>
@@ -282,7 +329,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
             handleExecute={handleExecute}
             handleSetAllStandBy={handleSetAllStandBy}
             options={['まとめて元に戻す']}
-          // options={['まとめて元に戻す', 'まとめて記事化する']}
           />
         </Box>
         <Pagination

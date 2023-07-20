@@ -16,11 +16,11 @@ export type DocumentType = {
   status: Status;
 };
 
-export const Status = {
+export const DocumentStatus = {
   Free: 'free',
   Using: 'using',
 };
-export type Status = (typeof Status)[keyof typeof Status];
+export type Status = (typeof DocumentStatus)[keyof typeof DocumentStatus];
 
 export const DOCUMENT_COLLECTION = 'documents';
 
@@ -28,7 +28,7 @@ export const fetchFreeDocuments = async (companyID: string) => {
   const collectionRef = getDocumentDocsRef(companyID);
   const documentQuery = query(
     collectionRef,
-    where('status', '==', Status.Free)
+    where('status', '==', DocumentStatus.Free)
   );
   const snapshots = await getDocs(documentQuery);
   const documentsPromises = snapshots.docs.map(async (doc) => {

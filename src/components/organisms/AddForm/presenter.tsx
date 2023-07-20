@@ -19,7 +19,12 @@ import axios from 'axios';
 import { NameLabel } from './NameLabel';
 import { NameLabel2 } from './NameLabel2';
 import { apiRoutes, routes } from 'constants/routes';
-import { SiteType, addSites, updateSites } from '@/firebase/firestore/sites';
+import {
+  Category,
+  SiteType,
+  addSites,
+  updateSites,
+} from '@/firebase/firestore/sites';
 import { useCompanyStore, selectUid } from 'features/company';
 import { BigWideButton } from '@/components/Button/BigWideButton';
 
@@ -32,7 +37,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_patrol?: boolean;
@@ -91,9 +96,9 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setCategories((prev) =>
         resCategories
           ? resCategories.map((category) => ({
-              id: category.id,
-              name: category.name,
-            }))
+            id: category.id,
+            name: category.name,
+          }))
           : prev
       );
     };
@@ -112,7 +117,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setValue('xpath', data.xpath);
     }
     if (data?.category) {
-      setValue('category', data.category);
+      setValue('category', data.category.name);
     }
     if (data?.interval1) {
       setValue('interval1', data.interval1);
@@ -120,8 +125,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     if (data?.interval2) {
       setValue('interval2', data.interval2);
     }
-    setValue('is_notified', data?.is_notified || false);
-    setValue('is_auto_patrol', data?.is_auto_patrol || false);
+    setValue('is_notified', data?.is_notified);
+    setValue('is_auto_patrol', data?.is_auto_patrol);
   }, [
     data?.name,
     data?.url,
@@ -143,6 +148,9 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         ...formData,
         // NOTE
         url: id ? formData.url : `${formData.url}`,
+        category: categories.filter(
+          (item) => item.name === formData.category
+        )[0],
       };
       if (id) {
         updateSites(companyID, id, data);
@@ -169,16 +177,19 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const getInterval2Input = () => {
     if (interval2Type === '毎月') {
       return (
-        <Input
-          type="number"
-          placeholder="日にちを入力"
-          w={'50%'}
-          min="1"
-          max="31"
-          borderRadius={'none'}
-          {...register('interval2', { required: true })}
-          fontSize={'1vw'}
-        />
+        <>
+          <Input
+            type="number"
+            placeholder="日にちを入力"
+            w={'50%'}
+            min="1"
+            max="31"
+            borderRadius={'none'}
+            {...register('interval2', { required: true })}
+            fontSize={'1vw'}
+          />
+          日
+        </>
       );
     } else if (interval2Type === '毎週') {
       return (

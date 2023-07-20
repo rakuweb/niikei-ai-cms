@@ -17,13 +17,19 @@ import {
 } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import {
+  INFORMATION_COLLECTION,
+  InformationStatus,
+} from '@/firebase/firestore/information';
+import { SiteType } from '@/firebase/firestore/registeredSites';
+import { Category } from '@/firebase/firestore/sites';
 
 type UserData = {
   created_at?: Timestamp;
   message?: string;
   title?: string;
   status?: string;
-  category?: string;
+  category?: Category;
   url?: string;
   site_ref?: DocumentReference;
   id?: string;
@@ -43,9 +49,12 @@ const Home: NextPage = () => {
           const employeeDocRef = doc(db, 'users', user.uid as string);
           const employeeDocSnap = await getDoc(employeeDocRef);
           const ref = employeeDocSnap.data()?.company_ref;
-          const allowedEmailsRef = collection(ref, 'infomation');
+          const allowedEmailsRef = collection(ref, INFORMATION_COLLECTION);
 
-          const q = query(allowedEmailsRef, where('status', '==', 'in_review'));
+          const q = query(
+            allowedEmailsRef,
+            where('status', '==', InformationStatus.InReview)
+          );
           const querySnapshot = await getDocs(q);
 
           const fetchedData: UserData[] = [];
@@ -53,12 +62,12 @@ const Home: NextPage = () => {
             querySnapshot.docs.map(async (doc) => {
               const docData = doc.data() as UserData;
               const siteRefSnap = await getDoc(docData.site_ref);
-              const siteData = siteRefSnap.data() as { category: string };
+              const siteData = siteRefSnap.data() as SiteType;
 
               fetchedData.push({
                 ...docData,
                 id: doc.id,
-                category: siteData?.category || '',
+                category: siteData?.category || { id: undefined, name: '' },
               });
             })
           );

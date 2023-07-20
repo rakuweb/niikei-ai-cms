@@ -7,7 +7,6 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import LordingComponent from './LordingComponent';
 import toWav from 'audiobuffer-to-wav';
-import { decode } from 'audio-decode';
 
 const Mp3select = ({ setSelectedFileContent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -44,6 +43,7 @@ const Mp3select = ({ setSelectedFileContent }) => {
       const res = await fetch(`/api/uplord-file?file=${fileName}`, {
         method: 'POST',
       });
+      console.log(res);
       const { url, fields } = await res.json();
       const body = new FormData();
       Object.entries({ ...fields, file }).forEach(([key, value]) => {

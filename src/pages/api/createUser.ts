@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { setDoc, doc, DocumentReference } from 'firebase/firestore';
 import { db } from 'src/firebase';
+import { INITIAL_NOTIFICATIONS } from '@/firebase/firestore/employees';
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,8 +30,7 @@ export default async function handler(
       new_info_notification: false,
       auto_publish_notification: false,
       fortune_notification: false,
-      // eslint-disable-line
-      notifications: { site: [], article: [], autoPost: [], fortune: [] },
+      notifications: INITIAL_NOTIFICATIONS,
     };
     let companyDocRef: DocumentReference;
     if (is_company) {

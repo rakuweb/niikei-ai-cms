@@ -9,6 +9,7 @@ import { Add } from 'components/Add';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';
+import { Category } from '@/firebase/firestore/sites';
 
 type UserData = {
   id?: string;
@@ -18,7 +19,7 @@ type UserData = {
   interval1?: string;
   interval2?: string;
   created_at?: Timestamp;
-  category?: string;
+  category?: Category;
   is_notified?: boolean;
   is_renewal?: boolean;
   is_auto_patrol?: boolean;

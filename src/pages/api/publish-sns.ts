@@ -2,9 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { TwitterApi } from 'twitter-api-v2';
 import axios from 'axios';
 
-import { TWITTER_APP_USER_TOKEN, FACEBOOK_ACCESS_TOKEN } from 'constants/env';
+import {
+  TWITTER_APP_USER_TOKEN,
+  FACEBOOK_ACCESS_TOKEN,
+  FACEBOOK_PAGE_ID,
+} from 'constants/env';
 
-const facebookPageId = `YOUR_PAGE_ID`;
+const facebookPageId = FACEBOOK_PAGE_ID;
 
 export default async function handler(
   req: NextApiRequest,

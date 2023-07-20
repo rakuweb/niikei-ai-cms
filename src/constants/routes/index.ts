@@ -33,6 +33,7 @@ export const apiRoutes = {
   wpMedia: `/api/wp/media`,
   updateUserPassword: `/api/update-user-password`,
   wpBasic: `/api/wp/basic`,
+  createDocument: `/api/create-document`,
 };
 
 export const wpRoutes = { media: `${WORDPRESS_URL}/wp-json/wp/v2/media` };

@@ -14,6 +14,8 @@ import { auth, db } from '@/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { AitoPostSites } from '@/components/AitoPostSites';
+import { Category } from '@/firebase/firestore/sites';
+import { routes } from '@/constants/routes';
 
 type UserData = {
   id: string;
@@ -23,7 +25,7 @@ type UserData = {
   interval1: string;
   interval2: string;
   created_at: Timestamp;
-  category: string;
+  category: Category;
   is_notified: boolean;
   is_renewal: boolean;
   is_auto_posts: boolean;
@@ -59,7 +61,7 @@ const Draftslist: NextPage = () => {
           );
           setData(fetchedData);
         } else {
-          router.push('/');
+          router.push(routes.signin);
         }
       } catch (error) {
         window.alert(error);

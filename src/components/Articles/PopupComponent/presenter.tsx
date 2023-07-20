@@ -13,26 +13,16 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { WideButton } from './WideButton';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
-import { getAuth } from 'firebase/auth';
 import { useAccountStore, selectAccountItem } from 'features/account';
-import { fetchFreeDocument } from './documents';
-
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
   text: string;
   setText: (text: string) => void;
   list: { id: string; name: string }[];
-  onChangeArticle?: () => void;
+  onChangeArticle?: (id: string) => void;
 };
 
 export const Presenter: FC<PresenterProps> = ({
@@ -40,7 +30,6 @@ export const Presenter: FC<PresenterProps> = ({
   onClose,
   text,
   list,
-  onChangeArticle,
 }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -52,60 +41,40 @@ export const Presenter: FC<PresenterProps> = ({
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCategory(e.target.value);
   };
+
   const account = useAccountStore(selectAccountItem);
+
   const handleCreateDocument = async () => {
     try {
-      const freeDocRef = collection(db, 'documents');
-
-      const freeDocsSnap = await getDocs(freeDocRef);
-
-      const freeDoc = freeDocsSnap.docs.find(
-        (doc) => doc.data().status === 'free'
-      );
-      if (!freeDoc) {
-        window.alert('利用可能なGoogleドキュメントがありません');
-        return;
-      }
-
-      const { document_id, url } = freeDoc.data();
-      console.log(url);
       const response = await fetch('/api/create-document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({
           title,
           text,
-          documentId: document_id,
-          url: url,
         }),
       });
-      console.log(response);
+
       if (response.ok) {
         const { documentId, url } = await response.json();
 
         const employeeDocRef = doc(db, 'users', account.uid);
-        console.log(account.uid);
         const employeeDocSnap = await getDoc(employeeDocRef);
         const ref = employeeDocSnap.data()?.company_ref;
         const allowedEmailsRef = collection(ref, 'articles');
         const documentRef = doc(allowedEmailsRef, documentId);
         await setDoc(documentRef, {
           document_id: documentId || '',
-          category: category || '',
+          category: list.filter((item) => String(item.id) === category)?.[0],
           url: url || '',
           status: 'editing',
-          due_date: '',
-          wp_url: '',
+          due_date: null,
+          wp_url: null,
+          wp_id: null,
           created_by: doc(ref, 'employees', account.uid),
         });
-        const documenIdRef = doc(db, 'documents', documentId);
-        await updateDoc(documenIdRef, {
-          status: 'using',
-        });
-        onChangeArticle && onChangeArticle();
 
         onClose();
         window.open(url, '_blank');
@@ -154,6 +123,13 @@ export const Presenter: FC<PresenterProps> = ({
             </FormControl>
           </ModalBody>
           <ModalFooter>
+            {/*
+            <WideButton
+              onClick={authenticationGoogle}
+              text="ユーザー認証する"
+              fontSize={{ base: '1.2vw' }}
+            />
+          */}
             <WideButton
               onClick={handleCreateDocument}
               text=" Googleドキュメントで記事を作成する"

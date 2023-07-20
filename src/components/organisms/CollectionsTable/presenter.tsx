@@ -26,6 +26,18 @@ import { ExternalLink } from '@/components/links/ExternalLink';
 import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { getAuth } from 'firebase/auth';
+import { Category } from '@/firebase/firestore/sites';
+import {
+  INFORMATION_COLLECTION,
+  InformationStatus,
+} from '@/firebase/firestore/information';
+import { deleteSiteNotificationByID } from '@/firebase/firestore/employees';
+import { selectUid, useCompanyStore } from '@/features/company';
+import { selectAccountItem, useAccountStore } from '@/features/account';
+import {
+  selectDeleteSiteNotificationByID,
+  useNotificationsStore,
+} from '@/features/notifications';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -37,7 +49,7 @@ export type PresenterProps = {
     message?: string;
     title?: string;
     status?: string;
-    category?: string;
+    category?: Category;
     url?: string;
     id?: string;
   }[];
@@ -46,6 +58,11 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
+  const companyID = useCompanyStore(selectUid);
+  const { uid: employeeID } = useAccountStore(selectAccountItem);
+  const deleteSiteManagementByID = useNotificationsStore(
+    selectDeleteSiteNotificationByID
+  );
   const itemsPerPage = 10;
 
   const [selectedItems, setSelectedItems] = useState<{ [id: string]: boolean }>(
@@ -74,11 +91,13 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
 
     await updateDoc(docRef, {
-      status: 'is_deleted',
+      status: InformationStatus.IsDeleted,
     });
+    await deleteSiteNotificationByID(companyID, employeeID, id);
+    deleteSiteManagementByID(id);
 
     window.alert('ゴミ箱に移動しました');
     location.reload();
@@ -96,9 +115,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
-          status: 'is_deleted',
+          status: InformationStatus.IsDeleted,
         });
       }
     }
@@ -117,18 +136,20 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   };
   const [selectedValue, setSelectedValue] = useState('');
 
-  // 状態をstand_byへ
+  // 状態をstandbyへ
   const handleSetStandBy = async (id: string) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const employeeDocRef = doc(db, 'users', user.uid as string);
     const employeeDocSnap = await getDoc(employeeDocRef);
     const ref = employeeDocSnap.data()?.company_ref;
-    const docRef = doc(ref, 'infomation', id);
+    const docRef = doc(ref, INFORMATION_COLLECTION, id);
 
     await updateDoc(docRef, {
-      status: 'stand_by',
+      status: InformationStatus.StandBy,
     });
+    await deleteSiteNotificationByID(companyID, employeeID, id);
+    deleteSiteManagementByID(id);
 
     window.alert('ステータスを変更しました');
     location.reload();
@@ -143,9 +164,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
         console.log(id);
-        const docRef = doc(ref, 'infomation', id);
+        const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
-          status: 'stand_by',
+          status: InformationStatus.StandBy,
         });
       }
     }
@@ -207,7 +228,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               'YYYY/MM/DD'
                             )}
                           </Td>
-                          <Td>{data?.category || ''}</Td>
+                          <Td>{data?.category.name || ''}</Td>
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
 
@@ -216,13 +237,24 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <ExternalLink href={data?.url || ''}>
+                              <ExternalLink
+                                href={data?.url || ''}
+                                onClick={async () => {
+                                  await deleteSiteNotificationByID(
+                                    companyID,
+                                    employeeID,
+                                    data.id
+                                  );
+                                  deleteSiteManagementByID(data.id);
+                                }}
+                              >
                                 <WideButton
                                   text={`確認する`}
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>
                               <WideButton
+                                mx={`0.5vw`}
                                 text={`記事化する`}
                                 w={`${140 / 19.2}vw`}
                                 onClick={() => handleSetStandBy(data.id)}

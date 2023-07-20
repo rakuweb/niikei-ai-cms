@@ -3,9 +3,9 @@ import { Box, Spinner } from '@chakra-ui/react';
 import { Sidebar } from 'components/Sidebar';
 import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Drafts } from 'components/Drafts';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
 import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
+import { Checking } from '@/components/Checking';
 
 const Draftslist: NextPage = () => {
   const [data, setData] = useState<DocumentData[]>([]);
@@ -53,7 +53,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Drafts data={data} titles={'確認記事一覧'} />
+        <Checking data={data} titles={'確認記事一覧'} />
       </Box>
     </>
   );

@@ -10,12 +10,13 @@ import {
   TableContainer,
   Switch,
 } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
-import { WideButton } from 'components/Button/WideButton';
-import { GrayButton } from 'components/Button/GrayButton';
 import { css } from '@emotion/react';
 import { Timestamp } from 'firebase/firestore';
 import dayjs from 'dayjs';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
 import { selectUid, useCompanyStore } from '@/features/company';
 import {
   FortunesLogType,
@@ -26,6 +27,15 @@ import {
 import { ContentContainer } from '@/components/Container/ContentContainer';
 import { Pagination } from '@/components/Pagination';
 import { ExternalLink } from '@/components/links/ExternalLink';
+import {
+  selectDeleteOriginalContentNotificationByID,
+  useNotificationsStore,
+} from '@/features/notifications';
+import {
+  NotificationKind,
+  deleteNotificationByID,
+} from '@/firebase/firestore/employees';
+import { useAccountStore } from '@/features/account';
 
 export type PresenterProps = {
   data?: {
@@ -46,6 +56,10 @@ export const Presenter: FC<PresenterProps> = () => {
   const companyID = useCompanyStore(selectUid);
   const [displayList, setDisplayList] = useState<FortunesLogType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const deleteOriginalContentNotificationByID = useNotificationsStore(
+    selectDeleteOriginalContentNotificationByID
+  );
+  const employeeID = useAccountStore((state) => state.uid);
 
   const handlePageChange = (newPage: number) => {
     const start = (newPage - 1) * itemsPerPage;
@@ -78,6 +92,12 @@ export const Presenter: FC<PresenterProps> = () => {
       return null;
     });
     if (res === null) return;
+
+    await deleteNotificationByID(
+      { companyID, employeeID, notificationID: id },
+      NotificationKind.Fortune
+    );
+    deleteOriginalContentNotificationByID(id);
     alert('画像を削除しました。');
     location.reload();
   };
@@ -196,13 +216,27 @@ export const Presenter: FC<PresenterProps> = () => {
 
                         <Td>
                           <Box display={'flex'} justifyContent={'space-around'}>
-                            <ExternalLink href={log.url}>
+                            <ExternalLink
+                              href={log.url}
+                              onClick={async () => {
+                                await deleteNotificationByID(
+                                  {
+                                    companyID,
+                                    employeeID,
+                                    notificationID: log.id,
+                                  },
+                                  NotificationKind.Fortune
+                                );
+                                deleteOriginalContentNotificationByID(log.id);
+                              }}
+                            >
                               <WideButton
                                 text={`確認する`}
                                 w={`${140 / 19.2}vw`}
                               />
                             </ExternalLink>
                             <GrayButton
+                              ml={`0.5vw`}
                               onClick={() => handleDelete(log.id)}
                               text={`削除する`}
                               w={`${140 / 19.2}vw`}

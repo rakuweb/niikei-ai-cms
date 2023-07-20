@@ -7,6 +7,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Timestamp } from 'firebase/firestore';
 import { AddForm } from 'components/organisms/AddForm';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: {
@@ -17,7 +18,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_patrol?: boolean;

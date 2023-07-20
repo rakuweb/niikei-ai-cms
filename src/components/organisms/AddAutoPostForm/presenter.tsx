@@ -26,6 +26,7 @@ import {
 } from '@/firebase/firestore/registeredSites';
 import { useCompanyStore, selectUid } from 'features/company';
 import { BigWideButton } from '@/components/Button/BigWideButton';
+import { Category } from '@/firebase/firestore/sites';
 
 export type PresenterProps = {
   data?: {
@@ -36,7 +37,7 @@ export type PresenterProps = {
     interval1?: string;
     interval2?: string;
     created_at?: Timestamp;
-    category?: string;
+    category?: Category;
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_posts: boolean;
@@ -91,7 +92,13 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
 
       if (res === null) return;
 
-      setCategories((prev) => res?.data?.categories ?? prev);
+      setCategories(
+        (prev) =>
+          res?.data?.categories.map((item) => ({
+            id: item.id,
+            name: item.name,
+          })) ?? prev
+      );
     };
 
     handler();
@@ -107,8 +114,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     if (data?.xpath) {
       setValue('xpath', data.xpath);
     }
-    if (data?.category) {
-      setValue('category', data.category);
+    if (data?.category?.name) {
+      setValue('category', data.category.name);
     }
     if (data?.interval1) {
       setValue('interval1', data.interval1);
@@ -135,10 +142,14 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       return;
     }
     try {
+      const categoryTarget = categories.find(
+        (item) => item.name === formData.category
+      );
       const data: Partial<SiteType> = {
         ...formData,
         // NOTE
         url: id ? formData.url : `${formData.url}`,
+        category: categoryTarget,
       };
       if (id) {
         updateSites(companyID, id, data);
