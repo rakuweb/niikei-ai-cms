@@ -16,6 +16,7 @@ import { WideButton } from './WideButton';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { useAccountStore, selectAccountItem } from 'features/account';
+
 export type PresenterProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +34,7 @@ export const Presenter: FC<PresenterProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -45,6 +47,7 @@ export const Presenter: FC<PresenterProps> = ({
   const account = useAccountStore(selectAccountItem);
 
   const handleCreateDocument = async () => {
+    setIsCreating(true);
     try {
       const response = await fetch('/api/create-document', {
         method: 'POST',
@@ -84,6 +87,8 @@ export const Presenter: FC<PresenterProps> = ({
     } catch (error) {
       window.alert(error);
       console.log(error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -123,17 +128,11 @@ export const Presenter: FC<PresenterProps> = ({
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            {/*
-            <WideButton
-              onClick={authenticationGoogle}
-              text="ユーザー認証する"
-              fontSize={{ base: '1.2vw' }}
-            />
-          */}
             <WideButton
               onClick={handleCreateDocument}
-              text=" Googleドキュメントで記事を作成する"
+              text={'Googleドキュメントで記事を作成する'}
               fontSize={{ base: '1.2vw' }}
+              isLoading={!!isCreating}
             />
           </ModalFooter>
         </ModalContent>
