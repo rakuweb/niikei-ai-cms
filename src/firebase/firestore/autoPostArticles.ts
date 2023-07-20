@@ -3,6 +3,7 @@ import {
   collection,
   getDoc,
   getDocs,
+  deleteDoc,
   doc,
 } from 'firebase/firestore';
 
@@ -36,6 +37,7 @@ export type User = {
   name: string;
 };
 export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
+
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
 
@@ -53,6 +55,17 @@ export const fetchArticles = async (companyID: string) => {
   return documents;
 };
 
+export const deleteAutoPostArticle = async (
+  companyID: string,
+  articleID: string
+) => {
+  const docRef = getArticleDocRef(companyID, articleID);
+  await deleteDoc(docRef).catch((err) => {
+    console.error(err);
+    throw err;
+  });
+};
+
 export const getArticleDocsRef = (companyID: string) => {
   const docsRef = collection(
     db,
@@ -62,4 +75,16 @@ export const getArticleDocsRef = (companyID: string) => {
   );
 
   return docsRef;
+};
+
+export const getArticleDocRef = (companyID: string, articleID: string) => {
+  const docRef = doc(
+    db,
+    COMPANY_COLLECTION,
+    companyID,
+    AUTO_POST_ARTICLE_COLLECTION,
+    articleID
+  );
+
+  return docRef;
 };

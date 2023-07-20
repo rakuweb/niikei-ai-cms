@@ -7,10 +7,7 @@ import Popup from './Popup';
 
 import { useStore } from 'lib/store';
 import { routes } from 'constants/routes';
-import {
-  useNotificationsStore,
-  selectNotificationsAll,
-} from 'features/notifications';
+import { useNotificationsStore } from 'features/notifications';
 
 import AutorenewSvg from 'public/svg/autorenew.svg';
 import DescriptionSvg from 'public/svg/description.svg';
@@ -43,30 +40,33 @@ export const Presenter: FC = () => {
   } = useNotificationsStore();
 
   const siteSubPages = [
+    { text: '新着情報一覧', url: routes.crawlersCollections },
     { text: 'サイトを登録', url: routes.crawlersAdd },
     { text: '登録サイト一覧', url: routes.crawlers },
-    { text: '新着情報一覧', url: routes.crawlersCollections },
     { text: 'ゴミ箱', url: routes.crawlersTrash },
   ];
   const articleSubPages = [
     { text: '新規作成する', url: routes.articlesNew },
     { text: '記事化リスト', url: routes.articlesCollections },
     { text: '下書き記事一覧', url: routes.articlesDrafts },
+    { text: '修正記事一覧', url: routes.articlesCorrections },
+    { text: 'ゴミ箱', url: routes.articlesTrash },
+  ];
+  const articleConfirmationSubPages = [
     ...(account.role === Role.Editor
       ? [{ text: '確認記事一覧', url: routes.articlesReviews }]
       : []),
-    { text: '修正記事一覧', url: routes.articlesCorrections },
     { text: '公開記事一覧', url: routes.articlesPublished },
     { text: 'ゴミ箱', url: routes.articlesTrash },
   ];
   const autoPostSubPages = [
-    { text: '登録サイト一覧', url: routes.autoPostsSites },
     { text: '記事一覧', url: routes.autoPostsArticles },
+    { text: '登録サイト一覧', url: routes.autoPostsSites },
   ];
 
   const fortuneSubPages = [
+    { text: 'コンテンツ一覧', url: routes.fortunes },
     { text: 'アップロードする', url: routes.fortunesUpload },
-    { text: '占い記事一覧', url: routes.fortunes },
   ];
   const settingSubPages = [
     { text: 'アカウント情報', url: routes.settingsAccount },
@@ -95,10 +95,8 @@ export const Presenter: FC = () => {
         account.uid
       ).catch((err) => {
         console.error(err);
-        // return null;
       });
       if (!notifications) return;
-      // if (notifications === null) return;
 
       setSiteManagementNotifications(notifications.site);
       setArticleManagementNotifications(notifications.article);
@@ -124,35 +122,42 @@ export const Presenter: FC = () => {
                 title=""
                 logo={<RobotSvg />}
                 links={siteSubPages}
-                href={undefined}
+                href={routes.crawlersCollections}
                 notifications={siteManagement}
               />
               <Popup
                 title=""
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
-                href={undefined}
+                href={routes.articlesNew}
+                notifications={articleManagement}
+              />
+              <Popup
+                title=""
+                logo={<DescriptionSvg />}
+                links={articleConfirmationSubPages}
+                href={routes.articlesReviews}
                 notifications={articleManagement}
               />
               <Popup
                 title=""
                 logo={<AutorenewSvg />}
                 links={autoPostSubPages}
-                href={undefined}
+                href={routes.autoPostsArticles}
                 notifications={autoPostManagement}
               />
               <Popup
                 title=""
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
-                href={undefined}
+                href={routes.fortunes}
                 notifications={originalContentManagement}
               />
               <Popup
                 title=""
                 logo={<GearSvg />}
                 links={settingSubPages}
-                href={undefined}
+                href={routes.settingsAccount}
               />
               <SidebarToggle onClick={toggleSidebar}>
                 <Link>
@@ -170,35 +175,42 @@ export const Presenter: FC = () => {
                 title="サイト管理"
                 logo={<RobotSvg />}
                 links={siteSubPages}
-                href={undefined}
+                href={routes.crawlersCollections}
                 notifications={siteManagement}
               />
               <Popup
-                title="記事管理"
+                title="記事作成管理"
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
-                href={undefined}
+                href={routes.articlesNew}
+                notifications={articleManagement}
+              />
+              <Popup
+                title="確認記事管理"
+                logo={<DescriptionSvg />}
+                links={articleConfirmationSubPages}
+                href={routes.articlesReviews}
                 notifications={articleManagement}
               />
               <Popup
                 title="自動投稿管理"
                 logo={<AutorenewSvg />}
                 links={autoPostSubPages}
-                href={undefined}
+                href={routes.autoPostsArticles}
                 notifications={autoPostManagement}
               />
               <Popup
                 title="オリジナル配信管理"
                 logo={<AntennaSvg />}
                 links={fortuneSubPages}
-                href={undefined}
+                href={routes.fortunes}
                 notifications={originalContentManagement}
               />
               <Popup
                 title="設定"
                 logo={<GearSvg />}
                 links={settingSubPages}
-                href={undefined}
+                href={routes.settingsAccount}
               />
               <SidebarToggle onClick={toggleSidebar}>
                 <Box

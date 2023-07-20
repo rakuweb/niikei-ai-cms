@@ -14,10 +14,10 @@ export type EmployeeType = {
   notifications: Notifications;
 };
 export type Notifications = {
-  site: [];
-  article: { standby: []; checking: []; fixing: [] };
-  auto_post: [];
-  fortune: [];
+  site: string[];
+  article: { standby: string[]; checking: string[]; fixing: string[] };
+  auto_post: string[];
+  fortune: string[];
 };
 export const NotificationKind = {
   Site: 'site',
@@ -30,6 +30,12 @@ export type ArticleNotificationKind =
   (typeof NotificationKind.Article)[keyof typeof NotificationKind.Article];
 
 export const EMPLOYEE_COLLECTION = 'employees';
+export const INITIAL_NOTIFICATIONS: Notifications = {
+  site: [],
+  article: { standby: [], checking: [], fixing: [] },
+  auto_post: [],
+  fortune: [],
+};
 
 export const getEmployee = async (companyID: string, employeeID: string) => {
   const docRef = getEmployeeDocRef(companyID, employeeID);
