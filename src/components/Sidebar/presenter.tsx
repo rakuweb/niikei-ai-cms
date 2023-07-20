@@ -49,10 +49,13 @@ export const Presenter: FC = () => {
     { text: '新規作成する', url: routes.articlesNew },
     { text: '記事化リスト', url: routes.articlesCollections },
     { text: '下書き記事一覧', url: routes.articlesDrafts },
+    { text: '修正記事一覧', url: routes.articlesCorrections },
+    { text: 'ゴミ箱', url: routes.articlesTrash },
+  ];
+  const articleConfirmationSubPages = [
     ...(account.role === Role.Editor
       ? [{ text: '確認記事一覧', url: routes.articlesReviews }]
       : []),
-    { text: '修正記事一覧', url: routes.articlesCorrections },
     { text: '公開記事一覧', url: routes.articlesPublished },
     { text: 'ゴミ箱', url: routes.articlesTrash },
   ];
@@ -69,9 +72,9 @@ export const Presenter: FC = () => {
     { text: 'アカウント情報', url: routes.settingsAccount },
     ...(account.role === Role.Editor
       ? [
-        { text: 'ユーザ一覧', url: routes.settingsUsers },
-        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
-      ]
+          { text: 'ユーザ一覧', url: routes.settingsUsers },
+          { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+        ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
   ];
@@ -131,6 +134,13 @@ export const Presenter: FC = () => {
               />
               <Popup
                 title=""
+                logo={<DescriptionSvg />}
+                links={articleConfirmationSubPages}
+                href={undefined}
+                notifications={articleManagement}
+              />
+              <Popup
+                title=""
                 logo={<AutorenewSvg />}
                 links={autoPostSubPages}
                 href={undefined}
@@ -169,9 +179,16 @@ export const Presenter: FC = () => {
                 notifications={siteManagement}
               />
               <Popup
-                title="記事管理"
+                title="記事作成管理"
                 logo={<DescriptionSvg />}
                 links={articleSubPages}
+                href={undefined}
+                notifications={articleManagement}
+              />
+              <Popup
+                title="確認記事管理"
+                logo={<DescriptionSvg />}
+                links={articleConfirmationSubPages}
                 href={undefined}
                 notifications={articleManagement}
               />
