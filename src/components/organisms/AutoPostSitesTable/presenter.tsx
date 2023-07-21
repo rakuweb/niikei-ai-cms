@@ -141,8 +141,10 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               {data?.name || ''}
                             </Box>
                           </Td>
-                          {/* NOTE */}
+                          {/* NOTE 
                           <Td>{data?.url ? `https://${data.url}` : ''}</Td>
+                          */}
+                          <Td>{data?.url ? `${data.url}` : ''}</Td>
 
                           <Td>
                             {data?.interval1 || ''}
