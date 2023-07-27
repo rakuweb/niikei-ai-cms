@@ -31,6 +31,7 @@ type UserData = {
   category: Category;
   url: string;
   site_ref: DocumentReference;
+  siteName?: string;
   id: string;
 };
 

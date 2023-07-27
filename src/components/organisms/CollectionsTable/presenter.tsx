@@ -52,6 +52,7 @@ export type PresenterProps = {
     category?: Category;
     url?: string;
     id?: string;
+    siteName?: string;
   }[];
 
   currentPage: number;
@@ -231,8 +232,11 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                             )}
                           </Td>
                           <Td>{data?.category.name || ''}</Td>
-                          <Td>{data?.title || ''}</Td>
+                          <Td>
+                            {`${data?.siteName}の記事が更新されました。` || ''}
+                          </Td>
                           {/*
+                          <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
                           */}
 
