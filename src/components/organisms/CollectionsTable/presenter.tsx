@@ -187,7 +187,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                       <Th w={`${52 / 19.2}vw`}>更新日時</Th>
                       <Th w={`${30 / 19.2}vw`}>カテゴリ</Th>
                       <Th w={`${350 / 19.2}vw`}>タイトル</Th>
+                      {/*
                       <Th w={`${350 / 19.2}vw`}>URL</Th>
+                      */}
                       <Th w={`${10 / 19.2}vw`}>アクション</Th>
                     </Tr>
                   </Thead>
@@ -230,7 +232,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                           </Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>{data?.title || ''}</Td>
+                          {/*
                           <Td>{data?.url || ''}</Td>
+                          */}
 
                           <Td>
                             <Box
