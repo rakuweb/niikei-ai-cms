@@ -87,7 +87,7 @@ export const Presenter: FC = () => {
   };
 
   useEffect(() => {
-    if (fiftyFifty()) return;
+    // if (fiftyFifty()) return;
 
     const handler = async () => {
       const notifications = await fetchNotifications(
@@ -105,7 +105,7 @@ export const Presenter: FC = () => {
     };
 
     handler();
-  }, []);
+  });
 
   return (
     <>

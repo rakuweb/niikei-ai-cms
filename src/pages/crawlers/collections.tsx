@@ -33,6 +33,7 @@ type UserData = {
   url?: string;
   site_ref?: DocumentReference;
   id?: string;
+  siteName?: string;
 };
 
 const Home: NextPage = () => {
@@ -66,6 +67,7 @@ const Home: NextPage = () => {
 
               fetchedData.push({
                 ...docData,
+                siteName: siteData.name,
                 id: doc.id,
                 category: siteData?.category || { id: undefined, name: '' },
               });
