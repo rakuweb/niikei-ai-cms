@@ -275,7 +275,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               .tz('Asia/Tokyo')
                               .format('YYYY/MM/DD')}
                           </Td>
-                          <Td>{data?.category.name || ''}</Td>
+                          <Td>{data?.category?.name || ''}</Td>
                           <Td>{titles[data?.url || '']}</Td>
                           <Td>{data?.name || ''}</Td>
 
