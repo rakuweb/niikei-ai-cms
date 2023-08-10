@@ -1,4 +1,9 @@
-import { Timestamp, collection, getDocs } from 'firebase/firestore';
+import {
+  DocumentReference,
+  Timestamp,
+  collection,
+  getDocs,
+} from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -18,6 +23,7 @@ export type InformationType = {
   url: string;
   status: string;
   category: { id: number; name: string };
+  site_ref: DocumentReference;
 };
 
 export const INFORMATION_COLLECTION = 'information';

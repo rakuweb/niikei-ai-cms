@@ -23,8 +23,9 @@ export type PresenterProps = {
     name?: string;
   }>[];
   titles?: string;
+  isPublish?: boolean;
 };
-export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
+export const Presenter: FC<PresenterProps> = ({ data, titles, isPublish }) => {
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
@@ -43,7 +44,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               </InternalLink>
             </Flex>
 
-            <CheckingTable data={data} currentPage={0} />
+            <CheckingTable data={data} currentPage={0} isPublish />
           </Text>
         </OutsideContainer>
       </Box>

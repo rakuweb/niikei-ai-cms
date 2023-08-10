@@ -4,7 +4,7 @@ export const routes = {
   signin: `/signin`,
   passwordReset: `/password-reset`,
   crawlers: `/crawlers`,
-  crawlersSitesId: (id: string) => `/crawlers/sites/${id}`,
+  crawlersSitesId: (id: string) => `/crawlers/site/${id}`,
   crawlersAdd: `/crawlers/add`,
   crawlersCollections: `/crawlers/collections`,
   crawlersCollectionsId: (id: string) => `/crawlers/collections/${id}`,

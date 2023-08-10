@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import * as admin from 'firebase-admin';
 
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -9,33 +8,16 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { InternalLink } from 'components/links/InternalLink';
 import { SitesTable } from 'components/organisms/SitesTable';
-import { Category } from '@/firebase/firestore/sites';
+import { routes } from '@/constants/routes';
+import { SiteType } from 'src/firebase/firestore/sites';
 
 export type PresenterProps = {
-  data?: {
-    id?: string;
-    name?: string;
-    url?: string;
-    xpath?: string;
-    interval1?: string;
-    interval2?: string;
-    created_at?: admin.firestore.Timestamp;
-    category?: Category;
-    is_notified?: boolean;
-    is_renewal?: boolean;
-    is_auto_patrol?: boolean;
-  }[];
+  data?: Partial<SiteType>[];
   titles?: string;
   titles2?: string;
-  urls?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({
-  data,
-  titles,
-  titles2,
-  urls,
-}) => {
+export const Presenter: FC<PresenterProps> = ({ data, titles, titles2 }) => {
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
@@ -45,7 +27,7 @@ export const Presenter: FC<PresenterProps> = ({
             <Flex justify={`space-between`}>
               <Title title={titles} />
 
-              <InternalLink href={'/crawlers/add'}>
+              <InternalLink href={routes.crawlersAdd}>
                 <WideButton
                   w={`${200 / 19.2}vw`}
                   mt={`${13 / 19.2}vw`}
@@ -54,7 +36,7 @@ export const Presenter: FC<PresenterProps> = ({
               </InternalLink>
             </Flex>
 
-            <SitesTable data={data} urls={urls} />
+            <SitesTable data={data} />
           </Text>
         </OutsideContainer>
       </Box>

@@ -5,6 +5,8 @@ import {
   addDoc,
   doc,
   updateDoc,
+  orderBy,
+  query,
 } from 'firebase/firestore';
 
 import { db } from '..';
@@ -47,7 +49,9 @@ export const fetchSites = async (companyID: string) => {
     companyID,
     SITE_COLLECTION
   );
-  const snapshots = await getDocs(docsRef);
+  const snapshots = await getDocs(
+    query(docsRef, orderBy('created_at', 'desc'))
+  );
   const documents = snapshots.docs.map((document) => ({
     id: document.id, // Here is the document ID
     ...document.data(),
