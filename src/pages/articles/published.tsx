@@ -53,7 +53,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Checking data={data} titles={'公開記事一覧'} />
+        <Checking isPublish data={data} titles={'公開記事一覧'} />
       </Box>
     </>
   );

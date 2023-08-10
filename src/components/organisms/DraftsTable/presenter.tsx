@@ -160,10 +160,17 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   useEffect(() => {
     const fetchTitles = async () => {
       const newTitles = {};
-      for (const item of data) {
-        const title = await getTitle(item.url);
-        newTitles[item.url] = title;
-      }
+      Promise.allSettled(
+        data.map(async (item) => {
+          const title = await getTitle(item.url);
+          newTitles[item.url] = title;
+          // setTitles(newTitles);
+        })
+      );
+      // for (const item of data) {
+      //   const title = await getTitle(item.url);
+      //   newTitles[item.url] = title;
+      // }
       setTitles(newTitles);
     };
 

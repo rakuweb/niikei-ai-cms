@@ -58,9 +58,10 @@ export type PresenterProps = {
     name?: string;
   }>[];
   currentPage: number;
+  isPublish: boolean;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, isPublish }) => {
   const companyID = useCompanyStore(selectUid);
   const { uid: employeeID } = useAccountStore(selectAccountItem);
   const deleteArticleManagementByKindAndID = useNotificationsStore(
@@ -359,24 +360,26 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>
-                              <WideButton
-                                mx={`0.5vw`}
-                                text={`修正依頼を出す`}
-                                w={`${140 / 19.2}vw`}
-                                onClick={async () => {
-                                  await handleChangeStatus(data.url);
-                                  await deleteArticleNotificationByID(
-                                    companyID,
-                                    employeeID,
-                                    NotificationKind.Article.Checking,
-                                    data.id
-                                  );
-                                  deleteArticleManagementByKindAndID(
-                                    NotificationKind.Article.Checking,
-                                    data.id
-                                  );
-                                }}
-                              />
+                              {!isPublish && (
+                                <WideButton
+                                  mx={`0.5vw`}
+                                  text={`修正依頼を出す`}
+                                  w={`${140 / 19.2}vw`}
+                                  onClick={async () => {
+                                    await handleChangeStatus(data.url);
+                                    await deleteArticleNotificationByID(
+                                      companyID,
+                                      employeeID,
+                                      NotificationKind.Article.Checking,
+                                      data.id
+                                    );
+                                    deleteArticleManagementByKindAndID(
+                                      NotificationKind.Article.Checking,
+                                      data.id
+                                    );
+                                  }}
+                                />
+                              )}
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}

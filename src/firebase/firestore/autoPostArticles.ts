@@ -1,10 +1,11 @@
 import {
   Timestamp,
   collection,
-  getDoc,
   getDocs,
   deleteDoc,
   doc,
+  orderBy,
+  query,
 } from 'firebase/firestore';
 
 import { db } from '..';
@@ -41,7 +42,9 @@ export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
 
-  const snapshots = await getDocs(docsRef);
+  const snapshots = await getDocs(
+    query(docsRef, orderBy('date', 'desc'))
+  );
   const documentsPromises = snapshots.docs.map(async (document) => {
     const data = document.data();
     return { ...data, id: document.id };

@@ -64,6 +64,10 @@ const Home: NextPage = () => {
               });
             })
           );
+          fetchedData.sort(
+            (a, b) =>
+              b.created_at.toDate().getTime() - a.created_at.toDate().getTime()
+          );
           setData(fetchedData.filter((item) => !!item));
         } else {
           router.push('/');

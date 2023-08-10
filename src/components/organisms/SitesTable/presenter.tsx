@@ -18,7 +18,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
-import * as admin from 'firebase-admin';
 
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
@@ -27,31 +26,19 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { db, auth } from 'src/firebase';
 import { InternalLink } from 'components/links/InternalLink';
-import { Category } from '@/firebase/firestore/sites';
+import { SiteType } from '@/firebase/firestore/sites';
+import { routes } from 'constants/routes';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale('ja');
 
 export type PresenterProps = {
-  data?: {
-    id?: string;
-    name?: string;
-    url?: string;
-    xpath?: string;
-    interval1?: string;
-    interval2?: string;
-    created_at?: admin.firestore.Timestamp;
-    category?: Category;
-    is_notified?: boolean;
-    is_renewal?: boolean;
-    is_auto_patrol?: boolean;
-  }[];
+  data?: Partial<SiteType>[];
   titles?: string;
-  urls?: string;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
+export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -186,7 +173,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               display={'flex'}
                               justifyContent={'space-around'}
                             >
-                              <InternalLink href={`${urls}/${data?.id}`}>
+                              <InternalLink
+                                href={routes.crawlersSitesId(data?.id)}
+                              >
                                 <WideButton
                                   text={`編集する`}
                                   w={`${110 / 19.2}vw`}

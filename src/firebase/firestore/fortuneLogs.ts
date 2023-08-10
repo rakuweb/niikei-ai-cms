@@ -6,6 +6,8 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  orderBy,
+  query,
 } from 'firebase/firestore';
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -49,7 +51,9 @@ export const getFortunesLogCollectionRef = (companyID: string) => {
 
 export const fetchFortunesLogs = async (companyID: string) => {
   const collectionRef = getFortunesLogCollectionRef(companyID);
-  const snapshots = await getDocs(collectionRef);
+  const snapshots = await getDocs(
+    query(collectionRef, orderBy('date', 'desc'))
+  );
   if (snapshots === null) return [];
   const documents = snapshots.docs.map((document) => {
     const data = document.data();

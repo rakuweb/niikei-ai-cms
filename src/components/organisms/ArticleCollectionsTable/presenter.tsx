@@ -63,6 +63,7 @@ export type PresenterProps = {
     category: Category;
     id: string;
     url: string;
+    siteName?: string;
   }[];
 
   currentPage: number;
@@ -165,11 +166,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const docRef = doc(ref, 'infomation', id);
 
     await deleteDoc(docRef);
-    // await updateDoc(docRef, {
-    //   status: InformationStatus.InReview,
-    // });
-
-    // window.alert('ステータスを変更しました');
     location.reload();
   };
   const handleSetAllStandBy = async () => {
@@ -265,7 +261,12 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             )}
                           </Td>
                           <Td>{data.category.name || ''}</Td>
+                          <Td>
+                            {`${data?.siteName}の記事が更新されました。` || ''}
+                          </Td>
+                          {/*
                           <Td>{data?.title || ''}</Td>
+                          */}
                           <Td>{data?.url || ''}</Td>
 
                           <Td>
