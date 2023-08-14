@@ -15,6 +15,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "storycap": "storycap --verbose --server-cmd \"yarn storybook\" http://localhost:6006 --server-timeout 100000",
+    "reg-cli": "npx reg-cli actual expected diff -R index.html",
     "gen:theme-typings": "chakra-cli tokens ./src/lib/theme/index.ts"
   },
   "dependencies": {
