@@ -49,6 +49,7 @@ import {
   NotificationKind,
   deleteArticleNotificationByID,
 } from '@/firebase/firestore/employees';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -177,7 +178,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        console.log(id);
         const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
           status: InformationStatus.StandBy,
@@ -256,9 +256,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {dayjs(data.created_at.toDate()).format(
-                              'YYYY/MM/DD'
-                            )}
+                          {formatDate(data.created_at.toDate().toString()) || ''}
                           </Td>
                           <Td>{data.category.name || ''}</Td>
                           <Td>

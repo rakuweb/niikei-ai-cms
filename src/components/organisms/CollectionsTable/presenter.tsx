@@ -16,6 +16,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
@@ -23,9 +26,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from '@/components/links/ExternalLink';
-import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { getAuth } from 'firebase/auth';
 import { Category } from '@/firebase/firestore/sites';
 import {
   INFORMATION_COLLECTION,
@@ -38,6 +39,7 @@ import {
   selectDeleteSiteNotificationByID,
   useNotificationsStore,
 } from '@/features/notifications';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -227,9 +229,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {dayjs(data.created_at.toDate()).format(
-                              'YYYY/MM/DD'
-                            )}
+                            {formatDate(data.created_at.toDate().toString())}
                           </Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>

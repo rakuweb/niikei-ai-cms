@@ -38,6 +38,7 @@ import {
   useNotificationsStore,
 } from '@/features/notifications';
 import { deleteAutoPostArticle } from '@/firebase/firestore/autoPostArticles';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -93,7 +94,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const refFieldString = userDoc.data().company_ref;
 
     for (const url of selectedUrls) {
-
       const index = data.findIndex((item) => item.url === url);
       const document_id = data[index]?.document_id;
 
@@ -227,11 +227,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>
-                            {dayjs(data.date.toDate())
-                              .tz('Asia/Tokyo')
-                              .format('YYYY/MM/DD')}
-                          </Td>
+                          <Td>{formatDate(data.date.toDate().toString())}</Td>
                           <Td>{data?.category?.name || ''}</Td>
                           <Td>{data.title}</Td>
                           <Td>{`自動生成`}</Td>
