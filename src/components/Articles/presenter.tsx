@@ -10,7 +10,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { ArticlesTable } from 'components/organisms/ArticlesTable';
 import { Popup } from './PopupComponent';
-import { apiRoutes } from '@/constants/routes';
+import { apiRoutes, routes } from '@/constants/routes';
 import axios from 'axios';
 
 export type PresenterProps = {
@@ -56,7 +56,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`設定`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`設定`}
+              pagelink1={routes.crawlersCollections}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
 

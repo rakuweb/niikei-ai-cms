@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import { Timestamp } from 'firebase/firestore';
 
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -15,9 +16,8 @@ import { WideButton } from 'components/Button/WideButton';
 import { BigWideButton } from 'components/Button/BigWideButton';
 import { uploadImages } from '@/lib/wordpress';
 import { addFortunesLog } from '@/firebase/firestore/fortuneLogs';
-import { Timestamp } from 'firebase/firestore';
 import { useCompanyStore, selectUid } from 'features/company';
-import { apiRoutes, wpRoutes } from '@/constants/routes';
+import { apiRoutes, routes, wpRoutes } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -121,7 +121,11 @@ export const Presenter: FC = () => {
       <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`オリジナル配信管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`オリジナル配信管理`}
+              pagelink1={routes.fortunes}
+              pagename2={title}
+            />
 
             <Title title={title} />
             <ContentContainer

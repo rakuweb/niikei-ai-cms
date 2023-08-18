@@ -7,6 +7,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { UserTable } from 'components/organisms/UserTable';
 import { InternalLink } from 'components/links/InternalLink';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -30,7 +31,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`設定`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`設定`}
+              pagelink1={routes.settingsAccount}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
               <InternalLink href={'/settings/users/new'}>
