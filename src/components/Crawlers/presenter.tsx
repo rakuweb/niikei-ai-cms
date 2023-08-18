@@ -7,6 +7,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { CrawlerTable } from 'components/ContentTable/CrawlerTable';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -49,7 +50,11 @@ export const Presenter: FC = () => {
       <Box bg={`#EAEAEA`} h={`${1080 / 19.2}vw`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`サイト管理`}
+              pagelink1={routes.crawlersCollections}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
               <WideButton

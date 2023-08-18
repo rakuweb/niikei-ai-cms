@@ -37,7 +37,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Box bg={`#EAEAEA`} h={`100%`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`オリジナル配信管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`オリジナル配信管理`}
+              pagelink1={routes.fortunes}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
 

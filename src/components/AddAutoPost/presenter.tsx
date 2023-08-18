@@ -8,6 +8,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Timestamp } from 'firebase/firestore';
 import { AddAutoPostForm } from '../organisms/AddAutoPostForm';
 import { Category } from '@/firebase/firestore/sites';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -34,7 +35,11 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} pb={'2vw'}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={`サイト管理`}
+              pagelink1={routes.autoPostsArticles}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>

@@ -3,9 +3,17 @@ import { Image } from 'components/images/Image';
 import { Text } from 'components/texts/Text';
 import { InternalLink } from 'components/links/InternalLink';
 
-export type PresenterProps = { pagename1: string; pagename2: string };
+export type PresenterProps = {
+  pagename1: string;
+  pagelink1: string;
+  pagename2: string;
+};
 
-export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
+export const Presenter: FC<PresenterProps> = ({
+  pagename1,
+  pagelink1,
+  pagename2,
+}) => {
   return (
     <>
       <Text
@@ -18,7 +26,7 @@ export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
         mb={`${15 / 19.2}vw`}
       >
         <InternalLink
-          href={`/`}
+          href={pagelink1}
           _hover={{
             color: `#49bac0`,
           }}
@@ -38,14 +46,16 @@ export const Presenter: FC<PresenterProps> = ({ pagename1, pagename2 }) => {
           }}
         />
 
+        {/*
         <InternalLink
           href={`/`}
           _hover={{
             color: `#49bac0`,
           }}
         >
-          {pagename2}
         </InternalLink>
+        */}
+        {pagename2}
       </Text>
     </>
   );
