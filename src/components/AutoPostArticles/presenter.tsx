@@ -7,7 +7,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { AutoPostArticlesTable } from '../organisms/AutoPostArticlesTable';
 import { Category } from '@/firebase/firestore/sites';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -31,7 +31,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`自動投稿管理`}
+              pagename1={sidebarItems.autoPost}
               pagelink1={routes.autoPostsArticles}
               pagename2={titles}
             />

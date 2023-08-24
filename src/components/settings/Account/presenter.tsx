@@ -6,7 +6,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { AccountTable } from 'components/ContentTable/AccountTable';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -19,7 +19,7 @@ export const Presenter: FC = () => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`設定`}
+              pagename1={sidebarItems.settings}
               pagelink1={routes.settingsAccount}
               pagename2={title}
             />

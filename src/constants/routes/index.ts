@@ -28,6 +28,15 @@ export const routes = {
   settingsNotifications: `/settings/notifications`,
 };
 
+export const sidebarItems = {
+  crawlers: 'サイト管理',
+  createArticle: '記事作成管理',
+  checkArticle: '確認記事管理',
+  autoPost: '自動投稿管理',
+  originalPost: 'オリジナル配信管理',
+  settings: '設定',
+};
+
 export const apiRoutes = {
   wpCategories: `/api/wp/categories`,
   wpMedia: `/api/wp/media`,

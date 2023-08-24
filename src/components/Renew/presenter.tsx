@@ -8,7 +8,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { RenewForm } from 'components/organisms/RenewForm';
 import Subtitle from '../ContentTable/AccountTable/Subtitle';
 import { useCompanyStore, selectCompanyItem } from 'features/company';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data: {
@@ -28,8 +28,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`サイト管理`}
-              pagelink1={routes.crawlersCollections}
+              pagename1={sidebarItems.settings}
+              pagelink1={routes.settingsAccount}
               pagename2={title}
             />
             <Flex justify={`space-between`}>

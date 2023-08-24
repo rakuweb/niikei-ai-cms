@@ -10,7 +10,7 @@ import { Pagination } from 'components/Pagination';
 import { FortunesTable } from '../organisms/FortunesTable';
 import { Timestamp } from 'firebase/firestore';
 import { InternalLink } from '../links/InternalLink';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -38,7 +38,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`オリジナル配信管理`}
+              pagename1={sidebarItems.originalPost}
               pagelink1={routes.fortunes}
               pagename2={title}
             />

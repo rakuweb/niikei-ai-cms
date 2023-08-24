@@ -7,7 +7,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -18,6 +18,7 @@ export type PresenterProps = {
     category?: Category;
     url?: string;
     id?: string;
+    siteUrl: string;
   }[];
   titles: string;
 };
@@ -29,7 +30,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`サイト管理`}
+              pagename1={sidebarItems.crawlers}
               pagelink1={routes.crawlersCollections}
               pagename2={titles}
             />

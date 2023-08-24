@@ -8,7 +8,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { FixingTable } from 'components/organisms/FixingTable';
 import { InternalLink } from 'components/links/InternalLink';
 import { Category } from '@/firebase/firestore/sites';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -32,7 +32,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`記事管理`}
+              pagename1={sidebarItems.createArticle}
               pagelink1={routes.articlesNew}
               pagename2={titles}
             />

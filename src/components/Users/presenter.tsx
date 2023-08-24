@@ -7,7 +7,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { UserTable } from 'components/organisms/UserTable';
 import { InternalLink } from 'components/links/InternalLink';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -32,7 +32,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`設定`}
+              pagename1={sidebarItems.settings}
               pagelink1={routes.settingsAccount}
               pagename2={title}
             />
