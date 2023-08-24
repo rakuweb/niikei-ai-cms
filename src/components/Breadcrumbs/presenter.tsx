@@ -46,15 +46,6 @@ export const Presenter: FC<PresenterProps> = ({
           }}
         />
 
-        {/*
-        <InternalLink
-          href={`/`}
-          _hover={{
-            color: `#49bac0`,
-          }}
-        >
-        </InternalLink>
-        */}
         {pagename2}
       </Text>
     </>

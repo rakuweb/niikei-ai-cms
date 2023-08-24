@@ -8,7 +8,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CheckingTable } from 'components/organisms/CheckingTable';
 import { InternalLink } from 'components/links/InternalLink';
 import { Category } from '@/firebase/firestore/sites';
-import { routes } from '@/constants/routes';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -33,8 +33,8 @@ export const Presenter: FC<PresenterProps> = ({ data, titles, isPublish }) => {
         <OutsideContainer>
           <Text>
             <Breadcrumbs
-              pagename1={`記事管理`}
-              pagelink1={routes.articlesNew}
+              pagename1={sidebarItems.checkArticle}
+              pagelink1={routes.articlesReviews}
               pagename2={titles}
             />
             <Flex justify={`space-between`}>

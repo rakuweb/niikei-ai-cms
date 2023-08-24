@@ -13,7 +13,6 @@ export const Presenter: FC<PresenterProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const router = useRouter();
   const uid = useAccountStore(selectUid);
-  console.log(uid);
 
   useEffect(() => {
     if (pathsAnonymous.includes(router.asPath)) {
