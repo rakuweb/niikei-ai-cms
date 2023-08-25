@@ -86,26 +86,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       return;
     }
 
-    const userDocRef = doc(db, 'users', id);
-    const userDoc = await getDoc(userDocRef);
-    const refFieldString = userDoc.data().company_ref;
-
     for (const url of selectedUrls) {
-      const index = data.findIndex((item) => item.url === url);
-      const document_id = data[index]?.document_id;
-
-      const companyEmployeeDocRef = doc(
-        refFieldString,
-        'auto_post_articles',
-        document_id
-      );
-      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
-
-      if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(companyEmployeeDocRef);
-      } else {
-        console.log('指定したユーザー情報が存在しません');
-      }
+      await deleteAutoPostArticleSingle(url);
     }
 
     window.alert('選択項目を削除しました');
@@ -115,11 +97,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   // single
-  const handleDeleteSingle = async (url: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
-      return;
-    }
-
+  const deleteAutoPostArticleSingle = async (url: string) => {
     const index = data.findIndex((item) => item.wp_url === url);
     const articleID = data[index]?.id;
 
@@ -136,11 +114,20 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     const postArticleID = data[index].id ?? null;
     if (postArticleID === null) return;
+    console.log(postArticleID);
     await deleteNotificationByID(
       { companyID, employeeID, notificationID: postArticleID },
       NotificationKind.AutoPost
     );
     deleteAutoPostManagementByID(postArticleID);
+  };
+
+  const handleDeleteSingle = async (url: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    await deleteAutoPostArticleSingle(url);
     window.alert('選択項目を削除しました');
     location.reload();
   };

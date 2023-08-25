@@ -10,19 +10,20 @@ import { useUserStore } from 'lib/store';
 import { Sidebar } from 'components/Sidebar';
 import { AddAutoPost } from '@/components/AddAutoPost';
 import { Category } from '@/firebase/firestore/sites';
+import { routes } from '@/constants/routes';
 
 type UserData = {
   id?: string;
-  name?: string;
-  url?: string;
-  xpath?: string;
-  interval1?: string;
-  interval2?: string;
-  created_at?: Timestamp;
-  category?: Category;
-  is_notified?: boolean;
-  is_renewal?: boolean;
-  is_auto_posts: boolean;
+  name: string;
+  url: string;
+  xpath: string;
+  interval1: string;
+  interval2: string;
+  created_at: Timestamp;
+  category: Category;
+  is_notified: boolean;
+  is_renewal: boolean;
+  is_auto_post: boolean;
 };
 
 const SitePage: NextPage = () => {

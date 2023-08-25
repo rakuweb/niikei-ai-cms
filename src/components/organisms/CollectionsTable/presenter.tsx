@@ -55,6 +55,7 @@ export type PresenterProps = {
     url?: string;
     id?: string;
     siteName?: string;
+    siteUrl?: string;
   }[];
 
   currentPage: number;
@@ -232,7 +233,20 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                           </Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>
-                            {`${data?.siteName}の記事が更新されました。` || ''}
+                            <ExternalLink
+                              href={`https://${data.siteUrl}`}
+                              onClick={async () => {
+                                await deleteSiteNotificationByID(
+                                  companyID,
+                                  employeeID,
+                                  data.id
+                                );
+                                deleteSiteManagementByID(data.id);
+                              }}
+                            >
+                              {`${data?.siteName}の記事が更新されました。` ||
+                                ''}
+                            </ExternalLink>
                           </Td>
                           {/*
                           <Td>{data?.title || ''}</Td>
