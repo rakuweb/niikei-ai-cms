@@ -65,7 +65,7 @@ const SitePage: NextPage = () => {
         }
       }
     } catch (error) {
-      router.push('/signin');
+      router.push(routes.signin);
     }
   };
 

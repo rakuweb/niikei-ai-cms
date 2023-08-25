@@ -105,7 +105,6 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
 
     handler();
   }, []);
-
   useEffect(() => {
     if (data?.name) {
       setValue('name', data.name);

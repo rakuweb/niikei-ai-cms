@@ -15,28 +15,21 @@ export default async function handler(
     const fileName = 'mp3text';
     const client = new speech.SpeechClient({ credentials: credentials });
 
-    // const storage = new Storage({
-    //   projectId: process.env.GCP_PROJECT_ID,
-    //   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    // });
-    // const bucket = storage.bucket(bucketName);
-
     const gcsUri = `gs://${bucketName}/${fileName}`;
     const audio = {
       uri: gcsUri,
     };
-    const config = {
-      encoding: 'LINEAR16' as any,
-      // sampleRateHertz: 48000,
+    const config: speech.protos.google.cloud.speech.v1.IRecognitionConfig = {
+      encoding: 'LINEAR16',
       languageCode: 'ja-JP',
       enableAutomaticPunctuation: true,
     };
 
     const request: speech.protos.google.cloud.speech.v1.ILongRunningRecognizeRequest =
-      {
-        audio: audio,
-        config: config,
-      };
+    {
+      audio: audio,
+      config: config,
+    };
 
     const operation = await client.longRunningRecognize(request);
     const [response] = await operation[0].promise();
