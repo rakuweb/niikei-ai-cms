@@ -110,20 +110,12 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={
-                                !!data.is_auto_patrol
-                                // switchValues[
-                                // (currentPage - 1) * itemsPerPage + index
-                                // ]
-                              }
-                              // onChange={(e) => handlePatrolSwitch(e)}
-                              // defaultChecked={!!data?.is_auto_patrol}
-                              // onClick={(e) => handlePatrolSwitch(e.tar)}
+                              isChecked={!!data.is_auto_patrol}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },
@@ -144,7 +136,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               {data?.name || ''}
                             </Box>
                           </Td>
-                          {/* NOTE */}
+                          {/* NOTE: */}
                           <Td>{data?.url ? `https://${data.url}` : ''}</Td>
 
                           <Td>

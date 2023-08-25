@@ -96,9 +96,9 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setCategories((prev) =>
         resCategories
           ? resCategories.map((category) => ({
-            id: category.id,
-            name: category.name,
-          }))
+              id: category.id,
+              name: category.name,
+            }))
           : prev
       );
     };
@@ -125,8 +125,8 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     if (data?.interval2) {
       setValue('interval2', data.interval2);
     }
-    setValue('is_notified', data?.is_notified);
-    setValue('is_auto_patrol', data?.is_auto_patrol);
+    setValue('is_notified', !!data?.is_notified);
+    setValue('is_auto_patrol', !!data?.is_auto_patrol);
   }, [
     data?.name,
     data?.url,

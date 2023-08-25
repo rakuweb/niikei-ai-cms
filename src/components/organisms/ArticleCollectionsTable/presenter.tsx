@@ -50,6 +50,7 @@ import {
   deleteArticleNotificationByID,
 } from '@/firebase/firestore/employees';
 import { formatDate } from '@/lib';
+import { ExternalLink } from '@/components/links/ExternalLink';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -65,6 +66,7 @@ export type PresenterProps = {
     id: string;
     url: string;
     siteName?: string;
+    siteUrl?: string;
   }[];
 
   currentPage: number;
@@ -219,7 +221,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                       <Th w={`${52 / 19.2}vw`}>更新日時</Th>
                       <Th w={`${30 / 19.2}vw`}>カテゴリ</Th>
                       <Th w={`${350 / 19.2}vw`}>タイトル</Th>
+                      {/*
                       <Th w={`${350 / 19.2}vw`}>URL</Th>
+                      */}
                       <Th w={`${10 / 19.2}vw`}>アクション</Th>
                     </Tr>
                   </Thead>
@@ -256,16 +260,20 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             </Flex>
                           </Td>
                           <Td>
-                          {formatDate(data.created_at.toDate().toString()) || ''}
+                            {formatDate(data.created_at.toDate().toString()) ||
+                              ''}
                           </Td>
                           <Td>{data.category.name || ''}</Td>
                           <Td>
-                            {`${data?.siteName}の記事が更新されました。` || ''}
+                            <ExternalLink href={`https://${data.siteUrl}`}>
+                              {`${data?.siteName}の記事が更新されました。` ||
+                                ''}
+                            </ExternalLink>
                           </Td>
                           {/*
                           <Td>{data?.title || ''}</Td>
-                          */}
                           <Td>{data?.url || ''}</Td>
+                          */}
 
                           <Td>
                             <Box
