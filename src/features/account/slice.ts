@@ -15,7 +15,12 @@ export const createAccountSlice: StateCreator<
   newInfoNotification: false,
   autoPublishNotification: false,
   fortuneNotification: false,
-  notifications: [],
+  notifications: {
+    site: [],
+    article: { standby: [], checking: [], fixing: [] },
+    auto_post: [],
+    fortune: [],
+  },
 
   setAccount: (props) => {
     const result = props;

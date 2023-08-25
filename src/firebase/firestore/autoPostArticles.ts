@@ -42,18 +42,18 @@ export const AUTO_POST_ARTICLE_COLLECTION = 'auto_post_articles';
 export const fetchArticles = async (companyID: string) => {
   const docsRef = getArticleDocsRef(companyID);
 
-  const snapshots = await getDocs(
-    query(docsRef, orderBy('date', 'desc'))
-  );
+  const snapshots = await getDocs(query(docsRef, orderBy('date', 'desc')));
   const documentsPromises = snapshots.docs.map(async (document) => {
-    const data = document.data();
+    const data = document.data() as ArticleType;
     return { ...data, id: document.id };
   });
 
   const result = await Promise.allSettled(documentsPromises);
   const documents = result
     .filter((item) => item?.status === 'fulfilled')
-    .map((item) => (item as PromiseFulfilledResult<any>).value);
+    .map(
+      (item: PromiseFulfilledResult<ArticleType & { id: string }>) => item.value
+    );
 
   return documents;
 };
