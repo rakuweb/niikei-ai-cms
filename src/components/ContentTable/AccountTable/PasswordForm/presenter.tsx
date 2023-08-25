@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import { InputForm } from '../InputForm';
 import Password from '../Password';
-import { apiRoutes, routes } from '@/constants/routes';
+import { apiRoutes } from '@/constants/routes';
 import axios from 'axios';
 import { useAccountStore } from '@/features/account';
 

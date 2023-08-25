@@ -71,7 +71,7 @@ export const EmailComponent: FC<EmailComponentProps> = ({ data }) => {
     }
   };
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, _] = useState(false);
 
   const handleEmailSubmit = (e) => {
     e.stopPropagation();

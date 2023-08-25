@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -7,6 +7,7 @@ import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { UserTable } from 'components/organisms/UserTable';
 import { InternalLink } from 'components/links/InternalLink';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -19,18 +20,17 @@ export type PresenterProps = {
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
   const title = `ユーザ情報`;
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const handlePageChange = (newPage: number) => {
-  //   setCurrentPage(newPage);
-  // };
 
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`設定`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={sidebarItems.settings}
+              pagelink1={routes.settingsAccount}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
               <InternalLink href={'/settings/users/new'}>

@@ -70,8 +70,6 @@ export const EmailComponent: FC<EmailComponentProps> = () => {
     }
   };
 
-  const [showPopup, setShowPopup] = useState(false);
-
   return (
     <Box
       as="form"

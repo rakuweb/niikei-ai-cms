@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  updateDoc,
-  where,
-  query,
-} from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';

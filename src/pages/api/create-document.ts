@@ -82,15 +82,15 @@ ${text}
     });
     const requests = inputText
       ? [
-        {
-          insertText: {
-            location: {
-              index: 1,
+          {
+            insertText: {
+              location: {
+                index: 1,
+              },
+              text: inputText,
             },
-            text: inputText,
           },
-        },
-      ]
+        ]
       : [];
 
     if (requests.length > 0) {

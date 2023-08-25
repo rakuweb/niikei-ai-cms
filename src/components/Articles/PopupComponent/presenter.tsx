@@ -109,14 +109,20 @@ export const Presenter: FC<PresenterProps> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="100vw">
+      <Modal
+        closeOnOverlayClick={!isCreating}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="100vw"
+      >
         <ModalOverlay />
         <ModalContent p={{ base: '3vw 1.5vw' }} w={{ base: '40%' }}>
           <form onSubmit={handleSubmit(handleCreateDocument)}>
             <ModalHeader fontSize={{ base: '1.8vw' }}>
               記事の新規作成
             </ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton isDisabled={!!isCreating} />
             <ModalBody>
               <FormControl id="title">
                 <FormLabel fontSize={{ base: '1.2vw' }}>タイトル</FormLabel>
@@ -157,6 +163,7 @@ export const Presenter: FC<PresenterProps> = ({
                 type="submit"
                 text={'Googleドキュメントで記事を作成する'}
                 fontSize={{ base: '1.2vw' }}
+                isDisabled={!!isCreating}
                 isLoading={!!isCreating}
                 cursor={isCreating ? 'not-allowed' : 'pointer'}
                 _hover={{

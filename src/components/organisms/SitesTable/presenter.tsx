@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, ChangeEvent } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Box,
   Table,
@@ -42,7 +42,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   const user = auth.currentUser;
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const [switchValues, setSwitchValues] = useState([]);
+  const [_, setSwitchValues] = useState([]);
 
   const handleDeleteSingle = async (id: string) => {
     if (!window.confirm('削除しますか？')) {
@@ -66,7 +66,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
   useEffect(() => {
     const length = data.length;
     const arr = new Array(length);
-    const result = arr.map((item, idx) => !!data[idx]?.is_auto_patrol);
+    const result = arr.map((_, idx) => !!data[idx]?.is_auto_patrol);
 
     setSwitchValues(result);
   }, [data]);
@@ -110,20 +110,12 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={
-                                !!data.is_auto_patrol
-                                // switchValues[
-                                // (currentPage - 1) * itemsPerPage + index
-                                // ]
-                              }
-                              // onChange={(e) => handlePatrolSwitch(e)}
-                              // defaultChecked={!!data?.is_auto_patrol}
-                              // onClick={(e) => handlePatrolSwitch(e.tar)}
+                              isChecked={!!data.is_auto_patrol}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },
@@ -144,7 +136,7 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                               {data?.name || ''}
                             </Box>
                           </Td>
-                          {/* NOTE */}
+                          {/* NOTE: */}
                           <Td>{data?.url ? `https://${data.url}` : ''}</Td>
 
                           <Td>
@@ -156,12 +148,11 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
                               isChecked={!!data?.is_notified}
-                              // defaultChecked={!!data?.is_notified}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },

@@ -48,7 +48,7 @@ const Home: NextPage = () => {
     <>
       <Box>
         <Sidebar />
-        {<New />}
+        <New />
       </Box>
     </>
   );

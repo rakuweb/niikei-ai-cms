@@ -27,6 +27,7 @@ import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
 import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -265,10 +266,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -277,11 +278,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>
-                            {dayjs(times[data.url || ''])
-                              .tz('Asia/Tokyo')
-                              .format('YYYY/MM/DD')}
-                          </Td>
+                          <Td>{formatDate(times[data.url || ''])}</Td>
                           <Td>{data?.category?.name || ''}</Td>
                           <Td>{titles[data?.url || '']}</Td>
                           <Td>{data?.name || ''}</Td>

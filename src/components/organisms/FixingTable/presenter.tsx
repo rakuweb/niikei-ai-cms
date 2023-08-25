@@ -11,21 +11,22 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
+import { css } from '@emotion/react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+import { updateDoc } from 'firebase/firestore';
+
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
-import { css } from '@emotion/react';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc } from '@firebase/firestore';
 import { db, auth } from 'src/firebase';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/ja';
-import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
 import { Status } from '@/firebase/firestore/articles';
 import {
@@ -39,6 +40,7 @@ import {
   selectDeleteArticleManagementByKindAndID,
   useNotificationsStore,
 } from '@/features/notifications';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -313,10 +315,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -325,11 +327,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>
-                            {dayjs(times[data.url || ''])
-                              .tz('Asia/Tokyo')
-                              .format('YYYY/MM/DD')}
-                          </Td>
+                          <Td>{formatDate(times[data.url] || '')}</Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>{titles[data?.url || '']}</Td>
                           <Td>{data?.name || ''}</Td>

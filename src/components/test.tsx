@@ -43,3 +43,7 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+
+test('ダミー', () => {
+  expect(1).toBe(1);
+});

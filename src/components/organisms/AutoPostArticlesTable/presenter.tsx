@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Box,
   Table,
@@ -12,7 +12,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { doc, getDoc, deleteDoc, Timestamp } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -25,19 +25,19 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
-import { db, auth } from 'src/firebase';
 import { Category } from '@/firebase/firestore/sites';
 import {
   NotificationKind,
   deleteNotificationByID,
 } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
-import { selectAccountItem, useAccountStore } from '@/features/account';
+import { useAccountStore } from '@/features/account';
 import {
   selectDeleteAutoPostNotificationByID,
   useNotificationsStore,
 } from '@/features/notifications';
 import { deleteAutoPostArticle } from '@/firebase/firestore/autoPostArticles';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -61,8 +61,6 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const user = auth.currentUser;
-  const id = user?.uid;
   const itemsPerPage = 10;
   const companyID = useCompanyStore(selectUid);
   const employeeID = useAccountStore((state) => state.uid);
@@ -88,27 +86,8 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       return;
     }
 
-    const userDocRef = doc(db, 'users', id);
-    const userDoc = await getDoc(userDocRef);
-    const refFieldString = userDoc.data().company_ref;
-
     for (const url of selectedUrls) {
-
-      const index = data.findIndex((item) => item.url === url);
-      const document_id = data[index]?.document_id;
-
-      const companyEmployeeDocRef = doc(
-        refFieldString,
-        'auto_post_articles',
-        document_id
-      );
-      const companyEmployeeDoc = await getDoc(companyEmployeeDocRef);
-
-      if (userDoc.exists() && companyEmployeeDoc.exists()) {
-        await deleteDoc(companyEmployeeDocRef);
-      } else {
-        console.log('指定したユーザー情報が存在しません');
-      }
+      await deleteAutoPostArticleSingle(url);
     }
 
     window.alert('選択項目を削除しました');
@@ -118,11 +97,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
   };
 
   // single
-  const handleDeleteSingle = async (url: string) => {
-    if (!window.confirm('本当に削除しますか？')) {
-      return;
-    }
-
+  const deleteAutoPostArticleSingle = async (url: string) => {
     const index = data.findIndex((item) => item.wp_url === url);
     const articleID = data[index]?.id;
 
@@ -139,11 +114,20 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     const postArticleID = data[index].id ?? null;
     if (postArticleID === null) return;
+    console.log(postArticleID);
     await deleteNotificationByID(
       { companyID, employeeID, notificationID: postArticleID },
       NotificationKind.AutoPost
     );
     deleteAutoPostManagementByID(postArticleID);
+  };
+
+  const handleDeleteSingle = async (url: string) => {
+    if (!window.confirm('本当に削除しますか？')) {
+      return;
+    }
+
+    await deleteAutoPostArticleSingle(url);
     window.alert('選択項目を削除しました');
     location.reload();
   };
@@ -165,7 +149,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
-  const [times, setTimes] = useState<{ [url: string]: string }>({});
+  const [times, _] = useState<{ [url: string]: string }>({});
 
   const timesArray = Object.entries(times);
 
@@ -227,11 +211,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>
-                            {dayjs(data.date.toDate())
-                              .tz('Asia/Tokyo')
-                              .format('YYYY/MM/DD')}
-                          </Td>
+                          <Td>{formatDate(data.date.toDate().toString())}</Td>
                           <Td>{data?.category?.name || ''}</Td>
                           <Td>{data.title}</Td>
                           <Td>{`自動生成`}</Td>

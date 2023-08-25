@@ -6,6 +6,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { NewForm } from 'components/organisms/NewForm';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
@@ -17,7 +18,11 @@ export const Presenter: FC<PresenterProps> = () => {
       <Box bg={`#EAEAEA`} h={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`設定`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={sidebarItems.settings}
+              pagelink1={routes.settingsAccount}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>

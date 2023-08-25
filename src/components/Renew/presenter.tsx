@@ -6,8 +6,8 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
 import { RenewForm } from 'components/organisms/RenewForm';
-import Subtitle from '../ContentTable/AccountTable/Subtitle';
 import { useCompanyStore, selectCompanyItem } from 'features/company';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data: {
@@ -26,7 +26,11 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
       <Box bg={`#EAEAEA`} h={'auto'} minH={'100vh'} pb={'2.5vw'}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={sidebarItems.settings}
+              pagelink1={routes.settingsAccount}
+              pagename2={title}
+            />
             <Flex justify={`space-between`}>
               <Title title={title} />
             </Flex>

@@ -23,7 +23,11 @@ export const Presenter: FC<PresenterProps> = ({ data, titles, titles2 }) => {
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={titles2} pagename2={titles} />
+            <Breadcrumbs
+              pagename1={titles2}
+              pagelink1={routes.crawlersCollections}
+              pagename2={titles}
+            />
             <Flex justify={`space-between`}>
               <Title title={titles} />
 

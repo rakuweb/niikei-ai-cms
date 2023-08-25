@@ -1,14 +1,15 @@
 import { ArticleNotificationKind } from '@/firebase/firestore/employees';
 
 export type Notification = string;
+export type ArticleManagement = {
+  standby: Notification[];
+  checking: Notification[];
+  fixing: Notification[];
+};
 
 export type NotificationsSliceData = {
   siteManagement: Notification[];
-  articleManagement: {
-    standby: Notification[];
-    checking: Notification[];
-    fixing: Notification[];
-  };
+  articleManagement: ArticleManagement;
   autoPostManagement: Notification[];
   originalContentManagement: Notification[];
 };

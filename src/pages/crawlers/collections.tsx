@@ -25,6 +25,7 @@ import { SiteType } from '@/firebase/firestore/registeredSites';
 type InformationData = InformationType & {
   id?: string;
   siteName?: string;
+  siteUrl: string;
 };
 
 const Home: NextPage = () => {
@@ -59,6 +60,7 @@ const Home: NextPage = () => {
               fetchedData.push({
                 ...docData,
                 siteName: siteData.name,
+                siteUrl: siteData.url,
                 id: doc.id,
                 category: siteData?.category || { id: undefined, name: '' },
               });

@@ -20,7 +20,7 @@ const Draftslist: NextPage = () => {
         setData(fetchedData);
       } catch (error) {
         window.alert(error);
-        console.log(error);
+        console.error(error);
       }
     };
 
