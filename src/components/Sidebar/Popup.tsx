@@ -1,3 +1,5 @@
+import { ArticleManagement } from '@/features/notifications';
+import type { Notification as NotificationType } from '@/features/notifications';
 import {
   Popover,
   PopoverTrigger,
@@ -6,19 +8,21 @@ import {
   PopoverBody,
   Link,
 } from '@chakra-ui/react';
+
 import { Notification } from 'components/Notification';
+import { sidebarItems } from 'constants/routes';
 
 const Popup = ({ title, logo, links, href, notifications = undefined }) => {
   const displayNotification = (title: string, linkText: string) => {
-    if (title === 'サイト管理') {
+    if (title === sidebarItems.crawlers) {
       if (linkText === '新着情報一覧') {
         return true;
       }
-    } else if (title === '自動投稿管理') {
+    } else if (title === sidebarItems.autoPost) {
       if (linkText === '記事一覧') {
         return true;
       }
-    } else if (title === 'オリジナル配信管理') {
+    } else if (title === sidebarItems.originalPost) {
       if (linkText === '占い記事一覧') {
         return true;
       }
@@ -29,10 +33,11 @@ const Popup = ({ title, logo, links, href, notifications = undefined }) => {
   const displayArticleNotification = (
     title: string,
     linkText: string,
-    notifications: any
+    notifications: NotificationType[] | ArticleManagement
   ) => {
-    if (title === '記事管理') {
-      if (linkText === '記事化リスト' && notifications?.inReview?.length > 0) {
+    if (title === sidebarItems.createArticle) {
+      notifications = notifications as ArticleManagement;
+      if (linkText === '記事化リスト' && notifications?.standby?.length > 0) {
         return true;
       } else if (
         linkText === '確認記事一覧' &&
@@ -49,9 +54,12 @@ const Popup = ({ title, logo, links, href, notifications = undefined }) => {
 
     return false;
   };
-  const showArticleNotification = (linkText: string, notifications: any) => {
+  const showArticleNotification = (
+    linkText: string,
+    notifications: ArticleManagement
+  ) => {
     if (linkText === '記事化リスト') {
-      return notifications.inReview.length;
+      return notifications.standby.length;
     } else if (linkText === '確認記事一覧') {
       return notifications.checking.length;
     } else if (linkText === '修正記事一覧') {
@@ -61,16 +69,23 @@ const Popup = ({ title, logo, links, href, notifications = undefined }) => {
     return 0;
   };
 
-  const countNotification = (title: string, notifications: any) => {
-    if (title === 'サイト管理') {
+  const countNotification = (
+    title: string,
+    notifications: NotificationType[] | ArticleManagement
+  ) => {
+    if (title === sidebarItems.crawlers) {
+      notifications = notifications as NotificationType[];
       return notifications.length;
-    } else if (title === '自動投稿管理') {
+    } else if (title === sidebarItems.autoPost) {
+      notifications = notifications as NotificationType[];
       return notifications.length;
-    } else if (title === 'オリジナル配信管理') {
+    } else if (title === sidebarItems.originalPost) {
+      notifications = notifications as NotificationType[];
       return notifications.length;
-    } else if (title === '記事管理') {
+    } else if (title === sidebarItems.createArticle) {
+      notifications = notifications as ArticleManagement;
       return (
-        notifications?.inReview?.length ??
+        notifications?.standby?.length ??
         0 + notifications?.checking?.length ??
         0 + notifications?.fixing?.length ??
         0
@@ -119,9 +134,9 @@ const Popup = ({ title, logo, links, href, notifications = undefined }) => {
           />
 
           <PopoverBody mt={`0.5vw`}>
-            {links.map((link, index) => (
+            {links.map((link: { text: string; url: string }) => (
               <Link
-                key={index}
+                key={link.text}
                 w={`fit-content`}
                 href={link.url}
                 color="#fff"
