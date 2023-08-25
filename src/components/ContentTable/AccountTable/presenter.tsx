@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, HStack, Select } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 
 import Subtitle from './Subtitle';

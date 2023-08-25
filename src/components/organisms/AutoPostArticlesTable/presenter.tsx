@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Box,
   Table,
@@ -12,7 +12,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { doc, getDoc, deleteDoc, Timestamp } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -25,14 +25,13 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from 'components/links/ExternalLink';
-import { db, auth } from 'src/firebase';
 import { Category } from '@/firebase/firestore/sites';
 import {
   NotificationKind,
   deleteNotificationByID,
 } from '@/firebase/firestore/employees';
 import { selectUid, useCompanyStore } from '@/features/company';
-import { selectAccountItem, useAccountStore } from '@/features/account';
+import { useAccountStore } from '@/features/account';
 import {
   selectDeleteAutoPostNotificationByID,
   useNotificationsStore,
@@ -62,8 +61,6 @@ export type PresenterProps = {
 };
 
 export const Presenter: FC<PresenterProps> = ({ data }) => {
-  const user = auth.currentUser;
-  const id = user?.uid;
   const itemsPerPage = 10;
   const companyID = useCompanyStore(selectUid);
   const employeeID = useAccountStore((state) => state.uid);
@@ -165,7 +162,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     setCurrentPage(newPage);
   };
 
-  const [times, setTimes] = useState<{ [url: string]: string }>({});
+  const [times, _] = useState<{ [url: string]: string }>({});
 
   const timesArray = Object.entries(times);
 

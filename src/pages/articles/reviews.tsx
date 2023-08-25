@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { Box, Spinner } from '@chakra-ui/react';
-import { Sidebar } from 'components/Sidebar';
 import { DocumentData } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+
+import { Sidebar } from 'components/Sidebar';
 import { selectCompanyItem, useCompanyStore } from '@/features/company';
 import { fetchArticlesWhere, Status } from '@/firebase/firestore/articles';
 import { Checking } from '@/components/Checking';
@@ -23,7 +24,7 @@ const Draftslist: NextPage = () => {
         setData(fetchedData);
       } catch (error) {
         window.alert(error);
-        console.log(error);
+        console.error(error);
       }
     };
 

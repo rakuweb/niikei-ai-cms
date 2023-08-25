@@ -8,7 +8,7 @@ const credentials = JSON.parse(
 );
 
 const deleteDocuments = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { urls, documentId } = req.body;
+  const { documentId } = req.body;
 
   try {
     const auth = new google.auth.GoogleAuth({

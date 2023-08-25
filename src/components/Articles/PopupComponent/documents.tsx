@@ -1,7 +1,5 @@
 // src/components/Articles/PopupComponent/documents.tsx
-
 import {
-  getFirestore,
   collection,
   query,
   where,

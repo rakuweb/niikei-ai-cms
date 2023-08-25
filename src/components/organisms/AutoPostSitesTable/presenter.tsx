@@ -158,9 +158,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },

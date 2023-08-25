@@ -107,10 +107,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -153,10 +153,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
         <Box position={'absolute'}>
           <DropDown
             selectedValue={''}
-            handleSelect={function(): void {
+            handleSelect={function (): void {
               throw new Error('Function not implemented.');
             }}
-            handleExecute={function(): void {
+            handleExecute={function (): void {
               throw new Error('Function not implemented.');
             }}
           />

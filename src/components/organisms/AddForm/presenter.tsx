@@ -146,7 +146,6 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     try {
       const data: Partial<SiteType> = {
         ...formData,
-        // NOTE
         url: id ? formData.url : `${formData.url}`,
         category: categories.filter(
           (item) => item.name === formData.category

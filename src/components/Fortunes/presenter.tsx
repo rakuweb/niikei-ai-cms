@@ -1,12 +1,10 @@
-import React, { FC, useState } from 'react';
-import { Box, Flex, TableContainer, useDisclosure } from '@chakra-ui/react';
+import React, { FC } from 'react';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { WideButton } from 'components/Button/WideButton';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
 import { FortunesTable } from '../organisms/FortunesTable';
 import { Timestamp } from 'firebase/firestore';
 import { InternalLink } from '../links/InternalLink';

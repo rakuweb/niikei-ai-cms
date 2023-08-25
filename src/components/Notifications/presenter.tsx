@@ -15,22 +15,22 @@ export const Presenter: FC<PresenterProps> = () => {
   const title = `メール設定`;
 
   return (
-      <Box bg={`#EAEAEA`} h={`100vh`}>
-        <OutsideContainer>
-          <Text>
-            <Breadcrumbs
-              pagename1={sidebarItems.settings}
-              pagelink1={routes.settingsAccount}
-              pagename2={title}
-            />
-            <Flex justify={`space-between`}>
-              <Title title={title} />
-            </Flex>
-            <ContentContainer h={`${702 / 19.2}vw`}>
-              <NotificationsForm />
-            </ContentContainer>
-          </Text>
-        </OutsideContainer>
-      </Box>
+    <Box bg={`#EAEAEA`} h={`100vh`}>
+      <OutsideContainer>
+        <Text>
+          <Breadcrumbs
+            pagename1={sidebarItems.settings}
+            pagelink1={routes.settingsAccount}
+            pagename2={title}
+          />
+          <Flex justify={`space-between`}>
+            <Title title={title} />
+          </Flex>
+          <ContentContainer h={`${702 / 19.2}vw`}>
+            <NotificationsForm />
+          </ContentContainer>
+        </Text>
+      </OutsideContainer>
+    </Box>
   );
 };

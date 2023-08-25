@@ -31,7 +31,7 @@ export const Presenter: FC = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [file, setFile] = useState<File>();
   const [isButtonActive, setButtonActive] = useState(false);
-  const [isSending, setIsSending] = useState<boolean>(false);
+  const [_, setIsSending] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
