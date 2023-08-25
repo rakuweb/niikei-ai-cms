@@ -52,3 +52,11 @@ mp3text-fixed.mp3
 mp3text.mp3-fixed.mp3
 
 output-documents.csv
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# storycap
+/diff/
+/actual/
+/tests-examples/

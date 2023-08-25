@@ -8,6 +8,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CheckingTable } from 'components/organisms/CheckingTable';
 import { InternalLink } from 'components/links/InternalLink';
 import { Category } from '@/firebase/firestore/sites';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: Partial<{
@@ -23,14 +24,19 @@ export type PresenterProps = {
     name?: string;
   }>[];
   titles?: string;
+  isPublish?: boolean;
 };
-export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
+export const Presenter: FC<PresenterProps> = ({ data, titles, isPublish }) => {
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`記事管理`} pagename2={titles} />
+            <Breadcrumbs
+              pagename1={sidebarItems.checkArticle}
+              pagelink1={routes.articlesReviews}
+              pagename2={titles}
+            />
             <Flex justify={`space-between`}>
               <Title title={titles} />
 
@@ -43,7 +49,7 @@ export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
               </InternalLink>
             </Flex>
 
-            <CheckingTable data={data} currentPage={0} />
+            <CheckingTable data={data} currentPage={0} isPublish={isPublish} />
           </Text>
         </OutsideContainer>
       </Box>

@@ -22,7 +22,7 @@ export const PasswordPopupComponent: FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const [errorPass, setErrorPass] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword] = useState(false);
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: isOpen });
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {

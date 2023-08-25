@@ -1,8 +1,6 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { FC } from 'react';
 import { Text } from 'components/texts/Text';
-import { FlexProps, Button, ButtonProps, Flex, Image } from '@chakra-ui/react';
-// import { Image } from 'components/images/Image';
+import { Button, ButtonProps, Image } from '@chakra-ui/react';
 
 export type PresenterProps = ButtonProps & { text: string };
 

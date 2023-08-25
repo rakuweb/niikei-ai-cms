@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+import { Timestamp } from 'firebase/firestore';
+
 import { Text } from 'components/texts/Text';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { ContentContainer } from 'components/Container/ContentContainer';
-import { Timestamp } from 'firebase/firestore';
 import { AddForm } from 'components/organisms/AddForm';
 import { Category } from '@/firebase/firestore/sites';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -30,20 +32,22 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   const title = `サイトを登録`;
 
   return (
-    <>
-      <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} pb={'2vw'}>
-        <OutsideContainer>
-          <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={title} />
-            <Flex justify={`space-between`}>
-              <Title title={title} />
-            </Flex>
-            <ContentContainer h={`auto`}>
-              <AddForm data={data} id={id} />
-            </ContentContainer>
-          </Text>
-        </OutsideContainer>
-      </Box>
-    </>
+    <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} pb={'2vw'}>
+      <OutsideContainer>
+        <Text>
+          <Breadcrumbs
+            pagename1={sidebarItems.crawlers}
+            pagelink1={routes.crawlersCollections}
+            pagename2={title}
+          />
+          <Flex justify={`space-between`}>
+            <Title title={title} />
+          </Flex>
+          <ContentContainer h={`auto`}>
+            <AddForm data={data} id={id} />
+          </ContentContainer>
+        </Text>
+      </OutsideContainer>
+    </Box>
   );
 };

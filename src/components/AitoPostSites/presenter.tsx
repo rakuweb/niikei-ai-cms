@@ -8,6 +8,7 @@ import { Title } from 'components/Title';
 import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { AutoPostSitesTable } from '../organisms/AutoPostSitesTable';
 import { Category } from '@/firebase/firestore/sites';
+import { routes } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -39,7 +40,11 @@ export const Presenter: FC<PresenterProps> = ({
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={titles2} pagename2={titles} />
+            <Breadcrumbs
+              pagename1={titles2}
+              pagelink1={routes.autoPostsArticles}
+              pagename2={titles}
+            />
             <Flex justify={`space-between`}>
               <Title title={titles} />
             </Flex>

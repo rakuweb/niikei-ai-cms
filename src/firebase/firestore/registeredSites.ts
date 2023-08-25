@@ -22,7 +22,9 @@ export type SiteType = {
   category: Category;
   is_notified: boolean;
   is_renewal: boolean;
+  // WARN:
   is_auto_posts: boolean;
+  is_auto_post: boolean;
   previous_structure: string[];
 };
 

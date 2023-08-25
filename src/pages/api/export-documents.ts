@@ -25,7 +25,7 @@ export default async function exportDocuments(
 
   const json2csv = new Parser();
   const csv = json2csv.parse(documents);
-  fs.writeFile('output-documents.csv', csv, function(err) {
+  fs.writeFile('output-documents.csv', csv, function (err) {
     if (err) throw err;
     console.log('csv error');
   });

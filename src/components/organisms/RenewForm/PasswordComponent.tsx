@@ -31,7 +31,7 @@ type PasswordComponentProps = PresenterProps & {
 export const PasswordComponent: FC<PasswordComponentProps> = ({ data }) => {
   const router = useRouter();
   const { id } = router.query;
-  const [password, setPassword] = useState(data.password);
+  const [_, setPassword] = useState(data.password);
   useEffect(() => {
     setPassword(data.password);
   }, [data.password]);

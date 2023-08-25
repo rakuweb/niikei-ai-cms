@@ -4,7 +4,7 @@ export const routes = {
   signin: `/signin`,
   passwordReset: `/password-reset`,
   crawlers: `/crawlers`,
-  crawlersSitesId: (id: string) => `/crawlers/sites/${id}`,
+  crawlersSitesId: (id: string) => `/crawlers/site/${id}`,
   crawlersAdd: `/crawlers/add`,
   crawlersCollections: `/crawlers/collections`,
   crawlersCollectionsId: (id: string) => `/crawlers/collections/${id}`,
@@ -26,6 +26,15 @@ export const routes = {
   settingsUsersNew: `/settings/users/new`,
   settingsUsersId: (id: string) => `/settings/users/${id}`,
   settingsNotifications: `/settings/notifications`,
+};
+
+export const sidebarItems = {
+  crawlers: 'サイト管理',
+  createArticle: '記事作成管理',
+  checkArticle: '確認記事管理',
+  autoPost: '自動投稿管理',
+  originalPost: 'オリジナル配信管理',
+  settings: '設定',
 };
 
 export const apiRoutes = {

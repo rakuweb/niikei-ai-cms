@@ -9,12 +9,13 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import Fileselect from './Fileselect';
 import Read from './Read';
 import Mp3select from './Mp3select';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = Record<string, unknown>;
 
 export const Presenter: FC = () => {
   const title = `新規作成する`;
-  const [selectedFileContent, setSelectedFileContent] = useState("");
+  const [selectedFileContent, setSelectedFileContent] = useState('');
   const [isPDFSelected, setIsPDFSelected] = useState(true);
 
   const handlePDFButtonClick = () => {
@@ -33,7 +34,11 @@ export const Presenter: FC = () => {
       <Box bg={`#EAEAEA`} h={`100%`} minH={'100vh'} paddingBottom={'2vw'}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`記事管理`} pagename2={title} />
+            <Breadcrumbs
+              pagename1={sidebarItems.createArticle}
+              pagelink1={routes.articlesNew}
+              pagename2={title}
+            />
 
             <Title title={title} />
             <ContentContainer px={`0`}>

@@ -20,7 +20,7 @@ const Draftslist: NextPage = () => {
         setData(fetchedData);
       } catch (error) {
         window.alert(error);
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -50,12 +50,7 @@ const Draftslist: NextPage = () => {
     <>
       <Sidebar />
       <Box>
-        <Sites
-          data={data}
-          titles={'登録サイト一覧'}
-          titles2={`サイト管理`}
-          urls={'/crawlers/site'}
-        />
+        <Sites data={data} titles={'登録サイト一覧'} titles2={`サイト管理`} />
       </Box>
     </>
   );

@@ -1,13 +1,8 @@
+import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import { Box, Spinner } from '@chakra-ui/react';
-
-import { Sidebar } from 'components/Sidebar';
-import { Collections } from 'components/Collections';
-import { auth, db } from '@/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
-  DocumentReference,
-  Timestamp,
   collection,
   doc,
   getDoc,
@@ -16,28 +11,25 @@ import {
   where,
 } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+
+import { Sidebar } from 'components/Sidebar';
+import { Collections } from 'components/Collections';
+import { auth, db } from '@/firebase';
 import {
   INFORMATION_COLLECTION,
   InformationStatus,
+  InformationType,
 } from '@/firebase/firestore/information';
 import { SiteType } from '@/firebase/firestore/registeredSites';
-import { Category } from '@/firebase/firestore/sites';
 
-type UserData = {
-  created_at?: Timestamp;
-  message?: string;
-  title?: string;
-  status?: string;
-  category?: Category;
-  url?: string;
-  site_ref?: DocumentReference;
+type InformationData = InformationType & {
   id?: string;
   siteName?: string;
+  siteUrl: string;
 };
 
 const Home: NextPage = () => {
-  const [data, setData] = useState<UserData[] | null>(null);
+  const [data, setData] = useState<InformationData[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -58,20 +50,25 @@ const Home: NextPage = () => {
           );
           const querySnapshot = await getDocs(q);
 
-          const fetchedData: UserData[] = [];
+          const fetchedData: InformationData[] = [];
           await Promise.all(
             querySnapshot.docs.map(async (doc) => {
-              const docData = doc.data() as UserData;
+              const docData = doc.data() as InformationData;
               const siteRefSnap = await getDoc(docData.site_ref);
               const siteData = siteRefSnap.data() as SiteType;
 
               fetchedData.push({
                 ...docData,
                 siteName: siteData.name,
+                siteUrl: siteData.url,
                 id: doc.id,
                 category: siteData?.category || { id: undefined, name: '' },
               });
             })
+          );
+          fetchedData.sort(
+            (a, b) =>
+              b.created_at.toDate().getTime() - a.created_at.toDate().getTime()
           );
           setData(fetchedData);
         } else {

@@ -1,3 +1,5 @@
+import { Notifications } from 'src/firebase/firestore/employees';
+
 export const Role = {
   Editor: 'editor',
   Writer: 'writer',
@@ -13,7 +15,7 @@ export type AccountSliceData = {
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
-  notifications: any;
+  notifications: Notifications;
 };
 
 type SetAccountInfoProps = {
@@ -24,7 +26,7 @@ type SetAccountInfoProps = {
   newInfoNotification: boolean;
   autoPublishNotification: boolean;
   fortuneNotification: boolean;
-  notifications: any;
+  notifications: Notifications;
 };
 
 export type AccountSlice = AccountSliceData & {

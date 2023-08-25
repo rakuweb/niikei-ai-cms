@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import { db } from '..';
 import { COMPANY_COLLECTION } from './companies';
@@ -80,7 +80,7 @@ export const updateArticleNotification = async (
       ...notifications,
       article: {
         ...notifications.article,
-        [kind]: [...notifications.article[kind], id],
+        [kind]: [...(notifications?.article[kind] ?? []), id],
       },
     },
   };
@@ -120,12 +120,13 @@ export const deleteNotificationByID = async (
   const currentData = await getDoc(employeeDocRef);
   const { notifications } = currentData.data();
 
+  const newNotifications = notifications[kind].filter(
+    (item: string) => item !== notificationID
+  );
   const newData = {
     notifications: {
       ...notifications,
-      [NotificationKind[kind]]: notifications[kind].filter(
-        (item: string) => item !== notificationID
-      ),
+      [kind]: newNotifications,
     },
   };
   await updateEmployee({ companyID, employeeID }, newData);
@@ -161,7 +162,7 @@ export const fetchNotifications = async (
   const employee = await getEmployee(companyID, employeeID).catch((err) => {
     throw err;
   });
-  const data = employee.data() as EmployeeType;
+  const data = employee as EmployeeType;
 
   const { notifications } = data;
 

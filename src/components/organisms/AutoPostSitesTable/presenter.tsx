@@ -46,6 +46,7 @@ export type PresenterProps = {
     is_notified?: boolean;
     is_renewal?: boolean;
     is_auto_posts?: boolean;
+    is_auto_post?: boolean;
   }[];
   titles?: string;
   urls?: string;
@@ -115,12 +116,12 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                           >
                             <Switch
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
-                              isChecked={data?.is_auto_posts || false}
+                              isChecked={data?.is_auto_post || false}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },
@@ -158,9 +159,9 @@ export const Presenter: FC<PresenterProps> = ({ data = [], urls }) => {
                               isReadOnly
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                                 span: {
                                   cursor: `not-allowed`,
                                 },

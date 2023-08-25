@@ -5,7 +5,6 @@ import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );
-console.log(credentials);
 
 const auth = new google.auth.GoogleAuth({
   credentials: credentials,

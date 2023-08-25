@@ -28,7 +28,7 @@ type UserData = {
   category: Category;
   is_notified: boolean;
   is_renewal: boolean;
-  is_auto_posts: boolean;
+  is_auto_post: boolean;
 };
 
 const Draftslist: NextPage = () => {

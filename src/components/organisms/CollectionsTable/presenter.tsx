@@ -16,6 +16,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
 import { GrayButton } from 'components/Button/GrayButton';
@@ -23,9 +26,7 @@ import { ContentContainer } from 'components/Container/ContentContainer';
 import { Pagination } from 'components/Pagination';
 import { DropDown } from '../DropDown';
 import { ExternalLink } from '@/components/links/ExternalLink';
-import { Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { getAuth } from 'firebase/auth';
 import { Category } from '@/firebase/firestore/sites';
 import {
   INFORMATION_COLLECTION,
@@ -38,6 +39,7 @@ import {
   selectDeleteSiteNotificationByID,
   useNotificationsStore,
 } from '@/features/notifications';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -53,6 +55,7 @@ export type PresenterProps = {
     url?: string;
     id?: string;
     siteName?: string;
+    siteUrl?: string;
   }[];
 
   currentPage: number;
@@ -164,7 +167,6 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        console.log(id);
         const docRef = doc(ref, INFORMATION_COLLECTION, id);
         await updateDoc(docRef, {
           status: InformationStatus.StandBy,
@@ -214,10 +216,10 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.id || '']}
                                 onChange={() =>
@@ -227,13 +229,24 @@ export const Presenter: FC<PresenterProps> = ({ data = [] }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {dayjs(data.created_at.toDate()).format(
-                              'YYYY/MM/DD'
-                            )}
+                            {formatDate(data.created_at.toDate().toString())}
                           </Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>
-                            {`${data?.siteName}の記事が更新されました。` || ''}
+                            <ExternalLink
+                              href={`https://${data.siteUrl}`}
+                              onClick={async () => {
+                                await deleteSiteNotificationByID(
+                                  companyID,
+                                  employeeID,
+                                  data.id
+                                );
+                                deleteSiteManagementByID(data.id);
+                              }}
+                            >
+                              {`${data?.siteName}の記事が更新されました。` ||
+                                ''}
+                            </ExternalLink>
                           </Td>
                           {/*
                           <Td>{data?.title || ''}</Td>

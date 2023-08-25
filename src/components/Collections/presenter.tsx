@@ -7,6 +7,7 @@ import { OutsideContainer } from 'components/Container/OutsideContainer';
 import { CollectionsTable } from 'components/organisms/CollectionsTable';
 import { Timestamp } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
+import { routes, sidebarItems } from '@/constants/routes';
 
 export type PresenterProps = {
   data?: {
@@ -17,18 +18,22 @@ export type PresenterProps = {
     category?: Category;
     url?: string;
     id?: string;
+    siteUrl: string;
   }[];
   titles: string;
 };
 
 export const Presenter: FC<PresenterProps> = ({ data, titles }) => {
-  console.log(data);
   return (
     <>
       <Box bg={`#EAEAEA`} h={`auto`} minH={`100vh`}>
         <OutsideContainer>
           <Text>
-            <Breadcrumbs pagename1={`サイト管理`} pagename2={titles} />
+            <Breadcrumbs
+              pagename1={sidebarItems.crawlers}
+              pagelink1={routes.crawlersCollections}
+              pagename2={titles}
+            />
             <Flex justify={`space-between`}>
               <Title title={titles} />
             </Flex>

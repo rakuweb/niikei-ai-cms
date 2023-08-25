@@ -11,20 +11,21 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
-import { Text } from 'components/texts/Text';
-import { WideButton } from 'components/Button/WideButton';
-import { GrayButton } from 'components/Button/GrayButton';
 import { css } from '@emotion/react';
-import { ContentContainer } from 'components/Container/ContentContainer';
-import { Pagination } from 'components/Pagination';
-import { DropDown } from '../DropDown';
-import { ExternalLink } from 'components/links/ExternalLink';
 import { doc, getDoc } from '@firebase/firestore';
-import { db, auth } from 'src/firebase';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
+
+import { Text } from 'components/texts/Text';
+import { WideButton } from 'components/Button/WideButton';
+import { GrayButton } from 'components/Button/GrayButton';
+import { ContentContainer } from 'components/Container/ContentContainer';
+import { Pagination } from 'components/Pagination';
+import { DropDown } from '../DropDown';
+import { ExternalLink } from 'components/links/ExternalLink';
+import { db, auth } from 'src/firebase';
 import { updateDoc } from 'firebase/firestore';
 import { Category } from '@/firebase/firestore/sites';
 import { Status } from '@/firebase/firestore/articles';
@@ -39,6 +40,7 @@ import {
   selectDeleteArticleManagementByKindAndID,
   useNotificationsStore,
 } from '@/features/notifications';
+import { formatDate } from '@/lib';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -58,9 +60,10 @@ export type PresenterProps = {
     name?: string;
   }>[];
   currentPage: number;
+  isPublish: boolean;
 };
 
-export const Presenter: FC<PresenterProps> = ({ data }) => {
+export const Presenter: FC<PresenterProps> = ({ data, isPublish }) => {
   const companyID = useCompanyStore(selectUid);
   const { uid: employeeID } = useAccountStore(selectAccountItem);
   const deleteArticleManagementByKindAndID = useNotificationsStore(
@@ -286,7 +289,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                   <Thead>
                     <Tr css={thstyles}>
                       <Th w={`${52 / 19.2}vw`} h={`${20 / 19.2}vw`} />
-                      <Th w={`${52 / 19.2}vw`}>更新日時</Th>
+                      <Th w={`${52 / 19.2}vw`}>アップロード日時</Th>
                       <Th w={`${30 / 19.2}vw`}>カテゴリ</Th>
                       <Th w={`${350 / 19.2}vw`}>タイトル</Th>
                       <Th w={`${350 / 19.2}vw`}>作成者</Th>
@@ -313,10 +316,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.url || '']}
                                 onChange={() =>
@@ -325,11 +328,7 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                               />
                             </Flex>
                           </Td>
-                          <Td>
-                            {dayjs(times[data.url || ''])
-                              .tz('Asia/Tokyo')
-                              .format('YYYY/MM/DD')}
-                          </Td>
+                          <Td>{formatDate(times[data.url || ''])}</Td>
                           <Td>{data?.category.name || ''}</Td>
                           <Td>{titles[data?.url || '']}</Td>
                           <Td>{data?.name || ''}</Td>
@@ -359,24 +358,26 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                   w={`${140 / 19.2}vw`}
                                 />
                               </ExternalLink>
-                              <WideButton
-                                mx={`0.5vw`}
-                                text={`修正依頼を出す`}
-                                w={`${140 / 19.2}vw`}
-                                onClick={async () => {
-                                  await handleChangeStatus(data.url);
-                                  await deleteArticleNotificationByID(
-                                    companyID,
-                                    employeeID,
-                                    NotificationKind.Article.Checking,
-                                    data.id
-                                  );
-                                  deleteArticleManagementByKindAndID(
-                                    NotificationKind.Article.Checking,
-                                    data.id
-                                  );
-                                }}
-                              />
+                              {!isPublish && (
+                                <WideButton
+                                  mx={`0.5vw`}
+                                  text={`修正依頼を出す`}
+                                  w={`${140 / 19.2}vw`}
+                                  onClick={async () => {
+                                    await handleChangeStatus(data.url);
+                                    await deleteArticleNotificationByID(
+                                      companyID,
+                                      employeeID,
+                                      NotificationKind.Article.Checking,
+                                      data.id
+                                    );
+                                    deleteArticleManagementByKindAndID(
+                                      NotificationKind.Article.Checking,
+                                      data.id
+                                    );
+                                  }}
+                                />
+                              )}
                               <GrayButton
                                 text={`削除する`}
                                 w={`${140 / 19.2}vw`}

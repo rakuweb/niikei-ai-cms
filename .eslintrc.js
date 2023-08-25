@@ -33,5 +33,14 @@ module.exports = {
     'react/prop-types': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'jsx-a11y/alt-text': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+      },
+    ],
   },
 };

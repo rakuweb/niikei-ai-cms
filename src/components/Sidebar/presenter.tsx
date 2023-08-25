@@ -72,9 +72,9 @@ export const Presenter: FC = () => {
     { text: 'アカウント情報', url: routes.settingsAccount },
     ...(account.role === Role.Editor
       ? [
-        { text: 'ユーザ一覧', url: routes.settingsUsers },
-        { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
-      ]
+          { text: 'ユーザ一覧', url: routes.settingsUsers },
+          { text: 'ユーザ新規作成', url: routes.settingsUsersNew },
+        ]
       : []),
     { text: 'メール通知設定', url: routes.settingsNotifications },
   ];
@@ -83,11 +83,11 @@ export const Presenter: FC = () => {
   const toggleSidebar = useStore((state) => state.toggleOpen);
 
   const fiftyFifty = () => {
-    return Math.random() < 0.7;
+    return Math.random() < 0.5;
   };
 
   useEffect(() => {
-    // if (fiftyFifty()) return;
+    if (fiftyFifty()) return;
 
     const handler = async () => {
       const notifications = await fetchNotifications(
@@ -95,8 +95,9 @@ export const Presenter: FC = () => {
         account.uid
       ).catch((err) => {
         console.error(err);
+        return null;
       });
-      if (!notifications) return;
+      if (notifications === null) return;
 
       setSiteManagementNotifications(notifications.site);
       setArticleManagementNotifications(notifications.article);

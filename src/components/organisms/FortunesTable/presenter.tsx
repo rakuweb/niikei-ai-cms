@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { Timestamp } from 'firebase/firestore';
-import dayjs from 'dayjs';
 
 import { Text } from 'components/texts/Text';
 import { WideButton } from 'components/Button/WideButton';
@@ -36,6 +35,7 @@ import {
   deleteNotificationByID,
 } from '@/firebase/firestore/employees';
 import { useAccountStore } from '@/features/account';
+import { formatDate } from '@/lib';
 
 export type PresenterProps = {
   data?: {
@@ -196,9 +196,9 @@ export const Presenter: FC<PresenterProps> = () => {
                               size={{ lg: `sm`, xl: `md`, '2xl': `lg` }}
                               sx={{
                                 '.css-p27qcy[aria-checked=true], .css-p27qcy[data-checked]':
-                                {
-                                  backgroundColor: '#49BAC0',
-                                },
+                                  {
+                                    backgroundColor: '#49BAC0',
+                                  },
                               }}
                               onChange={(e) =>
                                 handleSwitchChange(log.id, e.target.checked)
@@ -209,7 +209,7 @@ export const Presenter: FC<PresenterProps> = () => {
                         </Td>
                         <Td>
                           {log?.date &&
-                            dayjs(log?.date?.toDate())?.format('YYYY/MM/DD')}
+                            formatDate(log.date.toDate().toString())}
                         </Td>
                         <Td>{log.title}</Td>
                         <Td>{log.message}</Td>

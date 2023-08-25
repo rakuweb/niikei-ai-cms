@@ -39,7 +39,7 @@ export const Presenter: FC<PresenterProps> = () => {
     mode: 'onChange',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, _] = useState(false);
   const [showAdditionalField, setShowAdditionalField] = useState(false);
   const currentUserUid = useNameStore((state) => state.currentUserUid);
   const setCurrentUserUid = useNameStore((state) => state.setCurrentUserUid);

@@ -49,6 +49,8 @@ import {
   NotificationKind,
   deleteArticleNotificationByID,
 } from '@/firebase/firestore/employees';
+import { formatDate } from '@/lib';
+import { ExternalLink } from '@/components/links/ExternalLink';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,6 +65,8 @@ export type PresenterProps = {
     category: Category;
     id: string;
     url: string;
+    siteName?: string;
+    siteUrl?: string;
   }[];
 
   currentPage: number;
@@ -165,11 +169,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
     const docRef = doc(ref, 'infomation', id);
 
     await deleteDoc(docRef);
-    // await updateDoc(docRef, {
-    //   status: InformationStatus.InReview,
-    // });
-
-    // window.alert('ステータスを変更しました');
     location.reload();
   };
   const handleSetAllStandBy = async () => {
@@ -181,7 +180,6 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
 
     for (const id of Object.keys(selectedItems)) {
       if (selectedItems[id]) {
-        console.log(id);
         const docRef = doc(ref, 'infomation', id);
         await updateDoc(docRef, {
           status: InformationStatus.StandBy,
@@ -223,7 +221,9 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                       <Th w={`${52 / 19.2}vw`}>更新日時</Th>
                       <Th w={`${30 / 19.2}vw`}>カテゴリ</Th>
                       <Th w={`${350 / 19.2}vw`}>タイトル</Th>
+                      {/*
                       <Th w={`${350 / 19.2}vw`}>URL</Th>
+                      */}
                       <Th w={`${10 / 19.2}vw`}>アクション</Th>
                     </Tr>
                   </Thead>
@@ -247,10 +247,10 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                                 size={{ lg: `sm`, '2xl': `md` }}
                                 sx={{
                                   '.css-qeepwd[aria-checked=true], .css-qeepwd[data-checked]':
-                                  {
-                                    backgroundColor: '#49BAC0',
-                                    borderColor: `#49BAC0`,
-                                  },
+                                    {
+                                      backgroundColor: '#49BAC0',
+                                      borderColor: `#49BAC0`,
+                                    },
                                 }}
                                 checked={selectedItems[data.id || '']}
                                 onChange={() =>
@@ -260,13 +260,20 @@ export const Presenter: FC<PresenterProps> = ({ data }) => {
                             </Flex>
                           </Td>
                           <Td>
-                            {dayjs(data.created_at.toDate()).format(
-                              'YYYY/MM/DD'
-                            )}
+                            {formatDate(data.created_at.toDate().toString()) ||
+                              ''}
                           </Td>
                           <Td>{data.category.name || ''}</Td>
+                          <Td>
+                            <ExternalLink href={`https://${data.siteUrl}`}>
+                              {`${data?.siteName}の記事が更新されました。` ||
+                                ''}
+                            </ExternalLink>
+                          </Td>
+                          {/*
                           <Td>{data?.title || ''}</Td>
                           <Td>{data?.url || ''}</Td>
+                          */}
 
                           <Td>
                             <Box
