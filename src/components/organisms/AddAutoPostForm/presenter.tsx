@@ -71,7 +71,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    reset,
   } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
@@ -94,38 +94,30 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
 
       if (res === null) return;
 
-      setCategories(
-        (prev) =>
-          res?.data?.categories.map((item) => ({
+      const resCategories = res?.data?.categories ?? undefined;
+      setCategories((prev) =>
+        resCategories
+          ? resCategories.map((item) => ({
             id: item.id,
             name: item.name,
-          })) ?? prev
+          }))
+          : prev
       );
     };
 
     handler();
   }, []);
   useEffect(() => {
-    if (data?.name) {
-      setValue('name', data.name);
-    }
-    if (data?.url) {
-      setValue('url', data.url);
-    }
-    if (data?.xpath) {
-      setValue('xpath', data.xpath);
-    }
-    if (data?.category?.name) {
-      setValue('category', data.category.name);
-    }
-    if (data?.interval1) {
-      setValue('interval1', data.interval1);
-    }
-    if (data?.interval2) {
-      setValue('interval2', data.interval2);
-    }
-    setValue('is_notified', data?.is_notified || false);
-    setValue('is_auto_post', data?.is_auto_post || false);
+    reset({
+      name: data.name,
+      url: data.url,
+      xpath: data.xpath,
+      category: data.category.name,
+      interval1: data.interval1,
+      interval2: data.interval2,
+      is_notified: data.is_notified,
+      is_auto_post: data.is_auto_post,
+    });
   }, [
     data?.name,
     data?.url,
@@ -135,7 +127,6 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     data?.interval2,
     data?.is_notified,
     data?.is_auto_post,
-    setValue,
   ]);
 
   const submitHandler = async (formData: Schema) => {

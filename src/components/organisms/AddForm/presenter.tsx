@@ -61,7 +61,7 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    reset,
   } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -107,26 +107,16 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
   }, []);
 
   useEffect(() => {
-    if (data?.name) {
-      setValue('name', data.name);
-    }
-    if (data?.url) {
-      setValue('url', data.url);
-    }
-    if (data?.xpath) {
-      setValue('xpath', data.xpath);
-    }
-    if (data?.category) {
-      setValue('category', data.category.name);
-    }
-    if (data?.interval1) {
-      setValue('interval1', data.interval1);
-    }
-    if (data?.interval2) {
-      setValue('interval2', data.interval2);
-    }
-    setValue('is_notified', !!data?.is_notified);
-    setValue('is_auto_patrol', !!data?.is_auto_patrol);
+    reset({
+      name: data.name,
+      url: data.url,
+      xpath: data.xpath,
+      category: data.category.name,
+      interval1: data.interval1,
+      interval2: data.interval2,
+      is_notified: data.is_notified,
+      is_auto_patrol: data.is_auto_patrol,
+    });
   }, [
     data?.name,
     data?.url,
@@ -136,7 +126,6 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
     data?.interval2,
     data?.is_notified,
     data?.is_auto_patrol,
-    setValue,
   ]);
 
   const submitHandler = async (formData: Schema) => {
@@ -201,11 +190,11 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
         >
           <option value="日曜日">日曜日</option>
           <option value="月曜日">月曜日</option>
-          <option value="月曜日">火曜日</option>
-          <option value="月曜日">水曜日</option>
-          <option value="月曜日">木曜日</option>
-          <option value="月曜日">金曜日</option>
-          <option value="月曜日">土曜日</option>
+          <option value="火曜日">火曜日</option>
+          <option value="水曜日">水曜日</option>
+          <option value="木曜日">木曜日</option>
+          <option value="金曜日">金曜日</option>
+          <option value="土曜日">土曜日</option>
         </Select>
       );
     } else if (interval2Type === '毎日') {
