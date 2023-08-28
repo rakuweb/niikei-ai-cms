@@ -96,9 +96,9 @@ export const Presenter: FC<PresenterProps> = ({ data, id }) => {
       setCategories((prev) =>
         resCategories
           ? resCategories.map((category) => ({
-            id: category.id,
-            name: category.name,
-          }))
+              id: category.id,
+              name: category.name,
+            }))
           : prev
       );
     };
