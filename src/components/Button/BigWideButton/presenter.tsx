@@ -6,9 +6,10 @@ import { BoxProps, Flex, Img } from '@chakra-ui/react';
 export type PresenterProps = BoxProps & {
   text: string;
   type?: string;
+  disabled?: boolean;
 };
 
-export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
+export const Presenter: FC<PresenterProps> = ({ text, disabled, ...props }) => {
   return (
     <Flex
       color={`white`}
@@ -19,11 +20,12 @@ export const Presenter: FC<PresenterProps> = ({ text, ...props }) => {
       justify={`space-between`}
       borderRadius={`${50 / 19.2}vw`}
       _hover={{
-        cursor: `pointer`,
+        cursor: disabled ? `not-allowed` : `pointer`,
         transition: `0.3s`,
         filter: `opacity(80%)`,
       }}
       as={'button'}
+      disabled={disabled}
       {...props}
     >
       <Text letterSpacing={`0`} fontWeight={`400`} fontSize={`${20 / 19.2}vw`}>
