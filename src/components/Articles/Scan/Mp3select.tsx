@@ -24,8 +24,10 @@ const Mp3select = ({ setSelectedFileContent }) => {
     let interval = 100;
     let timerId = null;
     const incrementProgress = () => {
-      if (progressInterval >= 100) {
-        setUploadProgress(100);
+      if (progressInterval >= 95) {
+        // if (progressInterval >= 100) {
+        setUploadProgress(95);
+        // setUploadProgress(100);
         return;
       }
 
@@ -98,8 +100,8 @@ const Mp3select = ({ setSelectedFileContent }) => {
 
   const handleClick = handleSubmit(async () => {
     if (file) {
-      uploadMp3(file);
       setIsLoading(true);
+      uploadMp3(file);
       setUploadProgress(0);
     }
   });
@@ -206,8 +208,9 @@ const Mp3select = ({ setSelectedFileContent }) => {
       ) : (
         <BigWideButton
           onClick={handleClick}
-          text="生成する"
+          text={isLoading ? '生成中' : '生成する'}
           w={`${280 / 19.2}vw`}
+          disabled={isLoading}
         />
       )}
     </div>
