@@ -15,6 +15,8 @@ export const WORDPRESS_URL =
   process.env.NEXT_PUBLIC_WORDPRESS_URL ??
   process.env.WORDPRESS_URL ??
   undefined;
+export const API_USER = process.env.WORDPRESS_API_USER;
+export const API_PASSWORD = process.env.WORDPRESS_API_PASSWORD;
 
 export const GOOGLE_APPLICATION_CREDENTIALS =
   process.env.GOOGLE_APPLICATION_CREDENTIALS ?? undefined;
