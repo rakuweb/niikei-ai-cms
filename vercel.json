@@ -7,6 +7,14 @@
     "api/**/*": {
       "memory": 3008,
       "maxDuration": 300 
+    },
+    "pages/**/*": {
+      "memory": 3008,
+      "maxDuration": 300 
+    },
+    "src/**/*": {
+      "memory": 3008,
+      "maxDuration": 300 
     }
   }
 }
