@@ -12,6 +12,7 @@ const Read = ({ text }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [popupText, setPopupText] = useState('');
   const [categories, setCategories] = useState([]);
+  const [textAreaValue, setTextAreaValue] = useState('');
 
   useEffect(() => {
     setButtonActive(!!text);
@@ -51,6 +52,15 @@ const Read = ({ text }) => {
     handler();
   }, []);
 
+  useEffect(() => {
+    if (text == '') return;
+    setTextAreaValue((prev) => {
+      const next = prev + text;
+
+      return next;
+    });
+  }, [text]);
+
   return (
     <div>
       <Text mb={`${40 / 19.2}vw`} letterSpacing={`0`}>
@@ -61,7 +71,9 @@ const Read = ({ text }) => {
           borderRadius={`0`}
           borderColor={`#D6D6D6`}
           fontSize={`${16 / 19.2}vw`}
-          value={text || undefined}
+          value={textAreaValue}
+          onChange={(e) => setTextAreaValue(e.target.value)}
+          // value={text || undefined}
         />
       </Text>
       <Flex justify={`space-between`}>
@@ -89,7 +101,7 @@ const Read = ({ text }) => {
         <Popup
           isOpen={isOpen}
           onClose={closePopup}
-          text={popupText}
+          text={textAreaValue}
           setText={setPopupText}
           list={categories}
         />
