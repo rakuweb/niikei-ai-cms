@@ -3,8 +3,6 @@ import axios from 'axios';
 
 import { WORDPRESS_URL } from 'constants/env';
 
-export const maxDuration = 300;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

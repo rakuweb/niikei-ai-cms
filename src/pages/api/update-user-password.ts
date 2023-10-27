@@ -9,8 +9,6 @@ if (!admin.apps.length) {
   });
 }
 
-export const maxDuration = 300;
-
 const updateUserPassword = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(400).send('Invalid request method');

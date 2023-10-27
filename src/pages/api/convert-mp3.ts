@@ -3,8 +3,6 @@ import * as speech from '@google-cloud/speech';
 import { Storage } from '@google-cloud/storage';
 import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 
-export const maxDuration = 300;
-
 const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );

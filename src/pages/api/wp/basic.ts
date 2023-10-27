@@ -5,8 +5,6 @@ import { API_USER, API_PASSWORD } from 'constants/env';
 // const API_USER = `rakuweb`;
 // const API_PASSWORD = `hsD8 c77W tgdl TpA8 tW5T gASH`;
 
-export const maxDuration = 300;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

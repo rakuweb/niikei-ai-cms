@@ -15,8 +15,6 @@ const auth = new google.auth.GoogleAuth({
 
 const drive = google.drive({ version: 'v3', auth });
 
-export const maxDuration = 300;
-
 export default async function handler(req, res) {
   const url = req.query.url;
   if (!url) {

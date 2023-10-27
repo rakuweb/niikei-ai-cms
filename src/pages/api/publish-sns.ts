@@ -10,8 +10,6 @@ import {
 
 const facebookPageId = FACEBOOK_PAGE_ID;
 
-export const maxDuration = 300;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

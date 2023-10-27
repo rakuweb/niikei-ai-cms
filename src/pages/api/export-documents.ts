@@ -12,8 +12,6 @@ if (!admin.apps.length) {
   });
 }
 
-export const maxDuration = 300;
-
 export default async function exportDocuments(
   req: NextApiRequest,
   res: NextApiResponse
