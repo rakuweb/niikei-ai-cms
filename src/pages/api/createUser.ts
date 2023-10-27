@@ -4,8 +4,6 @@ import { setDoc, doc, DocumentReference } from 'firebase/firestore';
 import { db } from 'src/firebase';
 import { INITIAL_NOTIFICATIONS } from '@/firebase/firestore/employees';
 
-export const maxDuration = 300;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

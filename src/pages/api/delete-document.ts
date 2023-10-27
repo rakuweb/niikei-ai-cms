@@ -3,8 +3,6 @@ import { docs_v1, drive_v3, google } from 'googleapis';
 
 import { GOOGLE_APPLICATION_CREDENTIALS } from 'constants/env';
 
-export const maxDuration = 300;
-
 const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );

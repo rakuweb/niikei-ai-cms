@@ -1,7 +1,5 @@
 import ffmpeg from 'fluent-ffmpeg';
 
-export const maxDuration = 300;
-
 export default async function handler(req, res) {
   const { method } = req;
 
