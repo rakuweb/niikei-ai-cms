@@ -9,6 +9,8 @@ import {
   DocumentStatus,
 } from '@/firebase/firestore/documents';
 
+export const maxDuration = 300;
+
 const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
 
 if (!admin.apps.length) {

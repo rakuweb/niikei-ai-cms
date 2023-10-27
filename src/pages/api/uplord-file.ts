@@ -7,6 +7,8 @@ const credentials = JSON.parse(
   Buffer.from(GOOGLE_APPLICATION_CREDENTIALS, 'base64').toString()
 );
 
+export const maxDuration = 300;
+
 export default async function uploadHandler(
   req: NextApiRequest,
   res: NextApiResponse

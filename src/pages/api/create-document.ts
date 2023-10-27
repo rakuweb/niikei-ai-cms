@@ -16,6 +16,8 @@ const credentials = JSON.parse(
   ).toString()
 );
 
+export const maxDuration = 300;
+
 const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title, text } = req.body;
 

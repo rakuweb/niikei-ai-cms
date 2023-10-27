@@ -10,6 +10,8 @@ if (!admin.apps.length) {
   });
 }
 
+export const maxDuration = 300;
+
 export default async function loginUser(
   req: NextApiRequest,
   res: NextApiResponse
