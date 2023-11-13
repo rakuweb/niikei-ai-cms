@@ -53,41 +53,41 @@ const copyDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const url = document.data.webViewLink;
 
     // chatGPT
-    let inputText = '';
-    if (text) {
-      const message = `下記の文章を記事風に要約してください。\n\n${text}`;
-      const requestMessages = [
-        { content: message, role: ChatCompletionRequestMessageRoleEnum.User },
-      ];
-      const resChat = await openAiRequest(requestMessages);
-
-      if (!resChat) {
-        inputText = `ChatGPT APIへの接続に失敗したため、要約文を生成できませんでした。
-        代わりに原文を挿入しました。
-
-${text}
-
-----------------------------`;
-      } else {
-        const choise = resChat.choices[0];
-        inputText = `${choise.message?.content ?? ''}
-
-----------------------------`;
-      }
-    }
+    // let inputText = '';
+//     if (text) {
+//       const message = `下記の文章を記事風に要約してください。\n\n${text}`;
+//       const requestMessages = [
+//         { content: message, role: ChatCompletionRequestMessageRoleEnum.User },
+//       ];
+//       const resChat = await openAiRequest(requestMessages);
+//
+//       if (!resChat) {
+//         inputText = `ChatGPT APIへの接続に失敗したため、要約文を生成できませんでした。
+//         代わりに原文を挿入しました。
+//
+// ${text}
+//
+// ----------------------------`;
+//       } else {
+//         const choise = resChat.choices[0];
+//         inputText = `${choise.message?.content ?? ''}
+//
+// ----------------------------`;
+//       }
+//     }
 
     const docs: docs_v1.Docs = google.docs({
       version: 'v1',
       auth,
     });
-    const requests = inputText
+    const requests = text
       ? [
           {
             insertText: {
               location: {
                 index: 1,
               },
-              text: inputText,
+              text: text,
             },
           },
         ]
