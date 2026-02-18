@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { NIIKEI39D3F } from 'constants/env';
+import { FIREBASE_ADMIN_CREDENTIALS } from 'constants/env';
 import { COMPANY_COLLECTION } from '@/firebase/firestore/companies';
 import { ARTICLE_COLLECTION, Status } from '@/firebase/firestore/articles';
 import {
@@ -9,7 +9,7 @@ import {
   DocumentStatus,
 } from '@/firebase/firestore/documents';
 
-const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
+const credentials = JSON.parse(Buffer.from(FIREBASE_ADMIN_CREDENTIALS, 'base64').toString());
 
 if (!admin.apps.length) {
   admin.initializeApp({

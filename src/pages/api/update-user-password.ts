@@ -1,11 +1,11 @@
 import admin from 'firebase-admin';
-import { NIIKEI39D3F } from 'constants/env';
-const credentials = JSON.parse(Buffer.from(NIIKEI39D3F, 'base64').toString());
+import { FIREBASE_ADMIN_CREDENTIALS } from 'constants/env';
+const credentials = JSON.parse(Buffer.from(FIREBASE_ADMIN_CREDENTIALS, 'base64').toString());
 
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(credentials as admin.ServiceAccount),
-    databaseURL: 'https://niikei-39d3f.firebaseio.com',
+    databaseURL: 'https://niikei-11666.firebaseio.com',
   });
 }
 

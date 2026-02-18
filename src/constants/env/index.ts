@@ -27,8 +27,7 @@ export const GOOGLE_TEMPLATE_DOCUMENT_ID =
 export const GOOGLE_PARENT_FOLDER =
   process.env.GOOGLE_PARENT_FOLDER ?? undefined;
 
-export const NIIKEI39D3F = process.env.NIIKEI_CMS ?? undefined;
-// export const NIIKEI39D3F = process.env.NIIKEI39D3F ?? undefined;
+export const FIREBASE_ADMIN_CREDENTIALS = process.env.NIIKEI_CMS ?? undefined;
 
 export const OPENAI_KEY = process.env.OPENAI_KEY ?? undefined;
 export const OPENAI_ORGANIZATION = process.env.OPENAI_ORGANIZATION ?? undefined;
